@@ -81,7 +81,7 @@ class Dbh extends CI_Model
 	public function findOrFail($table, $array, $type = "row")
 	{
 		$query = $this->db->get_where($table, $array);
-		if ($query->num_rows() > 0) :
+		if ($query->num_rows() > 0):
 			switch ($type) {
 				case 'row':
 					return $query->row_array();
