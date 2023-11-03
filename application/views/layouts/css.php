@@ -14,6 +14,8 @@
     class="template-customizer-theme-css" />
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/demo.css" />
 <!-- Vendors CSS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/libs/typeahead-js/typeahead.css" />
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/libs/apex-charts/apex-charts.css" />
