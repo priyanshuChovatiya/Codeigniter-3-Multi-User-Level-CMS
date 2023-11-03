@@ -1,5 +1,5 @@
 <!-- <script src="<?= base_url() ?>assets/vendor/libs/jquery/jquery.js"></script> -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <script src="<?= base_url() ?>assets/vendor/libs/popper/popper.js"></script>
 <script src="<?= base_url() ?>assets/vendor/js/bootstrap.js"></script>
@@ -22,7 +22,7 @@
 
 <script src="<?= base_url() ?>assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
 <script src="<?= base_url() ?>assets/vendor/libs/block-ui/block-ui.js"></script>
-<script src="<?= base_url() ?>assets/js/custom/AjaxHandler.js"></script>
+<!-- <script src="<?= base_url() ?>assets/js/custom/AjaxHandler.js"></script> -->
 <script src="<?= base_url() ?>assets/js/custom/common.js"></script>
 
 <?php if ($flash = $this->session->Flashdata('flash')): ?>

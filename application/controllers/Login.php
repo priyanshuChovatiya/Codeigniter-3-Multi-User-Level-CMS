@@ -17,7 +17,7 @@ class Login extends CI_Controller
 		if ($this->session->has_userdata('login')) {
 			$message = ['success' => 'warning', 'message' => 'You are already logged in!'];
 			$this->session->set_flashdata('flash', $message);
-			return redirect(base_url('admin/dashbord'));
+			return redirect(base_url('admin/dashboard'));
 		}
 		return $this->load->view('login');
 	}
@@ -27,24 +27,24 @@ class Login extends CI_Controller
 		$this->form_validation->set_rules('mobile', 'Mobile Number', 'trim|required');
 		$this->form_validation->set_rules('password', 'Password ', 'trim|required');
 		$login_user = [
-			'mobile' => $this->input->post("mobie"),
+			'mobile' => $this->input->post("mobile"),
 			'password' => sha1($this->input->post("password"))
 		];
 		if ($this->form_validation->run() == true) {
 			if ($this->db->get_where('user', ['mobile' => $login_user['mobile']])->num_rows() == 1) {
-
 				if ($this->db->get_where('user', $login_user)->num_rows() == 1) {
 					$user = $this->dbh->getWhereRowArray('user', $login_user);
 					$loged_user = array(
 						'user_id' => $user['id'],
 						'mobie' => $user['mobile'],
-						'username' => $user['username'],
+						'username' => $user['name'],
+						'user_type' => $user['type'],
 						'login' => true
 					);
 					$this->session->set_userdata('login', $loged_user);
 					$message = ['success' => 1, 'message' => 'login in successfully'];
 					$this->session->set_flashdata('flash', $message);
-					return redirect(base_url('admin/dashbord'));
+					return redirect(base_url('admin/dashboard'));
 				} else {
 					$message = ['success' => 0, 'message' => 'Enter valid Password'];
 					$this->session->set_flashdata('flash', $message);
