@@ -35,8 +35,8 @@
 	<div class="menu-inner-shadow"></div>
 
 	<ul class="menu-inner py-1">
-		<li class="menu-item <?= is_active('vendor/dashboard') ?>">
-			<a href="<?= base_url('vendor/dashboard'); ?>" class="menu-link">
+		<li class="menu-item <?= is_active('worker/dashboard') ?>">
+			<a href="<?= base_url('worker/dashboard'); ?>" class="menu-link">
 				<i class="menu-icon tf-icons mdi mdi-home-outline"></i>
 				<div data-i18n="Dashboards">Dashboards</div>
 			</a>

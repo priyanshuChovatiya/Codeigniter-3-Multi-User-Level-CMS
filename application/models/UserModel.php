@@ -59,8 +59,7 @@ class UserModel extends CI_Model
 		$i = $start + 1;
 		foreach ($Allrecords as $record) {
 
-			$id = $record->id;
-			// $id = encrypter($row->id);
+			$id = encrypt_id($record->id);
                 $link = base_url('admin/user/edit/') . $id;
                 $checked = $record->status == 'ACTIVE' ? "checked" : "";
 

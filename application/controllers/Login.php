@@ -41,10 +41,29 @@ class Login extends CI_Controller
 						'user_type' => $user['type'],
 						'login' => true
 					);
+
+					switch ($user['type']) {
+						case 'ADMIN':
+							$redirectUrl = 'admin/dashboard';
+							break;
+						case 'VENDOR':
+							$redirectUrl = 'vendor/dashboard';
+							break;
+						case 'WORKER':
+							$redirectUrl = 'worker/dashboard';
+							break;
+						case 'CUSTOMER':
+							$redirectUrl = 'customer/dashboard';
+							break;
+						default:
+							$redirectUrl = 'login';
+							break;
+					}
+
 					$this->session->set_userdata('login', $loged_user);
 					$message = ['success' => 1, 'message' => 'login in successfully'];
 					$this->session->set_flashdata('flash', $message);
-					return redirect(base_url('admin/dashboard'));
+					return redirect(base_url($redirectUrl));
 				} else {
 					$message = ['success' => 0, 'message' => 'Enter valid Password'];
 					$this->session->set_flashdata('flash', $message);
