@@ -30,7 +30,7 @@ function is_open($url)
 {
 	$CI =& get_instance();
 	if (in_array($CI->uri->uri_string(), $url)) {
-		return "active";
+		return "open";
 	}
 	return "";
 }
@@ -64,29 +64,40 @@ function compareDates($date1, $date2)
 }
 function access_level_admin()
 {
-
+	
 	$CI =& get_instance();
 	if (!$CI->session->has_userdata('login')) {
 		$message = ['class' => 'danger', 'message' => 'Your Session hase been Expired!! '];
 		flash_message($message);
-		redirect(base_url('admin/login'));
+		redirect(base_url('/login'));
 	}
 }
 
-function imageUpload($path, $image)
-{
+function imageUpload($field_name, $upload_path,$file_name = NULL)
+    {
+        $CI =& get_instance();
+        $CI->load->library('upload');
 
-	$config['upload_path'] = "$path";
-	$config['allowed_types'] = 'gif|jpg|png';
-	$config['max_size'] = '100';
-	// $config['max_width']  = '1024';
-	// $config['max_height']  = '768';
-	ci()->load->library('upload', $config);
-	if (!ci()->upload->do_upload($image)) {
-		return false;
-	} else {
-		return ci()->upload->data();
-	}
-}
+        // Configure upload options
+        $config['upload_path'] = "assets/uploads/$upload_path";
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = '1000'; // 2MB
+        // $config['max_width'] = '1024';
+        // $config['max_height'] = '768';
+        
+        if ($file_name !== NULL) {
+            $config['file_name'] = $file_name;
+        } else {
+            $config['encrypt_name'] = TRUE;
+        }
+        $CI->upload->initialize($config);
 
-?>
+        if ( ! $CI->upload->do_upload($field_name))
+        {
+            return false;
+        }
+        else
+        {
+            return $CI->upload->data();
+        }
+    }

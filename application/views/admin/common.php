@@ -30,6 +30,16 @@
         <div class="drag-target"></div>
     </div>
     <?php $this->load->view('layouts/js') ?>
+	<div class="append-javascript">
+
+	</div>
+	<script>
+		$(document).ready(function () {
+			var js = $('.javascript').html();
+			$('.append-javascript').append(js);
+			$('.javascript').html('')
+		});
+	</script>
 </body>
 
 </html>
