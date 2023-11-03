@@ -55,8 +55,8 @@ class User extends CI_Controller
 				$user['profile'] = $profile['file_name'];
 			}
 
-			$user = $this->db->insert('user', $user);
-			if (isset($user)) {
+			$insert = $this->db->insert('user', $user);
+			if (isset($insert)) {
 				$r['success'] = 1;
 				$r['message'] = "User Add SuccessFully.";
 			} else {
@@ -82,19 +82,28 @@ class User extends CI_Controller
 		echo json_encode($data);
 	}
 
-	public function edit($id)
+	public function edit($update_id)
 	{
-		$user_id = $this->session->userdata('login')['user_id'];
-		$page_data['data'] = $this->db->select('id,name,type,email,mobile,profile')->get_where('user', array('id' => $id, 'user_id' => $user_id))->row_array();
-		$page_data['page_title'] = 'Manage User';
-		$page_data['page_name'] = 'admin/user/user-add';
-		return $this->load->view('admin/common', $page_data);
+		try {
+			$id = decrypt_id($update_id);
+			$user_id = $this->session->userdata('login')['user_id'];
+			$page_data['data'] = $this->db->select('id,name,type,email,mobile,profile')->get_where('user', array('id' => $id, 'user_id' => $user_id))->row_array();
+			$page_data['id'] = $update_id;
+			$page_data['page_title'] = 'Manage User';
+			$page_data['page_name'] = 'admin/user/user-add';
+			return $this->load->view('admin/common', $page_data);
+		} catch (\Throwable | \ErrorException | \Error | \Exception $e) {
+			$r['success'] = 0;
+			$r['message'] = $e->getMessage();
+			$this->session->set_flashdata('flash', $r);
+			redirect(base_url('admin/user/report'), 'refresh');
+		}
 	}
 
 	public function update()
 	{
 		$data = $this->input->post();
-		$id = $data['id'];
+		$id = decrypt_id($data['id']);
 
 		$this->form_validation->set_rules('name', 'Full Name ', 'trim|required');
 		$this->form_validation->set_rules('id', 'Update Id', 'trim|required');
@@ -115,36 +124,36 @@ class User extends CI_Controller
 			$user['type'] = $data['user_type'];
 			$allData = $this->db->select('mobile,email,profile')->get_where('user', array('id' => $id, 'user_id' => $user_id));
 			$fetch_data = $allData->row_array();
-			
+
 			// Mobile unique
-            if($fetch_data['mobile'] == $data['mobile']){
+			if ($fetch_data['mobile'] == $data['mobile']) {
 				$user['mobile'] = $data['mobile'];
-            }else{
+			} else {
 				$num_rows = $allData->num_rows();
-                if($num_rows==0){
+				if ($num_rows == 0) {
 					$user['mobile'] = $data['mobile'];
-                }else{
+				} else {
 					$r['message'] = "Mobile No Already Exists.";
-                    $r['success'] = 0;
-                    $this->session->set_flashdata('flash', $r);
+					$r['success'] = 0;
+					$this->session->set_flashdata('flash', $r);
 					redirect(base_url('admin/user/report'), 'refresh');
-                }
-            }
+				}
+			}
 
 			// Email unique
-            if($fetch_data['email'] == $data['email']){
+			if ($fetch_data['email'] == $data['email']) {
 				$user['email'] = $data['email'];
-            }else{
+			} else {
 				$num_rows = $allData->num_rows();
-                if($num_rows==0){
+				if ($num_rows == 0) {
 					$user['email'] = $data['email'];
-                }else{
+				} else {
 					$r['message'] = "Email Id Already Exists.";
-                    $r['success'] = 0;
-                    $this->session->set_flashdata('flash', $r);
+					$r['success'] = 0;
+					$this->session->set_flashdata('flash', $r);
 					redirect(base_url('admin/user/report'), 'refresh');
-                }
-            }
+				}
+			}
 
 			// upload image    first fileName and second pathName
 			if ($this->input->post() && !empty($_FILES['profile']['name'])) {
@@ -159,7 +168,7 @@ class User extends CI_Controller
 				}
 			}
 
-			$user = $this->db->where('id',$id)->where('user_id',$user_id)->update('user', $user);
+			$user = $this->db->where('id', $id)->where('user_id', $user_id)->update('user', $user);
 			if (isset($user)) {
 				$r['success'] = 1;
 				$r['message'] = "User Updated SuccessFully.";
@@ -184,7 +193,9 @@ class User extends CI_Controller
 			} else {
 				$data = $this->input->post();
 				$user_id = $this->session->userdata('login')['user_id'];
-				$response = $this->db->where(array('id' => $data['id'], 'user_id' => $user_id))->update('user', ['status' => $data['status']]);
+				$id = decrypt_id($data['id']);
+
+				$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('user', ['status' => $data['status']]);
 
 				if (isset($response)) {
 					echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);
