@@ -14,12 +14,14 @@ class User extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		access_level_admin();
+		access_level('ADMIN');
 		$this->load->model('UserModel');
 	}
 
 	public function index()
 	{
+		$user_id = $this->session->userdata('login')['user_id'];
+		$page_data['city'] = $this->db->select('id,name')->get_where('city', array('user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
 		$page_data['page_title'] = 'Manage User';
 		$page_data['page_name'] = 'admin/user/user-add';
 		return $this->load->view('admin/common', $page_data);
@@ -32,6 +34,7 @@ class User extends CI_Controller
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[user.email]');
 		$this->form_validation->set_rules('mobile', 'Mobile', 'trim|required|numeric|exact_length[10]|is_unique[user.mobile]');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
+		$this->form_validation->set_rules('city', 'City', 'trim|required');
 		$this->form_validation->set_rules('user_type', 'User Type', 'trim|required|in_list[CUSTOMER,VENDOR,WORKER]');
 		$this->form_validation->set_rules('profile', 'Profile', 'trim|mime_in[profile,image/jpg,image/jpeg,image/png,]');
 
@@ -46,6 +49,7 @@ class User extends CI_Controller
 			$user['user_id'] = $this->session->userdata('login')['user_id'];
 			$user['email'] = $data['email'];
 			$user['mobile'] = $data['mobile'];
+			$user['city_id'] = $data['city'];
 			$user['password'] = sha1($data['password']);
 			$user['type'] = $data['user_type'];
 
@@ -70,6 +74,8 @@ class User extends CI_Controller
 
 	public function report()
 	{
+		$user_id = $this->session->userdata('login')['user_id'];
+		$page_data['city'] = $this->db->select('id,name')->get_where('city', array('user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
 		$page_data['page_title'] = 'User Report';
 		$page_data['page_name'] = 'admin/user/user-report';
 		return $this->load->view('admin/common', $page_data);
@@ -82,13 +88,13 @@ class User extends CI_Controller
 		echo json_encode($data);
 	}
 
-	public function edit($update_id)
+	public function edit($id)
 	{
 		try {
-			$id = decrypt_id($update_id);
 			$user_id = $this->session->userdata('login')['user_id'];
-			$page_data['data'] = $this->db->select('id,name,type,email,mobile,profile')->get_where('user', array('id' => $id, 'user_id' => $user_id))->row_array();
-			$page_data['id'] = $update_id;
+			$page_data['city'] = $this->db->select('id,name')->get_where('city', array('user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
+			$page_data['data'] = $this->db->select('id,name,type,email,mobile,profile,city_id')->get_where('user', array('id' => $id, 'user_id' => $user_id))->row_array();
+			$page_data['id'] = $id;
 			$page_data['page_title'] = 'Manage User';
 			$page_data['page_name'] = 'admin/user/user-add';
 			return $this->load->view('admin/common', $page_data);
@@ -103,11 +109,12 @@ class User extends CI_Controller
 	public function update()
 	{
 		$data = $this->input->post();
-		$id = decrypt_id($data['id']);
+		$id = $data['id'];
 
 		$this->form_validation->set_rules('name', 'Full Name ', 'trim|required');
 		$this->form_validation->set_rules('id', 'Update Id', 'trim|required');
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+		$this->form_validation->set_rules('city', 'City', 'trim|required');
 		$this->form_validation->set_rules('mobile', 'Mobile', 'trim|required|numeric|exact_length[10]');
 		$this->form_validation->set_rules('user_type', 'User Type', 'trim|required|in_list[CUSTOMER,VENDOR,WORKER]');
 		$this->form_validation->set_rules('profile', 'Profile', 'trim|mime_in[profile,image/jpg,image/jpeg,image/png,]');
@@ -121,6 +128,7 @@ class User extends CI_Controller
 
 			$user['name'] = $data['name'];
 			$user['email'] = $data['email'];
+			$user['city_id'] = $data['city'];
 			$user['type'] = $data['user_type'];
 			$allData = $this->db->select('mobile,email,profile')->get_where('user', array('id' => $id, 'user_id' => $user_id));
 			$fetch_data = $allData->row_array();
@@ -168,8 +176,8 @@ class User extends CI_Controller
 				}
 			}
 
-			$user = $this->db->where('id', $id)->where('user_id', $user_id)->update('user', $user);
-			if (isset($user)) {
+			$insert = $this->db->where('id', $id)->where('user_id', $user_id)->update('user', $user);
+			if (isset($insert)) {
 				$r['success'] = 1;
 				$r['message'] = "User Updated SuccessFully.";
 			} else {
@@ -193,7 +201,7 @@ class User extends CI_Controller
 			} else {
 				$data = $this->input->post();
 				$user_id = $this->session->userdata('login')['user_id'];
-				$id = decrypt_id($data['id']);
+				$id = $data['id'];
 
 				$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('user', ['status' => $data['status']]);
 
@@ -212,4 +220,43 @@ class User extends CI_Controller
 			echo json_encode($message);
 		}
 	}
+
+	public function getCustomers()
+    {
+        $user_id = $this->session->userdata('login')['user_id'];
+		$city_id = $this->input->post('city_id');
+		$query = $this->db->select('user.id,user.name,city.name as city_name')->from('user')
+			->join('city', 'user.city_id = city.id', 'left')->where(array('user.user_id', $user_id,'user.type' => 'CUSTOMER','user.status'=>'ACTIVE'));
+			if(!empty($city_id)){
+				$query->where('user.city_id', $city_id);
+			}
+		$userData = $query->get()->result_array();
+        echo json_encode($userData);
+    }
+
+    public function getVendor()
+    {
+        $user_id = $this->session->userdata('login')['user_id'];
+		$city_id = $this->input->post('city_id');
+		$query = $this->db->select('user.id,user.name,city.name as city_name')->from('user')
+			->join('city', 'user.city_id = city.id', 'left')->where(array('user.user_id', $user_id,'user.type' => 'VENDOR','user.status'=>'ACTIVE'));
+			if(!empty($city_id)){
+				$query->where('user.city_id', $city_id);
+			}
+		$userData = $query->get()->result_array();
+        echo json_encode($userData);
+    }
+
+    public function getWorker()
+    {
+        $user_id = $this->session->userdata('login')['user_id'];
+		$city_id = $this->input->post('city_id');
+		$query = $this->db->select('user.id,user.name,city.name as city_name')->from('user')
+			->join('city', 'user.city_id = city.id', 'left')->where(array('user.user_id', $user_id,'user.type' => 'WORKER','user.status'=>'ACTIVE'));
+			if(!empty($city_id)){
+				$query->where('user.city_id', $city_id);
+			}
+		$userData = $query->get()->result_array();
+        echo json_encode($userData);
+    }
 }

@@ -29,13 +29,26 @@
 										<label for="status">Status</label>
 									</div>
 								</div>
+								<div class="col-md-3">
+									<div class="form-floating form-floating-outline">
+										<select id="city" name="city" class="select2 form-select required" data-lable='City' required data-allow-clear="true">
+											<option value="">Select City</option>
+											<?php if(!empty($city)){ ?>
+												<?php foreach ($city as $key => $value) {?>
+                                                    <option value="<?= $value['id']?>" <?= isset($data['city_id']) && $data['city_id'] == $value['id']? "selected" : ''?>><?= $value['name']?></option>
+                                                <?php }?>
+                                            <?php }?>
+										</select>
+										<label for="City">City</label>
+									</div>
+								</div>
 								<div class="col-md-3 mb-3">
 									<div class="form-floating form-floating-outline">
 										<input type="text" id="search" name="search" class="form-control" placeholder="User Name" />
 										<label for="search">Search User</label>
 									</div>
 								</div>
-								<div class="col-md-3">
+								<div class="col-md-1">
 									<div class="">
 										<div class="m-1">
 											<button type="submit" class="btn btn-primary d-flex send-msg-btn waves-effect waves-light search-btn">
@@ -63,6 +76,7 @@
 								<th>Name</th>
 								<th>Email</th>
 								<th>Mobile</th>
+								<th>City</th>
 								<th>User Type</th>
 								<th>Status</th>
 								<th>Created At</th>
@@ -114,6 +128,7 @@
 						data.user_type = $('#user_type').val();
 						data.status = $('#status').val();
 						data.search = $('#search').val();
+						data.city_id = $('#city').val();
 						ShowBlockUi('#usersTable');
 					}
 				},
@@ -131,6 +146,9 @@
 					},
 					{
 						data: 'mobile'
+					},
+					{
+						data: 'city'
 					},
 					{
 						data: 'user_type'

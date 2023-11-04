@@ -14,16 +14,14 @@ class Project extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		access_level_admin();
+		access_level('ADMIN');
 		$this->load->model('admin/ProjectModel');
 	}
 
 	public function index()
 	{
 		$user_id = $this->session->userdata('login')['user_id'];
-		$page_data['worker'] = $this->db->select('id,name')->get_where('user', array('type' => 'WORKER', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
-		$page_data['vendor'] = $this->db->select('id,name')->get_where('user', array('type' => 'VENDOR', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
-		$page_data['customer'] = $this->db->select('id,name')->get_where('user', array('type' => 'CUSTOMER', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
+		$page_data['city'] = $this->db->select('id,name')->get_where('city', array('user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
 		$page_data['page_title'] = 'Manage Projects';
 		$page_data['page_name'] = 'admin/project/project-add';
 		return $this->load->view('admin/common', $page_data);
@@ -82,9 +80,10 @@ class Project extends CI_Controller
 	{
 		$page_data['page_title'] = 'User Report';
 		$user_id = $this->session->userdata('login')['user_id'];
-		$page_data['worker'] = $this->db->select('id,name')->get_where('user', array('type' => 'WORKER', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
-		$page_data['vendor'] = $this->db->select('id,name')->get_where('user', array('type' => 'VENDOR', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
-		$page_data['customer'] = $this->db->select('id,name')->get_where('user', array('type' => 'CUSTOMER', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
+		$page_data['city'] = $this->db->select('id,name')->get_where('city', array('user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
+		$page_data['worker'] = $this->db->select('id,name')->get_where('user', array('type' => 'WORKER', 'user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
+		$page_data['vendor'] = $this->db->select('id,name')->get_where('user', array('type' => 'VENDOR', 'user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
+		$page_data['customer'] = $this->db->select('id,name')->get_where('user', array('type' => 'CUSTOMER', 'user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
 		$page_data['page_name'] = 'admin/project/project-report';
 		return $this->load->view('admin/common', $page_data);
 	}
@@ -96,16 +95,22 @@ class Project extends CI_Controller
 		echo json_encode($data);
 	}
 
-	public function edit($update_id)
+	public function edit($id)
 	{
 		try {
-			$id = decrypt_id($update_id);
 			$user_id = $this->session->userdata('login')['user_id'];
-			$page_data['worker'] = $this->db->select('id,name')->get_where('user', array('type' => 'WORKER', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
-			$page_data['vendor'] = $this->db->select('id,name')->get_where('user', array('type' => 'VENDOR', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
-			$page_data['customer'] = $this->db->select('id,name')->get_where('user', array('type' => 'CUSTOMER', 'user_id' => $user_id,'status'=>'ACTIVE'))->result_array();
+			$page_data['city'] = $this->db->select('id,name')->get_where('city', array('user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
 			$page_data['data'] = $this->db->select('*')->get_where('project', array('id' => $id, 'user_id' => $user_id))->row_array();
-			$page_data['id'] = $update_id;
+			$page_data['worker'] = $this->db->select('user.id,user.name,city.name as city_name')->from('user')
+				->join('city', 'user.city_id = city.id', 'left')->where(array('user.user_id', $user_id, 'user.type' => 'WORKER', 'user.status' => 'ACTIVE'))
+				->where('user.city_id', $page_data['data']['city_id'])->get()->result_array();
+			$page_data['vendor'] = $this->db->select('user.id,user.name,city.name as city_name')->from('user')
+				->join('city', 'user.city_id = city.id', 'left')->where(array('user.user_id', $user_id, 'user.type' => 'VENDOR', 'user.status' => 'ACTIVE'))
+				->where('user.city_id', $page_data['data']['city_id'])->get()->result_array();
+			$page_data['customer'] = $this->db->select('user.id,user.name,city.name as city_name')->from('user')
+				->join('city', 'user.city_id = city.id', 'left')->where(array('user.user_id', $user_id, 'user.type' => 'CUSTOMER', 'user.status' => 'ACTIVE'))
+				->where('user.city_id', $page_data['data']['city_id'])->get()->result_array();
+			$page_data['id'] = $id;
 			$page_data['page_title'] = 'Manage Project';
 			$page_data['page_name'] = 'admin/project/project-add';
 			return $this->load->view('admin/common', $page_data);
@@ -120,11 +125,12 @@ class Project extends CI_Controller
 	public function update()
 	{
 		$data = $this->input->post();
-		$id = decrypt_id($data['id']);
+		$id = $data['id'];
 
 		//Project data
 		$this->form_validation->set_rules('name', 'Project Name ', 'trim|required');
 		$this->form_validation->set_rules('title', 'Title', 'trim|required');
+		$this->form_validation->set_rules('city', 'City', 'trim|required|numeric');
 		$this->form_validation->set_rules('worker', 'Worker', 'trim|required|numeric');
 		$this->form_validation->set_rules('vendor', 'Vendor', 'trim|required|numeric');
 		$this->form_validation->set_rules('customer', 'Customer', 'trim|required|numeric');
@@ -143,6 +149,7 @@ class Project extends CI_Controller
 			$store_data['name'] = $data['name'];
 			$store_data['user_id'] = $this->session->userdata('login')['user_id'];
 			$store_data['title'] = $data['title'];
+			$store_data['city_id'] = $data['city'];
 			$store_data['worker_id'] = $data['worker'];
 			$store_data['vendor_id'] = $data['vendor'];
 			$store_data['customer_id'] = $data['customer'];
@@ -190,7 +197,7 @@ class Project extends CI_Controller
 			} else {
 				$data = $this->input->post();
 				$user_id = $this->session->userdata('login')['user_id'];
-				$id = decrypt_id($data['id']);
+				$id = $data['id'];
 
 				$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('project', ['status' => $data['status']]);
 				if (isset($response)) {

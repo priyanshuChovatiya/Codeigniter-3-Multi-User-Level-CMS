@@ -39,15 +39,21 @@ class ProjectModel extends CI_Model
 		} else {
 			$status = array();
 		}
+		if (!empty($postData['city'])) {
+			$city = array('project.city_id' => $postData['city']);
+		} else {
+			$city = array();
+		}
 
 
 		## Total number of records without filtering
-		$query = $this->db->select('project.*, worker.name as worker_name, vendor.name as vendor_name, customer.name as customer_name')
+		$query = $this->db->select('project.*, worker.name as worker_name, vendor.name as vendor_name, customer.name as customer_name,city.name as city_name')
 			->from('project')
 			->join('user as worker', 'project.worker_id = worker.id', 'left')
 			->join('user as vendor', 'project.vendor_id = vendor.id', 'left')
 			->join('user as customer', 'project.customer_id = customer.id', 'left')
-			->where('project.user_id', $user_id)->where($worker_id)->where($vendor_id)->where($customer_id)->where($status);
+			->join('city', 'project.city_id = city.id', 'left')
+			->where('project.user_id', $user_id)->where($worker_id)->where($vendor_id)->where($customer_id)->where($status)->where($city);
 		if (!empty($postData['search'])) {
 			$query->like('project.name', $postData['search']);
 		}
@@ -55,24 +61,26 @@ class ProjectModel extends CI_Model
 
 
 		## Total number of record with filtering
-		$recordstotalRecord = $this->db->select('project.*, worker.name as worker_name, vendor.name as vendor_name, customer.name as customer_name')
+		$recordstotalRecord = $this->db->select('project.*, worker.name as worker_name, vendor.name as vendor_name, customer.name as customer_name,city.name as city_name')
 			->from('project')
 			->join('user as worker', 'project.worker_id = worker.id', 'left')
 			->join('user as vendor', 'project.vendor_id = vendor.id', 'left')
 			->join('user as customer', 'project.customer_id = customer.id', 'left')
-			->where('project.user_id', $user_id)->where($worker_id)->where($vendor_id)->where($customer_id)->where($status);
+			->join('city', 'project.city_id = city.id', 'left')
+			->where('project.user_id', $user_id)->where($worker_id)->where($vendor_id)->where($customer_id)->where($status)->where($city);
 		if (!empty($postData['search'])) {
 			$recordstotalRecord->like('project.name', $postData['search']);
 		}
 		$totalRecordwithFilter = $this->db->get()->num_rows();
 
 		## Fetch records
-		$records = $this->db->select('project.*, worker.name as worker_name, vendor.name as vendor_name, customer.name as customer_name')
+		$records = $this->db->select('project.*, worker.name as worker_name, vendor.name as vendor_name, customer.name as customer_name,city.name as city_name')
 			->from('project')
 			->join('user as worker', 'project.worker_id = worker.id', 'left')
 			->join('user as vendor', 'project.vendor_id = vendor.id', 'left')
 			->join('user as customer', 'project.customer_id = customer.id', 'left')
-			->where('project.user_id', $user_id)->where($worker_id)->where($vendor_id)->where($customer_id)->where($status);
+			->join('city', 'project.city_id = city.id', 'left')
+			->where('project.user_id', $user_id)->where($worker_id)->where($vendor_id)->where($customer_id)->where($status)->where($city);
 		if (!empty($postData['search'])) {
 			$records->like('project.name', $postData['search']);
 		}
@@ -84,7 +92,7 @@ class ProjectModel extends CI_Model
 		$i = $start + 1;
 		foreach ($Allrecords as $record) {
 
-			$id = encrypt_id($record->id);
+			$id = $record->id;
 			$link = base_url('admin/project/edit/') . $id;
 			$image_link = base_url('assets/uploads/project/').$record->project_image;
 			$checked = $record->status == 'ACTIVE' ? "checked" : "";
@@ -107,6 +115,7 @@ class ProjectModel extends CI_Model
 				"action" => $action,
 				"name" => $record->name,
 				"title" => $record->title,
+				"city" => $record->city_name,
 				"worker" => $record->worker_name,
 				"vendor" => $record->vendor_name,
 				"customer" => $record->customer_name,

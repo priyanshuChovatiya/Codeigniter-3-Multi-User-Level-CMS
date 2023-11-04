@@ -12,12 +12,39 @@ class Login extends CI_Controller
 		//Load Dependencies
 	}
 
+	public function redirect_if_authenticated()
+    {
+
+        switch ($this->session->userdata('login')['user_type']) {
+            case 'ADMIN':
+				$redirectUrl = 'admin/dashboard';
+				break;
+			case 'VENDOR':
+				$redirectUrl = 'vendor/dashboard';
+				break;
+			case 'WORKER':
+				$redirectUrl = 'worker/dashboard';
+				break;
+			case 'CUSTOMER':
+				$redirectUrl = 'customer/dashboard';
+				break;
+			default:
+				$redirectUrl = 'login';
+				break;
+        }
+        $response = [
+            'success' => 0,
+            'message' => "You are already logged in !"
+        ];
+		$this->session->set_flashdata('flash', $response);
+		return redirect(base_url($redirectUrl));
+
+    }
+
 	public function index()
 	{
 		if ($this->session->has_userdata('login')) {
-			$message = ['success' => 'warning', 'message' => 'You are already logged in!'];
-			$this->session->set_flashdata('flash', $message);
-			return redirect(base_url('admin/dashboard'));
+			$this->redirect_if_authenticated();
 		}
 		return $this->load->view('login');
 	}

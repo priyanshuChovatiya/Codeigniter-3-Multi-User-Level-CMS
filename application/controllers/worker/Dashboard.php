@@ -9,7 +9,7 @@ class Dashboard extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		access_level_admin();
+		access_level('WORKER');
 	}
 
 	public function index()

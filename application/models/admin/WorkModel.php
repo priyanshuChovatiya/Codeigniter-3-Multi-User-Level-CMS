@@ -37,7 +37,7 @@ class WorkModel extends CI_Model
 		$i = $start + 1;
 		foreach ($records as $record) {
 
-			$id = encrypt_id($record->id);
+			$id = $record->id;
 			$link = base_url('admin/work/edit/') . $id;
 			$checked = $record->status == 'ACTIVE' ? "checked" : "";
 			
