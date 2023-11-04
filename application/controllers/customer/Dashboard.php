@@ -9,14 +9,14 @@ class Dashboard extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		access_level('ADMIN');
+		access_level('CUSTOMER');
 	}
 
 	public function index()
 	{
-		$page_data['page_title'] = 'Admin Dashboard';
-		$page_data['page_name'] = 'admin/dashboard';
-		return $this->load->view('admin/common', $page_data);
+		$page_data['page_title'] = 'Customer Dashboard';
+		$page_data['page_name'] = 'customer/dashboard';
+		return $this->load->view('customer/common', $page_data);
 	}
 }
 

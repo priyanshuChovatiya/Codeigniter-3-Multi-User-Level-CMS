@@ -41,6 +41,18 @@
 				<div data-i18n="Dashboards">Dashboards</div>
 			</a>
 		</li>
+		<li class="menu-item <?= is_active('admin/city') ?>">
+			<a href="<?= base_url('admin/city'); ?>" class="menu-link">
+				<i class="menu-icon tf-icons mdi mdi-city"></i>
+				<div data-i18n="Manage City">Manage City</div>
+			</a>
+		</li>
+		<li class="menu-item <?= is_active('admin/work') ?>">
+			<a href="<?= base_url('admin/work'); ?>" class="menu-link">
+				<i class="menu-icon tf-icons mdi mdi-plus-network"></i>
+				<div data-i18n="Manage Job Type">Manage Job Type</div>
+			</a>
+		</li>
 		<li class="menu-item <?= is_open(['admin/user', 'admin/user/report']) ?>">
 			<a href="javascript:void(0);" class="menu-link menu-toggle">
 				<i class="menu-icon mdi mdi-account-multiple-plus"></i>
@@ -55,6 +67,24 @@
 				<li class="menu-item <?= is_active('admin/user/report') ?>">
 					<a href="<?= base_url('admin/user/report'); ?>" class="menu-link">
 						<div data-i18n="User Report">User Report</div>
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-item <?= is_open(['admin/project', 'admin/project/report']) ?>">
+			<a href="javascript:void(0);" class="menu-link menu-toggle">
+				<i class="menu-icon mdi mdi-home-modern"></i>
+				<div data-i18n="Manage Project">Manage Project</div>
+			</a>
+			<ul class="menu-sub">
+				<li class="menu-item <?= is_active('admin/project') ?>">
+					<a href="<?= base_url('admin/project'); ?>" class="menu-link">
+						<div data-i18n="Add Project">Add Project</div>
+					</a>
+				</li>
+				<li class="menu-item <?= is_active('admin/project/report') ?>">
+					<a href="<?= base_url('admin/project/report'); ?>" class="menu-link">
+						<div data-i18n="Project Report">Project Report</div>
 					</a>
 				</li>
 			</ul>

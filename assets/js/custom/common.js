@@ -204,7 +204,7 @@ const getOptions = function (response, props) {
       $.each(parts, function (i, part) {
         if ($.inArray(part, value)) {
           label +=
-            part == "user_type" ? `( ${value[part]} )` : value[part] + " ";
+            part == "city_name" ? `( ${value[part]} )` : value[part] + " ";
         } else {
           label += value.name;
         }
@@ -217,111 +217,66 @@ const getOptions = function (response, props) {
   return options;
 };
 
-const getmaster_distributor = function (selected_id = null) {
+const getCustomer = function (city_id,selected_id = null) {
   $.ajax({
-    url: `${BaseUrl}admin/getmaster-distributor`,
+    url: `${BaseUrl}admin/User/getCustomers`,
     type: "POST",
     dataType: "json",
+		data: {
+			city_id: city_id,
+		},
     success: function (response) {
-      $(".getMaster_distributor").empty();
+      $(".getCustomer").empty();
       var options = {
         value: "id",
-        format: "id-name-user_type",
+        format: "name-city_name",
         selected_id: selected_id,
         default: true,
       };
       var optionHTML = getOptions(response, options);
-      $(".getMaster_distributor").html(optionHTML);
+      $(".getCustomer").html(optionHTML);
     },
   });
 };
-const getDistributor = function (id,selected_id = null) {
+const getVendor = function (city_id,selected_id = null) {
   $.ajax({
-    url: `${BaseUrl}admin/getDistributor`,
+    url: `${BaseUrl}admin/User/getVendor`,
     type: "POST",
     dataType: "json",
     data: {
-      user_id: id,
+      city_id: city_id,
     },
     success: function (response) {
-      $(".getDistributor").empty();
+      $(".getVendor").empty();
       var options = {
-        format: "id-name-user_type",
+        format: "name-city_name",
         selected_id: selected_id,
         default: true,
       };
       var optionHTML = getOptions(response, options);
-      $(".getDistributor").html(optionHTML);
+      $(".getVendor").html(optionHTML);
     },
   });
 };
-const userDistributor = function (selected_id = null) {
+const getWorker = function (city_id,selected_id = null) {
   $.ajax({
-    url: `${BaseUrl}user/get-distributor`,
+    url: `${BaseUrl}admin/User/getWorker`,
     type: "POST",
     dataType: "json",
+		data: {
+			city_id: city_id,
+		},
     success: function (response) {
-      $(".getDistributor").empty();
+      $(".getWorker").empty();
       var options = {
-        format: "id-name-user_type",
+        format: "name-city_name",
         selected_id: selected_id,
         default: true,
       };
       var optionHTML = getOptions(response, options);
-      $(".getDistributor").html(optionHTML);
+      $(".getWorker").html(optionHTML);
     },
   });
-};
-
-const getPackage = function (id, selected_id = null, options) {
-  if (id != "") {
-    $.ajax({
-      url: `${BaseUrl}admin/get-package`,
-      type: "POST",
-      dataType: "json",
-      data: {
-        id: id,
-      },
-      success: function (response) {
-        $(".getPackage").empty();
-        var options = {
-          format: "id-name",
-          selected_id: selected_id,
-          default: true,
-        };
-        var optionHTML = getOptions(response, options);
-        $(".getPackage").html(optionHTML);
-      },
-    });
-  } else {
-    $(".getPackage").empty();
-    $(".getPackage").append('<option value="">Select Package</option>');
-  }
-};
-const userPackage = function (id, selected_id = null,options) {
-  if (id != "") {
-    $.ajax({
-      url: `${BaseUrl}user/get-package`,
-      type: "POST",
-      dataType: "json",
-      data: {
-        id: id,
-      },
-      success: function (response) {
-        $(".getPackage").empty();
-        var options = {
-          format: "id-name",
-          selected_id: selected_id,
-          default: true,
-        };
-        var optionHTML = getOptions(response, options);
-        $(".getPackage").html(optionHTML);
-      },
-    });
-  } else {
-    $(".getPackage").empty();
-    $(".getPackage").append('<option value="">Select Package</option>');
-  }
 };
 
 /* Common user get with ajax with Select2 */

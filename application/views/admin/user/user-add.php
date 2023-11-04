@@ -1,5 +1,5 @@
 <div class="container-xxl flex-grow-1 container-p-y pt-0">
-	<h4 class="py-2 mb-2"><span class="text-muted fw-light">User / </span> Add </h4>
+	<h4 class="py-2 mb-2"><span class="text-muted fw-light">User / </span> <?=isset($data) ? 'Edit' : 'Add' ?> </h4>
 	<!-- Sticky Actions -->
 	<form action="<?=!isset($data) ? base_url('admin/user/add') : base_url('admin/user/update') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="post" enctype="multipart/form-data">
 		<div class="row">
@@ -11,10 +11,10 @@
 							<div class="row g-4">
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
-										<input type="text" id="name" name="name" value="<?= isset($data['name']) ? $data['name'] : '' ?>" required class="form-control required" placeholder="Name" />
-										<input type="hidden" id="id" name="id" value="<?= isset($data['id']) ? $data['id'] : '' ?>" class="form-control"/>
+										<input type="text" id="name" name="name" value="<?= isset($data['name']) ? $data['name'] : '' ?>" required class="form-control required" placeholder="Enter Name" />
 										<label for="name">Name</label>
 									</div>
+									<input type="hidden" id="id" name="id" value="<?= isset($id) ? $id : '' ?>" class="form-control"/>
 								</div>
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
@@ -45,6 +45,32 @@
 											<option value="WORKER" <?= isset($data['type']) && $data['type'] == "WORKER" ? "selected" : '' ?>>WORKER</option>
 										</select>
 										<label for="User Type">User Type</label>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-floating form-floating-outline">
+										<select id="city" name="city" class="select2 form-select required" data-lable='City' required data-allow-clear="true">
+											<option value="">Select City</option>
+											<?php if(!empty($city)){ ?>
+												<?php foreach ($city as $key => $value) {?>
+                                                    <option value="<?= $value['id']?>" <?= isset($data['city_id']) && $data['city_id'] == $value['id']? "selected" : ''?>><?= $value['name']?></option>
+                                                <?php }?>
+                                            <?php }?>
+										</select>
+										<label for="City">City</label>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-floating form-floating-outline">
+										<select id="job_type" name="job_type" class="select2 form-select required" data-lable='Job Type' required data-allow-clear="true">
+											<option value="">Select Job Type</option>
+											<?php if(!empty($city)){ ?>
+												<?php foreach ($city as $key => $value) {?>
+                                                    <option value="<?= $value['id']?>" <?= isset($data['city_id']) && $data['city_id'] == $value['id']? "selected" : ''?>><?= $value['name']?></option>
+                                                <?php }?>
+                                            <?php }?>
+										</select>
+										<label for="Job Type">Job Type</label>
 									</div>
 								</div>
 								<div class="col-md-4">
