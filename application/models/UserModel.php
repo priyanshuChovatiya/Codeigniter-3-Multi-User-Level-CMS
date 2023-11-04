@@ -7,49 +7,58 @@ class UserModel extends CI_Model
 	public function getUsers($postData = null)
 	{
 
-        $response = array();
-   
-        ## Read value
-        $draw = $postData['draw'];
-        $start = $postData['start'];
-        $rowperpage = $postData['length']; // Rows display per page
-        $columnIndex = $postData['order'][0]['column']; // Column index
-        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
-        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
-        // $searchValue = $postData['search']['value']; // Search value
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		// $searchValue = $postData['search']['value']; // Search value
 		$user_id = $this->session->userdata('login')['user_id'];
 
-		if(!empty($postData['user_type'])){
-			$type = array('type'=>$postData['user_type']);
-		}else{
+		if (!empty($postData['user_type'])) {
+			$type = array('user.type' => $postData['user_type']);
+		} else {
 			$type = array();
 		}
-		if(!empty($postData['status'])){
-			$status = array('status'=>$postData['status']);
-		}else{
+		if (!empty($postData['status'])) {
+			$status = array('user.status' => $postData['status']);
+		} else {
 			$status = array();
 		}
-		
-		
+		if (!empty($postData['city_id'])) {
+			$city_id = array('user.city_id' => $postData['city_id']);
+		} else {
+			$city_id = array();
+		}
+
+
 		## Total number of records without filtering
-		$query = $this->db->select('*')->from('user')->where('user_id', $user_id)->where($type)->where($status);
-		if(!empty($postData['search'])){
-			$query->like('name', $postData['search']);
+		$query = $this->db->select('user.*,city.name as city_name')->from('user')
+			->join('city', 'user.city_id = city.id', 'left')
+			->where('user.user_id', $user_id)->where($type)->where($status)->where($city_id);
+		if (!empty($postData['search'])) {
+			$query->like('user.name', $postData['search']);
 		}
 		$totalRecords = $this->db->get()->num_rows();
-		
-		
+
+
 		## Total number of record with filtering
-		$recordstotalRecord = $this->db->select('*')->from('user')->where('user_id', $user_id)->where($type)->where($status);
-		if(!empty($postData['search'])){
-			$recordstotalRecord->like('name', $postData['search']);
+		$recordstotalRecord = $this->db->select('user.*,city.name as city_name')->from('user')
+			->join('city', 'user.city_id = city.id', 'left')->where('user.user_id', $user_id)->where($type)->where($status)->where($city_id);
+		if (!empty($postData['search'])) {
+			$recordstotalRecord->like('user.name', $postData['search']);
 		}
 		$totalRecordwithFilter = $this->db->get()->num_rows();
 
 		## Fetch records
-		$records = $this->db->select('*')->from('user')->where('user_id', $user_id)->where($type)->where($status);
-		if(!empty($postData['search'])){
-			$records->like('name', $postData['search']);
+		$records = $this->db->select('user.*,city.name as city_name')->from('user')
+			->join('city', 'user.city_id = city.id', 'left')->where('user.user_id', $user_id)->where($type)->where($status)->where($city_id);
+		if (!empty($postData['search'])) {
+			$records->like('user.name', $postData['search']);
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
@@ -59,14 +68,14 @@ class UserModel extends CI_Model
 		$i = $start + 1;
 		foreach ($Allrecords as $record) {
 
-			$id = encrypt_id($record->id);
-                $link = base_url('admin/user/edit/') . $id;
-                $checked = $record->status == 'ACTIVE' ? "checked" : "";
+			$id = $record->id;
+			$link = base_url('admin/user/edit/') . $id;
+			$checked = $record->status == 'ACTIVE' ? "checked" : "";
 
-                $action = "<button type='button' class='btn btn-sm btn-primary rounded-pill btn-icon permission' data-bs-toggle='modal' data-id='" . $id . "'> <i class='mdi mdi-tune'></i> </button>
+			$action = "<button type='button' class='btn btn-sm btn-primary rounded-pill btn-icon permission' data-bs-toggle='modal' data-id='" . $id . "'> <i class='mdi mdi-tune'></i> </button>
                 <a href='{$link}'><button type='button' class='btn btn-sm btn-dark rounded-pill btn-icon' data-bs-toggle='modal' > <i class='mdi mdi-pencil-outline'></i> </button><a/>";
 
-                $status = " <label class='switch switch-success'>
+			$status = " <label class='switch switch-success'>
                                 <input type='checkbox' data-id='$id' data-status='{$record->status}' data-on='ACTIVE' data-value='1' data-off='INACTIVE'
                                     class='switch-input status' {$checked} />
                                 <span class='switch-toggle-slider'>
@@ -85,6 +94,7 @@ class UserModel extends CI_Model
 				"name" => $record->name,
 				"email" => $record->email,
 				"mobile" => $record->mobile,
+				"city" => $record->city_name,
 				"user_type" => $record->type,
 				"status" => $status,
 				"created_at" => $record->created_at,

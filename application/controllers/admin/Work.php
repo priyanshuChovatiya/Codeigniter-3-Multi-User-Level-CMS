@@ -14,7 +14,7 @@ class Work extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		access_level_admin();
+		access_level('ADMIN');
 		$this->load->model('admin/WorkModel');
 	}
 
@@ -59,13 +59,12 @@ class Work extends CI_Controller
 		echo json_encode($data);
 	}
 
-	public function edit($update_id)
+	public function edit($id)
 	{
 		try {
-			$id = decrypt_id($update_id);
 			$user_id = $this->session->userdata('login')['user_id'];
 			$page_data['data'] = $this->db->select('id,name')->get_where('work', array('id' => $id, 'user_id' => $user_id))->row_array();
-			$page_data['id'] = $update_id;
+			$page_data['id'] = $id;
 			$page_data['page_title'] = 'Manage Work';
 			$page_data['page_name'] = 'admin/work/work-add';
 			return $this->load->view('admin/common', $page_data);
@@ -80,7 +79,7 @@ class Work extends CI_Controller
 	public function update()
 	{
 		$data = $this->input->post();
-		$id = decrypt_id($data['id']);
+		$id = $data['id'];
 
 		$this->form_validation->set_rules('name', 'Full Name ', 'trim|required');
 		if ($this->form_validation->run() == false) {
@@ -113,7 +112,7 @@ class Work extends CI_Controller
 			} else {
 				$data = $this->input->post();
 				$user_id = $this->session->userdata('login')['user_id'];
-				$id = decrypt_id($data['id']);
+				$id = $data['id'];
 
 				$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('work', ['status' => $data['status']]);
 

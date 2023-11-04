@@ -62,6 +62,19 @@
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating form-floating-outline">
+										<select id="city" name="city" class="select2 form-select required" data-lable='City' required data-allow-clear="true">
+											<option value="">Select City</option>
+											<?php if (!empty($city)) { ?>
+												<?php foreach ($city as $key => $value) { ?>
+													<option value="<?= $value['id'] ?>" <?= isset($data['city_id']) && $data['city_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+												<?php } ?>
+											<?php } ?>
+										</select>
+										<label for="City">City</label>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-floating form-floating-outline">
 										<input type="text" id="search" name="search" class="form-control" placeholder="User Name" />
 										<label for="search">Search Project </label>
 									</div>
@@ -93,6 +106,7 @@
 								<th>Action</th>
 								<th>Name</th>
 								<th>Title</th>
+								<th>City</th>
 								<th>Worker</th>
 								<th>Vendor</th>
 								<th>Customer</th>
@@ -132,6 +146,7 @@
 					data.customer_id = $('#customer').val();
 					data.status = $('#status').val();
 					data.search = $('#search').val();
+					data.city = $('#city').val();
 					ShowBlockUi('#ProjectTable');
 				}
 			},
@@ -146,6 +161,9 @@
 				},
 				{
 					data: 'title'
+				},
+				{
+					data: 'city'
 				},
 				{
 					data: 'worker'

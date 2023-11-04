@@ -62,14 +62,12 @@ function compareDates($date1, $date2)
 {
 	return strtotime($date1['date']) - strtotime($date2['date']);
 }
-function access_level_admin()
+function access_level($type)
 {
 
 	$CI = &get_instance();
-	if (!$CI->session->has_userdata('login')) {
-		$message = ['class' => 'danger', 'message' => 'Your Session hase been Expired!! '];
-		flash_message($message);
-		redirect(base_url('/login'));
+	if ($CI->session->userdata('login')['user_type'] == '' || $CI->session->userdata('login')['user_type'] != $type){
+		return redirect(base_url('/login'));
 	}
 }
 
@@ -115,21 +113,6 @@ function encrypt_id($id)
 	} catch (\Throwable | \ErrorException | \Error | \Exception $e) {
 		throw new Exception('Invalid  ID');
 	}
-
-	// try {
-	// 	$key = "4mh0OXr8yc536fVWfDSx2w";
-	// 	$ivLength = openssl_cipher_iv_length($cipher = "AES-128-CBC");
-	// 	$iv = openssl_random_pseudo_bytes($ivLength);
-	// 	$encrypted = openssl_encrypt($id, $cipher, $key, $options = 0, $iv, $iv_tag);
-	// 	$encrypId = bin2hex($iv . $iv_tag . $encrypted);
-	// 	if ($encrypId > 0) {
-	// 		return $encrypId;
-	// 	} else {
-	// 		throw new Exception('Invalid  ID');
-	// 	}
-	// } catch (\Throwable | \ErrorException | \Error | \Exception $e) {
-	// 	throw new Exception('Invalid  ID');
-	// }
 }
 
 function decrypt_id($encrypted_id)
@@ -148,21 +131,4 @@ function decrypt_id($encrypted_id)
 	} catch (\Throwable | \ErrorException | \Error | \Exception $e) {
 		throw new Exception('Invalid  ID');
 	}
-
-	// try {
-	// 	$key = "4mh0OXr8yc536fVWfDSx2w";
-	// 	$data = hex2bin($encrypted_id);
-	// 	$ivLength = openssl_cipher_iv_length($cipher = "AES-128-CBC");
-	// 	$iv = substr($data, 0, $ivLength);
-	// 	$iv_tag = substr($data, $ivLength, 16); // assuming a 128 bit tag
-	// 	$encrypted = substr($data, $ivLength + 16); // +16 for the tag
-	// 	$decryptId = openssl_decrypt($encrypted, $cipher, $key, $options = 0, $iv, $iv_tag);
-	// 	if ($decryptId > 0) {
-	// 		return $decryptId;
-	// 	} else {
-	// 		throw new Exception('Invalid  ID');
-	// 	}
-	// } catch (\Throwable | \ErrorException | \Error | \Exception $e) {
-	// 	throw new Exception('Invalid  ID');
-	// }
 }
