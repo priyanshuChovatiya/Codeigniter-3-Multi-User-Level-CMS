@@ -47,8 +47,8 @@
 				<div data-i18n="Manage City">Manage City</div>
 			</a>
 		</li>
-		<li class="menu-item <?= is_active('admin/work') ?>">
-			<a href="<?= base_url('admin/work'); ?>" class="menu-link">
+		<li class="menu-item <?= is_active('admin/jobType') ?>">
+			<a href="<?= base_url('admin/jobType'); ?>" class="menu-link">
 				<i class="menu-icon tf-icons mdi mdi-plus-network"></i>
 				<div data-i18n="Manage Job Type">Manage Job Type</div>
 			</a>

@@ -64,9 +64,9 @@
 									<div class="form-floating form-floating-outline">
 										<select id="job_type" name="job_type" class="select2 form-select required" data-lable='Job Type' required data-allow-clear="true">
 											<option value="">Select Job Type</option>
-											<?php if(!empty($city)){ ?>
-												<?php foreach ($city as $key => $value) {?>
-                                                    <option value="<?= $value['id']?>" <?= isset($data['city_id']) && $data['city_id'] == $value['id']? "selected" : ''?>><?= $value['name']?></option>
+											<?php if(!empty($job_type)){ ?>
+												<?php foreach ($job_type as $key => $value) {?>
+                                                    <option value="<?= $value['id']?>" <?= isset($data['job_type_id']) && $data['city_id'] == $value['id']? "selected" : ''?>><?= $value['name']?></option>
                                                 <?php }?>
                                             <?php }?>
 										</select>

@@ -109,7 +109,6 @@
 								<th>Name</th>
 								<th>Title</th>
 								<th>City</th>
-								<th>Job Type</th>
 								<th>Worker</th>
 								<th>Vendor</th>
 								<th>Customer</th>
@@ -128,7 +127,7 @@
 <!-- / Content -->
 <div class="javascript">
 	<script>
-		$(document).ready(function () {
+		// $(document).ready(function () {
 		var table = $('#ProjectTable').DataTable({
 			fixedHeader: false,
 			responsive: false,
@@ -140,7 +139,7 @@
 			paging: true,
 			processing: false,
 			ajax: {
-				url: '<?= base_url('admin/project/getProjectList'); ?>',
+				url: '<?= base_url('worker/project/getProjectList'); ?>',
 				type: "post",
 				data: function(data) {
 					data.worker_id = $('#worker').val();
@@ -172,9 +171,6 @@
 				},
 				{
 					data: 'city'
-				},
-				{
-					data: 'job_type'
 				},
 				{
 					data: 'worker'
@@ -262,6 +258,6 @@
 			change_status(obj, current_status);
 
 		});
-		});
+		// });
 	</script>
 </div>

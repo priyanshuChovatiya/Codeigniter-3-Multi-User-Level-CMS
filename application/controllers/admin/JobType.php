@@ -1,9 +1,7 @@
 <?php
-
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Work extends CI_Controller
+class JobType extends CI_Controller
 {
 
 	public $form_validation;
@@ -15,47 +13,47 @@ class Work extends CI_Controller
 	{
 		parent::__construct();
 		access_level('ADMIN');
-		$this->load->model('admin/WorkModel');
+		$this->load->model('admin/JobTypeModel');
 	}
 
 	public function index()
 	{
-		$page_data['page_title'] = 'Manage Work';
-		$page_data['page_name'] = 'admin/work/work-add';
+		$page_data['page_title'] = 'Manage Job Types';
+		$page_data['page_name'] = 'admin/jobType/jobType-add';
 		return $this->load->view('admin/common', $page_data);
 	}
 
 	public function add()
 	{
 		//work data
-		$this->form_validation->set_rules('name', 'Work Name ', 'trim|required');
+		$this->form_validation->set_rules('name', 'Job Type Name ', 'trim|required');
 		if ($this->form_validation->run() == false) {
 			$r['success'] = 0;
 			$r['message'] = validation_errors();
 		} else {
 			$data = $this->input->post();
-			$work = [];
+			$job_type = [];
 
-			$work['name'] = $data['name'];
-			$work['user_id'] = $this->session->userdata('login')['user_id'];
+			$job_type['name'] = $data['name'];
+			$job_type['user_id'] = $this->session->userdata('login')['user_id'];
 
-			$insert = $this->db->insert('work', $work);
+			$insert = $this->db->insert('job_type', $job_type);
 			if (isset($insert)) {
 				$r['success'] = 1;
-				$r['message'] = "Work Add SuccessFully.";
+				$r['message'] = "Job Type Add SuccessFully.";
 			} else {
 				$r['success'] = 0;
-				$r['message'] = "Work Add Failed, Please Try again.";
+				$r['message'] = "Job Type Add Failed, Please Try again.";
 			}
 		}
 		$this->session->set_flashdata('flash', $r);
-		redirect(base_url('admin/work'), 'refresh');
+		redirect(base_url('admin/jobType'), 'refresh');
 	}
 
-	public function getWorkList()
+	public function getJobTypeList()
 	{
 		$postData = $this->input->post();
-		$data = $this->WorkModel->getWork($postData);
+		$data = $this->JobTypeModel->getJobType($postData);
 		echo json_encode($data);
 	}
 
@@ -63,16 +61,16 @@ class Work extends CI_Controller
 	{
 		try {
 			$user_id = $this->session->userdata('login')['user_id'];
-			$page_data['data'] = $this->db->select('id,name')->get_where('work', array('id' => $id, 'user_id' => $user_id))->row_array();
+			$page_data['data'] = $this->db->select('id,name')->get_where('job_type', array('id' => $id, 'user_id' => $user_id))->row_array();
 			$page_data['id'] = $id;
-			$page_data['page_title'] = 'Manage Work';
-			$page_data['page_name'] = 'admin/work/work-add';
+			$page_data['page_title'] = 'Manage Job Types';
+			$page_data['page_name'] = 'admin/jobType/jobType-add';
 			return $this->load->view('admin/common', $page_data);
 		} catch (\Throwable | \ErrorException | \Error | \Exception $e) {
 			$r['success'] = 0;
 			$r['message'] = $e->getMessage();
 			$this->session->set_flashdata('flash', $r);
-			redirect(base_url('admin/work'), 'refresh');
+			redirect(base_url('admin/jobType'), 'refresh');
 		}
 	}
 
@@ -87,17 +85,17 @@ class Work extends CI_Controller
 			$r['message'] = validation_errors();
 		} else {
 			$user_id = $this->session->userdata('login')['user_id'];
-			$update = $this->db->where('id', $id)->where('user_id', $user_id)->update('work', ['name' => $data['name']]);
+			$update = $this->db->where('id', $id)->where('user_id', $user_id)->update('job_type', ['name' => $data['name']]);
 			if (isset($update)) {
 				$r['success'] = 1;
-				$r['message'] = "Work Updated SuccessFully.";
+				$r['message'] = "Job Type Updated SuccessFully.";
 			} else {
 				$r['success'] = 0;
-				$r['message'] = "Work Updated Failed, Please Try again.";
+				$r['message'] = "Job Type Updated Failed, Please Try again.";
 			}
 		}
 		$this->session->set_flashdata('flash', $r);
-		redirect(base_url('admin/work'), 'refresh');
+		redirect(base_url('admin/jobType'), 'refresh');
 	}
 
 	public function status()
@@ -114,7 +112,7 @@ class Work extends CI_Controller
 				$user_id = $this->session->userdata('login')['user_id'];
 				$id = $data['id'];
 
-				$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('work', ['status' => $data['status']]);
+				$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('job_type', ['status' => $data['status']]);
 
 				if (isset($response)) {
 					echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);

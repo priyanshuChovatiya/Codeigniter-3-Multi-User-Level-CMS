@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class WorkModel extends CI_Model
+class JobTypeModel extends CI_Model
 {
 
-	public function getWork($postData = null)
+	public function getJobType($postData = null)
 	{
 
 		$response = array();
@@ -21,14 +21,14 @@ class WorkModel extends CI_Model
 
 
 		## Total number of records without filtering
-		$totalRecords = $this->db->select('*')->from('work')->where('user_id', $user_id)->get()->num_rows();
+		$totalRecords = $this->db->select('*')->from('job_type')->where('user_id', $user_id)->get()->num_rows();
 
 
 		## Total number of record with filtering
-		$totalRecordwithFilter = $this->db->select('*')->from('work')->where('user_id', $user_id)->get()->num_rows();
+		$totalRecordwithFilter = $this->db->select('*')->from('job_type')->where('user_id', $user_id)->get()->num_rows();
 
 		## Fetch records
-		$records = $this->db->select('*')->from('work')->where('user_id', $user_id)
+		$records = $this->db->select('*')->from('job_type')->where('user_id', $user_id)
 					->order_by($columnName, $columnSortOrder)
 					->limit($rowperpage, $start)
 					->get()->result();
@@ -38,7 +38,7 @@ class WorkModel extends CI_Model
 		foreach ($records as $record) {
 
 			$id = $record->id;
-			$link = base_url('admin/work/edit/') . $id;
+			$link = base_url('admin/jobType/edit/') . $id;
 			$checked = $record->status == 'ACTIVE' ? "checked" : "";
 			
 			$action = "<div class='d-flex gap-1'><a href='{$link}'><button type='button' class='btn btn-sm btn-dark rounded-pill btn-icon' data-bs-toggle='modal' > <i class='mdi mdi-pencil-outline'></i> </button><a/>";
