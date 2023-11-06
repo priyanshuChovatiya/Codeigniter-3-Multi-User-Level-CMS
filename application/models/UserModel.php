@@ -37,8 +37,9 @@ class UserModel extends CI_Model
 
 
 		## Total number of records without filtering
-		$query = $this->db->select('user.*,city.name as city_name')->from('user')
+		$query = $this->db->select('user.*,city.name as city_name,job_type.name as job_name')->from('user')
 			->join('city', 'user.city_id = city.id', 'left')
+			->join('job_type', 'user.job_type_id = job_type.id', 'left')
 			->where('user.user_id', $user_id)->where($type)->where($status)->where($city_id);
 		if (!empty($postData['search'])) {
 			$query->like('user.name', $postData['search']);
@@ -47,16 +48,20 @@ class UserModel extends CI_Model
 
 
 		## Total number of record with filtering
-		$recordstotalRecord = $this->db->select('user.*,city.name as city_name')->from('user')
-			->join('city', 'user.city_id = city.id', 'left')->where('user.user_id', $user_id)->where($type)->where($status)->where($city_id);
+		$recordstotalRecord = $this->db->select('user.*,city.name as city_name,job_type.name as job_name')->from('user')
+			->join('city', 'user.city_id = city.id', 'left')
+			->join('job_type', 'user.job_type_id = job_type.id', 'left')
+			->where('user.user_id', $user_id)->where($type)->where($status)->where($city_id);
 		if (!empty($postData['search'])) {
 			$recordstotalRecord->like('user.name', $postData['search']);
 		}
 		$totalRecordwithFilter = $this->db->get()->num_rows();
 
 		## Fetch records
-		$records = $this->db->select('user.*,city.name as city_name')->from('user')
-			->join('city', 'user.city_id = city.id', 'left')->where('user.user_id', $user_id)->where($type)->where($status)->where($city_id);
+		$records = $this->db->select('user.*,city.name as city_name,job_type.name as job_name')->from('user')
+			->join('city', 'user.city_id = city.id', 'left')
+			->join('job_type', 'user.job_type_id = job_type.id', 'left')
+			->where('user.user_id', $user_id)->where($type)->where($status)->where($city_id);
 		if (!empty($postData['search'])) {
 			$records->like('user.name', $postData['search']);
 		}
@@ -72,8 +77,8 @@ class UserModel extends CI_Model
 			$link = base_url('admin/user/edit/') . $id;
 			$checked = $record->status == 'ACTIVE' ? "checked" : "";
 
-			$action = "<button type='button' class='btn btn-sm btn-primary rounded-pill btn-icon permission' data-bs-toggle='modal' data-id='" . $id . "'> <i class='mdi mdi-tune'></i> </button>
-                <a href='{$link}'><button type='button' class='btn btn-sm btn-dark rounded-pill btn-icon' data-bs-toggle='modal' > <i class='mdi mdi-pencil-outline'></i> </button><a/>";
+			$action = "<div class='d-flex gap-1'><button type='button' class='btn btn-sm btn-primary rounded-pill btn-icon permission' data-bs-toggle='modal' data-id='" . $id . "'> <i class='mdi mdi-tune'></i> </button>
+                <a href='{$link}'><button type='button' class='btn btn-sm btn-dark rounded-pill btn-icon' data-bs-toggle='modal' > <i class='mdi mdi-pencil-outline'></i> </button><a/></div>";
 
 			$status = " <label class='switch switch-success'>
                                 <input type='checkbox' data-id='$id' data-status='{$record->status}' data-on='ACTIVE' data-value='1' data-off='INACTIVE'
@@ -85,9 +90,6 @@ class UserModel extends CI_Model
                                 <span class='switch-label'>{$record->status}</span>
                             </label>";
 
-			$button = "<a href='" . base_url() . "abc_info/edit/" . $record->id . "' class='btn btn-info btn-sm mr-2'><i class='far fa-edit'></i></a>";
-			$button .= '<a class="btn btn-sm btn-danger text-light" onclick="deleteabc_info(' . $record->id . ')" href="javascript:void(0);"><i class="far fa-trash-alt"></i></a>';
-
 			$data[] = array(
 				"id" => $i++,
 				"action" => $action,
@@ -96,6 +98,7 @@ class UserModel extends CI_Model
 				"mobile" => $record->mobile,
 				"city" => $record->city_name,
 				"user_type" => $record->type,
+				"job_type" => $record->job_name,
 				"status" => $status,
 				"created_at" => $record->created_at,
 			);

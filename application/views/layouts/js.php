@@ -44,7 +44,7 @@ $(document).ready(function() {
     Toast.fire({
         icon: '<?= $class ?>',
         title: `<?= $flash['message'] ?>`
-    })
+    });
 });
 </script>
 <?php endif; ?>

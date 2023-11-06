@@ -10,9 +10,6 @@
 							<h5 class="text-primary">Project Details</h5>
 							<div class="row g-4">
 								<input type="hidden" id="id" name="id" value="<?= isset($id) ? $id : '' ?>" class="form-control" />
-								<input type="hidden" id="vendor_id" name="vendor_id" value="<?= isset($data['vendor_id']) ? $data['vendor_id'] : '' ?>" class="form-control" />
-								<input type="hidden" id="worker_id" name="worker_id" value="<?= isset($data['worker_id']) ? $data['worker_id'] : '' ?>" class="form-control" />
-								<input type="hidden" id="customer_id" name="customer_id" value="<?= isset($data['customer_id']) ? $data['customer_id'] : '' ?>" class="form-control" />
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<input type="text" id="name" name="name" value="<?= isset($data['name']) ? $data['name'] : '' ?>" required class="form-control required" placeholder="Enter Name" />
@@ -38,36 +35,42 @@
 										<label for="City">City</label>
 									</div>
 								</div>
-								<div class="col-md-4">
+								<!-- <div class="col-md-4">
 									<div class="form-floating form-floating-outline">
-										<select id="worker" name="worker" class="select2 form-select getWorker required" data-lable='Worker' required data-allow-clear="true">
+										<select id="worker" name="worker[]" class="select2 form-select getWorker required" multiple data-lable='Worker' required data-allow-clear="true">
 											<option value="">Select Worker</option>
 										</select>
 										<label for="worker">Workers</label>
 									</div>
-								</div>
-								<div class="col-md-4">
+								</div> -->
+								<!-- <div class="col-md-4">
 									<div class="form-floating form-floating-outline">
-										<select id="vendor" name="vendor" class="select2 form-select getVendor required" data-lable='Vendor' required data-allow-clear="true">
-											<option value="">Select Vendor/option>
+										<select id="vendor" name="vendor[]" class="select2 form-select getVendor required" multiple data-lable='Vendor' required data-allow-clear="true">
+											<option value="">Select Vendor</option>
 										</select>
 										<label for="vendor">Vendor</label>
 									</div>
-								</div>
+								</div> -->
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
-										<select id="customer" name="customer" class="select2 form-select getCustomer required" data-lable='Customer' required data-allow-clear="true">
-											<option value="">Select Customer/option>
+										<select id="customer" name="customer" class="select2 form-select required" data-lable='Customer' required data-allow-clear="true">
+											<option value="">Select Customer</option>
+											<?php if (!empty($customer)) {
+												foreach ($customer as $value) { ?>
+													<option value="<?= $value['id'] ?>" <?= isset($data['customer_id']) && $data['customer_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+											<?php }
+											} ?>
+
 										</select>
 										<label for="customer">Customer</label>
 									</div>
 								</div>
-								<div class="col-md-4">
+								<!-- <div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<input type="number" name="price" id="price" value="<?= isset($data['price']) ? $data['price'] : '' ?>" required class="form-control phone-mask required  positiveNumber" placeholder="0.00" aria-label="0.00" />
 										<label for="price">Price</label>
 									</div>
-								</div>
+								</div> -->
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<input type="date" name="start_date" id="start_date" value="<?= isset($data['start_date']) ? $data['start_date'] : '' ?>" required class="form-control phone-mask required" />
@@ -92,6 +95,97 @@
 								</div>
 							</div>
 						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class=" text-nowrap">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>SR NO</th>
+												<th>Job Type</th>
+												<th>Worker</th>
+												<th>Vendor</th>
+												<th>Price</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody class="table-border-bottom-0 append-here appendHTML">
+											<?php if (!empty($project_detail)) {
+												foreach ($project_detail as $key => $project_detail) { ?>
+													<tr class="copy_row gap-2">
+														<td class="td-srno">
+														<input type="hidden" name="pd_id[]" value="<?= isset($project_detail['id']) ? $project_detail['id'] : '' ?>" class="form-control" />
+															<?= isset($project_detail) ? $key + 1 : '1' ?>
+														</td>
+														<td class="p-1">
+															<div class="form-floating form-floating-outline">
+																<select name="job_type[]" class="select2 form-select required" required data-lable="Job Type" data-allow-clear="true">
+																	<option value="">Select Job Type</option>
+																	<?php if (!empty($job_type)) {
+																		foreach ($job_type as $key => $value) { ?>
+																			<option value="<?= $value['id'] ?>" <?= isset($project_detail['job_type_id']) && $project_detail['job_type_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+																		<?php } ?>
+																	<?php } ?>
+																</select>
+																<label for="Job Type">Job Type</label>
+															</div>
+														</td>
+														<td class="p-1">
+															<div class="form-floating form-floating-outline">
+																<select name="worker[]" class="select2 form-select required" data-lable="Worker" required data-allow-clear="true">
+																	<option value="">Select Worker</option>
+																	<?php if (!empty($worker)) {
+																		foreach ($worker as $key => $value) { ?>
+																			<option value="<?= $value['id'] ?>" <?= isset($project_detail['worker_id']) && $project_detail['worker_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+																		<?php } ?>
+																	<?php } ?>
+																</select>
+																<label for="worker">Worker</label>
+															</div>
+														</td>
+														<td class="p-1">
+															<div class="form-floating form-floating-outline">
+																<select name="vendor[]" class="select2 form-select required" data-lable="Vendor" required data-allow-clear="true">
+																	<option value="">Select Vendor</option>
+																	<?php if (!empty($vendor)) {
+																		foreach ($vendor as $key => $value) { ?>
+																			<option value="<?= $value['id'] ?>" <?= isset($project_detail['vendor_id']) && $project_detail['vendor_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+																		<?php } ?>
+																	<?php } ?>
+																</select>
+																<label for="vendor">Vendor</label>
+															</div>
+														</td>
+														<td class="p-1">
+															<div class="form-floating form-floating-outline">
+																<input type="number" name="price[]" class="form-control required" value="<?= isset($project_detail['price']) ? $project_detail['price'] : '' ?>" required placeholder="0.00" aria-label="0.00" />
+																<label for="price">Price</label>
+															</div>
+														</td>
+														<td>
+															<div class="mb-3 col-lg-12 col-xl-2 col-12 d-flex align-items-center mb-0">
+																<button type="button" class="btn btn-danger waves-effect mt-3 remove-row-btn">
+																	<span class="align-middle">
+																		<i class="mdi mdi-close "></i>
+																	</span>
+																</button>
+															</div>
+														</td>
+													</tr>
+											<?php }
+											} ?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<button type="button" class="float-start btn btn-primary more-btn mt-3"> +
+									Add More
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -110,6 +204,67 @@
 		</div>
 	</form>
 </div>
+<script type="text/template" id="copyHTML">
+	<tr class="copy_row gap-2">
+		<td class="td-srno">
+			1
+		</td>
+		<td class="p-1">
+			<div class="form-floating form-floating-outline">
+				<select name="job_type[]" class="select2 form-select required" required data-lable="Job Type" data-allow-clear="true">
+					<option value="">Select Job Type</option>
+					<?php if (!empty($job_type)) {
+						foreach ($job_type as $key => $value) { ?>
+							<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+						<?php } ?>
+					<?php } ?>
+				</select>
+				<label for="Job Type">Job Type</label>
+			</div>
+		</td>
+		<td class="p-1">
+			<div class="form-floating form-floating-outline">
+				<select name="worker[]" class="select2 form-select required" required data-lable="Worker" data-allow-clear="true">
+					<option value="">Select Worker</option>
+					<?php if (!empty($worker)) {
+						foreach ($worker as $key => $value) { ?>
+							<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+						<?php } ?>
+					<?php } ?>
+				</select>
+				<label for="worker">Worker</label>
+			</div>
+		</td>
+		<td class="p-1">
+			<div class="form-floating form-floating-outline">
+				<select name="vendor[]" class="select2 form-select required" required data-lable="Vendor" data-allow-clear="true">
+					<option value="">Select Vendor</option>
+					<?php if (!empty($vendor)) {
+						foreach ($vendor as $key => $value) { ?>
+							<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+						<?php } ?>
+					<?php } ?>
+				</select>
+				<label for="vendor">Vendor</label>
+			</div>
+		</td>
+		<td class="p-1">
+			<div class="form-floating form-floating-outline">
+				<input type="number" name="price[]" class="form-control required" required placeholder="0.00" aria-label="0.00" />
+				<label for="price">Price</label>
+			</div>
+		</td>
+		<td>
+			<div class="mb-3 col-lg-12 col-xl-2 col-12 d-flex align-items-center mb-0">
+				<button type="button" class="btn btn-danger waves-effect mt-3 remove-row-btn">
+					<span class="align-middle">
+						<i class="mdi mdi-close "></i>
+					</span>
+				</button>
+			</div>
+		</td>
+	</tr>
+</script>
 <script>
 	var worker = <?= json_encode(($worker) ?? '') ?>;
 	var vendor = <?= json_encode(($vendor) ?? '') ?>;
@@ -117,41 +272,41 @@
 </script>
 <div class="javascript">
 	<script>
-		selectAuto();
-		function selectAuto() {
-			if (worker) {
-				var options = {
-					format: "name-city_name",
-					selected_id: $('#worker_id').val(),
-					default: true,
-				};
-				var optionHTML = getOptions(worker, options);
-				$('.getWorker').html(optionHTML);
-			}
-			if (vendor) {
-				var options = {
-					format: "name-city_name",
-					selected_id: $('#vendor_id').val(),
-					default: true,
-				};
-				var optionHTML = getOptions(vendor, options);
-				$('.getVendor').html(optionHTML);
-			}
-			if (customer) {
-				var options = {
-					format: "name-city_name",
-					selected_id: $('#customer_id').val(),
-					default: true,
-				};
-				var optionHTML = getOptions(customer, options);
-				$('.getCustomer').html(optionHTML);
-			}
-		}
+		// $(document).ready(function() {
+		$(document).on("click", ".more-btn", function() {
+			var row = $("#copyHTML").html();
+			AppendBox = $('.appendHTML');
+			AppendBox.append(row);
+			AppendBox.children().last().find('.select2').each(function() {
 
-		$(document).on('change', '#city', function() {
-			getCustomer($(this).val());
-			getVendor($(this).val());
-			getWorker($(this).val());
+				$(this).val(null).trigger('change.select2').select2();
+			});
+			setSrNo(AppendBox);
 		});
+		$(document).on("click", ".remove-row-btn", function(e) {
+			let mainRowLength = $(".copy_row").length;
+			var RemoveBtn = $(this);
+			if (mainRowLength > 1) {
+				Swal.fire({
+					title: "Are you sure to delete?",
+					text: "You won't be able to revert this!",
+					icon: "warning",
+					showCancelButton: true,
+					confirmButtonText: "Yes, delete!",
+					customClass: {
+						confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+						cancelButton: "btn btn-outline-secondary waves-effect",
+					},
+					buttonsStyling: false,
+				}).then(function(result) {
+					if (result.value) {
+						RemoveBtn.parents(".copy_row").fadeOut(() => {
+							RemoveBtn.parents(".copy_row").remove();
+						});
+					}
+				});
+			}
+		});
+		// });
 	</script>
 </div>

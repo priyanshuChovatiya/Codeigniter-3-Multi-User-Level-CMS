@@ -1,13 +1,13 @@
 <div class="container-xxl flex-grow-1 container-p-y pt-0">
-	<h4 class="py-2 mb-2"><span class="text-muted fw-light">Work / </span> <?= isset($data) ? 'Edit' : 'Add' ?> </h4>
+	<h4 class="py-2 mb-2"><span class="text-muted fw-light">Job Type / </span> <?= isset($data) ? 'Edit' : 'Add' ?> </h4>
 	<!-- Sticky Actions -->
-	<form action="<?= !isset($data) ? base_url('admin/work/add') : base_url('admin/work/update') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="post" enctype="multipart/form-data">
+	<form action="<?= !isset($data) ? base_url('admin/jobType/add') : base_url('admin/jobType/update') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="post" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-lg-12 mb-2">
 				<div class="card">
 					<div class="card-body">
 						<div class="row">
-							<h5 class="text-primary">Work Details</h5>
+							<h5 class="text-primary">Job Type Details</h5>
 							<div class="row g-4">
 								<input type="hidden" id="id" name="id" value="<?= isset($id) ? $id : '' ?>" class="form-control" />
 								<div class="col-md-4">
@@ -42,7 +42,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="row">
-						<h5 class="text-primary">Work Report</h5>
+						<h5 class="text-primary">Job Type Report</h5>
 						<div class="card-datatable table-responsive pt-0 m-2">
 							<table class="table table-bordered" id="WorkTable">
 								<thead>
@@ -76,7 +76,7 @@
 			paging: true,
 			processing: false,
 			ajax: {
-				url: '<?= base_url('admin/work/getWorkList'); ?>',
+				url: '<?= base_url('admin/jobType/getJobTypeList'); ?>',
 				type: "post",
 				data: function(data) {
 					ShowBlockUi('#WorkTable');

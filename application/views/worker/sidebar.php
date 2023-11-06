@@ -41,6 +41,12 @@
 				<div data-i18n="Dashboards">Dashboards</div>
 			</a>
 		</li>
+		<li class="menu-item <?= is_active('worker/project/report') ?>">
+			<a href="<?= base_url('worker/project/report'); ?>" class="menu-link">
+				<i class="menu-icon mdi mdi-home-modern"></i>
+				<div data-i18n="Project Report">Project Report</div>
+			</a>
+		</li>
 	</ul>
 </aside>
 <div class="layout-page">

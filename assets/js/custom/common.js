@@ -3,6 +3,7 @@ const BaseUrl = $("meta[name=baseurl]").attr("content");
 var services = null;
 /* common ajax loader for all ajax call */
 $(document).ready(function() {
+	// $('.select2-dynamic').select2();
 	$(document).on('change', '.file', function() {
 		var input = this;
 		if (input.files && input.files[0]) {
@@ -15,6 +16,12 @@ $(document).ready(function() {
 		}
 	});
 });
+
+function setSrNo(element) {
+  element.find(".td-srno").each(function (index) {
+    $(this).html(parseInt(index) + 1);
+  });
+}
 
 $(document).ajaxSend(function (event, jqXHR, { showLoader }) {
   if (showLoader) {
@@ -193,11 +200,11 @@ const getOptions = function (response, props) {
   if (props.default) {
     options += `<option value=""> --- SELECT ---</option>`;
   }
+	var selectedIdsArray = props.selected_id ? props.selected_id.split(',') : [];
   $.each(response, function (key, value) {
-    selected =
-      props.selected_id != null && props.selected_id == value.id
-        ? "selected"
-        : " ";
+    // selected = props.selected_id != null && props.selected_id == value.id ? "selected" : " ";
+			selected = selectedIdsArray.includes(value.id.toString()) ? "selected" : "";
+
     if (props.format) {
       const parts = props.format.split("-");
       let label = "";

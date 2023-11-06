@@ -78,6 +78,7 @@
 								<th>Mobile</th>
 								<th>City</th>
 								<th>User Type</th>
+								<th>Job Type</th>
 								<th>Status</th>
 								<th>Created At</th>
 							</tr>
@@ -152,6 +153,9 @@
 					},
 					{
 						data: 'user_type'
+					},
+					{
+						data: 'job_type'
 					},
 					{
 						data: 'status'
