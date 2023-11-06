@@ -39,8 +39,8 @@
                 </div>
                 </ul>
                 <div class="mt-4">
-                    <button type="submit" class="btn btn-primary me-2">Save changes</button>
-                    <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary me-2  send-msg-btn waves-effect waves-light submit">Save changes</button>
+                    <button type="reset" class="btn btn-outline-secondary  send-msg-btn waves-effect waves-light resetBtn">Cancel</button>
                 </div>
             </form>
 
