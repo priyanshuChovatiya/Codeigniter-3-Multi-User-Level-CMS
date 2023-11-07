@@ -14,6 +14,17 @@ class Dashboard extends CI_Controller
 
 	public function index()
 	{
+		$user_id = $this->session->userdata('login')['user_id'];
+		$this->db->select('project.*,customer.name as customer_name,city.name as city_name')
+			->from('project')
+			->join('user as customer', 'project.customer_id = customer.id', 'left')
+			->join('project_detail', 'project.id = project_detail.project_id', 'left')
+			->join('city', 'project.city_id = city.id', 'left')
+			->where(array('project_detail.worker_id' => $user_id, 'project.project_status !=' => 'COMPLATED'));
+			$this->db->order_by('proect.id', 'asc');
+		$Allrecords = $this->db->get()->result();
+		pre($Allrecords);exit;
+		$page_data['project_data'] = $Allrecords;
 		$page_data['page_title'] = 'Worker Dashboard';
 		$page_data['page_name'] = 'worker/dashboard';
 		return $this->load->view('worker/common', $page_data);

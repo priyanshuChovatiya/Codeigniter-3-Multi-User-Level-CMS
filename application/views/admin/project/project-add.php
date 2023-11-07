@@ -89,13 +89,15 @@
 										<label for="project_image">Project Image</label>
 									</div>
 									<div class="show_image">
-										<?php $url = isset($data['project_image']) ? 'assets/uploads/project/' . $data['project_image'] : 'assets/uploads/no_image.jpg' ?>
-										<img src="<?= base_url() . $url; ?>" class="ms-4 mt-3 rounded" width="200" alt="Image preview">
+										<?php if(!empty($data['project_image'])){?>
+											<img src="<?= isset($data['project_image']) ? base_url() . 'assets/uploads/project/'  . $data["project_image"] : ''; ?>" class="ms-4 mt-3 rounded" width="200" alt="Image preview">
+										<?php } ?>
+
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row mt-4">
 							<div class="col-md-12">
 								<div class=" text-nowrap">
 									<table class="table">
@@ -113,8 +115,8 @@
 											<?php if (!empty($project_detail)) {
 												foreach ($project_detail as $key => $project_detail) { ?>
 													<tr class="copy_row gap-2">
-														<td class="td-srno">
 														<input type="hidden" name="pd_id[]" value="<?= isset($project_detail['id']) ? $project_detail['id'] : '' ?>" class="form-control" />
+														<td class="td-srno">
 															<?= isset($project_detail) ? $key + 1 : '1' ?>
 														</td>
 														<td class="p-1">
@@ -172,8 +174,68 @@
 															</div>
 														</td>
 													</tr>
-											<?php }
-											} ?>
+												<?php }
+											} else { ?>
+												<tr class="copy_row gap-2">
+													<td class="td-srno">
+														1
+													</td>
+													<td class="p-1">
+														<div class="form-floating form-floating-outline">
+															<select name="job_type[]" class="select2 form-select required" required data-lable="Job Type" data-allow-clear="true">
+																<option value="">Select Job Type</option>
+																<?php if (!empty($job_type)) {
+																	foreach ($job_type as $key => $value) { ?>
+																		<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+																	<?php } ?>
+																<?php } ?>
+															</select>
+															<label for="Job Type">Job Type</label>
+														</div>
+													</td>
+													<td class="p-1">
+														<div class="form-floating form-floating-outline">
+															<select name="worker[]" class="select2 form-select required" data-lable="Worker" required data-allow-clear="true">
+																<option value="">Select Worker</option>
+																<?php if (!empty($worker)) {
+																	foreach ($worker as $key => $value) { ?>
+																		<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+																	<?php } ?>
+																<?php } ?>
+															</select>
+															<label for="worker">Worker</label>
+														</div>
+													</td>
+													<td class="p-1">
+														<div class="form-floating form-floating-outline">
+															<select name="vendor[]" class="select2 form-select required" data-lable="Vendor" required data-allow-clear="true">
+																<option value="">Select Vendor</option>
+																<?php if (!empty($vendor)) {
+																	foreach ($vendor as $key => $value) { ?>
+																		<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+																	<?php } ?>
+																<?php } ?>
+															</select>
+															<label for="vendor">Vendor</label>
+														</div>
+													</td>
+													<td class="p-1">
+														<div class="form-floating form-floating-outline">
+															<input type="number" name="price[]" class="form-control amount required" required min="0" oninput="validateAmount(this)" placeholder="0.00" aria-label="0.00" />
+															<label for="price">Price</label>
+														</div>
+													</td>
+													<td>
+														<div class="mb-3 col-lg-12 col-xl-2 col-12 d-flex align-items-center mb-0">
+															<button type="button" class="btn btn-danger waves-effect mt-3 remove-row-btn">
+																<span class="align-middle">
+																	<i class="mdi mdi-close "></i>
+																</span>
+															</button>
+														</div>
+													</td>
+												</tr>
+											<?php } ?>
 										</tbody>
 									</table>
 								</div>
@@ -250,7 +312,7 @@
 		</td>
 		<td class="p-1">
 			<div class="form-floating form-floating-outline">
-				<input type="number" name="price[]" class="form-control required" required placeholder="0.00" aria-label="0.00" />
+				<input type="number" name="price[]" class="form-control amount required" min="0" oninput="validateAmount(this)" required placeholder="0.00" aria-label="0.00" />
 				<label for="price">Price</label>
 			</div>
 		</td>
@@ -272,7 +334,14 @@
 </script>
 <div class="javascript">
 	<script>
-		// $(document).ready(function() {
+		$(document).ready(function() {
+		$('.amount').on('input', function() {
+			var value = $(this).val();
+			if (value < 0 || value.includes('-')) {
+				$(this).val(value.replace('-', ''));
+			}
+		});
+
 		$(document).on("click", ".more-btn", function() {
 			var row = $("#copyHTML").html();
 			AppendBox = $('.appendHTML');
@@ -307,6 +376,6 @@
 				});
 			}
 		});
-		// });
+		});
 	</script>
 </div>
