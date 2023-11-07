@@ -20,14 +20,14 @@
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating form-floating-outline">
-										<input type="date" name="start_date" id="start_date" value="<?= isset($data['start_date']) ? $data['start_date'] : '' ?>" required class="form-control phone-mask required" />
-										<label for="start_date">Start Date</label>
+										<input type="date" name="from_date" id="from_date" value="<?= isset($data['from_date']) ? $data['from_date'] : '' ?>" required class="form-control phone-mask required" />
+										<label for="from_date">From Date</label>
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-floating form-floating-outline">
-										<input type="date" name="end_date" id="end_date" value="<?= isset($data['end_date']) ? $data['end_date'] : '' ?>" required class="form-control phone-mask required" />
-										<label for="end_date">End Date</label>
+										<input type="date" name="to_date" id="to_date" value="<?= isset($data['to_date']) ? $data['to_date'] : '' ?>" required class="form-control phone-mask required" />
+										<label for="to_date">To Date</label>
 									</div>
 								</div>
 								<div class="col-md-2">
@@ -95,11 +95,11 @@
 			paging: true,
 			processing: false,
 			ajax: {
-				url: '<?= base_url('worker/project/getProjectList'); ?>',
+				url: '<?= base_url('vendor/project/getProjectList'); ?>',
 				type: "post",
 				data: function(data) {
-					data.end_date = $('#end_date').val();
-					data.start_date = $('#start_date').val();
+					data.from_date = $('#from_date').val();
+					data.to_date = $('#to_date').val();
 					data.status = $('#status').val();
 					data.search = $('#search').val();
 					ShowBlockUi('#ProjectTable');
@@ -120,7 +120,6 @@
 				{
 					data: 'title'
 				},
-
 				{
 					data: 'worker'
 				},
@@ -156,7 +155,7 @@
 		}, current_status) {
 			alert_if("Do you want to update the status?", function() {
 				$.ajax({
-					url: "<?= base_url("admin/project/status") ?>",
+					url: "<?= base_url("vendor/project/status") ?>",
 					type: 'POST',
 					showLoader: true,
 					data: payload,

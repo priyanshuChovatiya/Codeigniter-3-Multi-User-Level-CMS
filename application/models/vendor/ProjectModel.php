@@ -20,20 +20,20 @@ class ProjectModel extends CI_Model
 		$user_id = $this->session->userdata('login')['user_id'];
 
 
-		if (!empty($postData['from_date'])) {
-			$from_date = array('project.from_date' => $postData['from_date']);
+		if (!empty($postData['start_date'])) {
+			$start_date = array('project.start_date' => $postData['start_date']);
 		} else {
-			$from_date = array();
+			$start_date = array();
 		}
-		if (!empty($postData['to_date'])) {
-			$to_date = array('project.to_date' => $postData['to_date']);
+		if (!empty($postData['end_date'])) {
+			$end_date = array('project.end_date' => $postData['end_date']);
 		} else {
-			$to_date = array();
+			$end_date = array();
 		}
-		if (!empty($postData['project_status'])) {
-			$project_status = array('project.project_status' => $postData['project_status']);
+		if (!empty($postData['status'])) {
+			$status = array('project.status' => $postData['status']);
 		} else {
-			$project_status = array();
+			$status = array();
 		}
 
 		## Total number of records without filtering
@@ -41,7 +41,7 @@ class ProjectModel extends CI_Model
 			->from('project_detail')
 			->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
 			->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
-			->where('project_detail.worker_id', $user_id);
+			->where('project_detail.vendor_id', $user_id);
 		// ->where('project.user_id', $user_id)->where($start_date)->where($status)->where($end_date);
 
 		if (!empty($postData['search'])) {
@@ -55,7 +55,7 @@ class ProjectModel extends CI_Model
 			->from('project_detail')
 			->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
 			->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
-			->where('project_detail.worker_id', $user_id);
+			->where('project_detail.vendor_id', $user_id);
 		// ->where('project.user_id', $user_id)->where($start_date)->where($status)->where($end_date);
 		if (!empty($postData['search'])) {
 			$recordstotalRecord->like('project.name', $postData['search']);
@@ -71,7 +71,7 @@ class ProjectModel extends CI_Model
 			->join('project', 'project_detail.project_id = project.id', 'left')
 			->join('city', 'project_detail.project_id = city.id', 'left')
 			->join('user as customer', 'project_detail.project_id = customer.id', 'left')
-			->where('project_detail.worker_id', $user_id);
+			->where('project_detail.vendor_id', $user_id);
 		// ->where('project.user_id', $user_id)->where($start_date)->where($status)->where($end_date);
 
 		if (!empty($postData['search'])) {
@@ -85,14 +85,6 @@ class ProjectModel extends CI_Model
 		$i = $start + 1;
 
 		foreach ($Allrecords as $record) {
-
-			// $this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name')
-			// 	->from('project_detail')
-			// 	->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
-			// 	->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
-			// 	->join('project', 'project_detail.project_id=project.id', 'left')
-			// 	->where('project_detail.worker_id', $user_id);
-			// $project_details = $this->db->get()->result_array();
 
 
 			$id = $record->id;

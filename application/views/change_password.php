@@ -1,5 +1,5 @@
 <div class="container-xxl flex-grow-1 container-p-y pt-0">
-    <h4 class="py-2 mb-2"><span class="text-muted fw-light"><?= $user_type ?> / </span> Change Password </h4>
+    <h4 class="py-2 mb-2"><span class="text-muted fw-light"><?= $this->session->userdata('login')['user_type']; ?> / </span> Change Password </h4>
     <!-- Change Password -->
     <div class="card mb-4">
         <h5 class="card-header">Change Password</h5>

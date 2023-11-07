@@ -1,6 +1,5 @@
 <?php
 
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Project extends CI_Controller
@@ -18,14 +17,6 @@ class Project extends CI_Controller
 		$this->load->model('worker/ProjectModel');
 	}
 
-	// public function index()
-	// {
-	// 	$user_id = $this->session->userdata('login')['user_id'];
-	// 	$page_data['city'] = $this->db->select('id,name')->get_where('city', array('user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
-	// 	$page_data['page_title'] = 'Manage Projects';
-	// 	$page_data['page_name'] = 'worker/project';
-	// 	return $this->load->view('worker/common', $page_data);
-	// }
 
 	public function report()
 	{
@@ -44,5 +35,46 @@ class Project extends CI_Controller
 		$postData = $this->input->post();
 		$data = $this->ProjectModel->getProjectReport($postData);
 		echo json_encode($data);
+	}
+
+	public function status()
+	{
+		try {
+			$this->form_validation->set_rules('status', 'Status', 'trim|required');
+			$this->form_validation->set_rules('id', 'Update Id', 'trim|required');
+			$this->form_validation->set_rules('type', 'Status type', 'trim|required');
+
+			if ($this->form_validation->run() == false) {
+				$r['success'] = 0;
+				$r['message'] = validation_errors();
+			} else {
+				$data = $this->input->post();
+				$user_id = $this->session->userdata('login')['user_id'];
+				$id = $data['id'];
+
+				if ($data['type'] == 'status') {
+					$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('project', ['status' => $data['status']]);
+					if (isset($response)) {
+						echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);
+					} else {
+						echo json_encode(['success' => false, 'error' => json_encode(validation_errors())]);
+					}
+				} elseif ($data['type'] == 'project_status') {
+					$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('project', ['project_status' => $data['status']]);
+					if (isset($response)) {
+						echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);
+					} else {
+						echo json_encode(['success' => false, 'error' => json_encode(validation_errors())]);
+					}
+				}
+			}
+		} catch (\Throwable | \ErrorException | \Error | \Exception $e) {
+			$message = [
+				'success' => false,
+				'error' => $e->getMessage(),
+				'data' => []
+			];
+			echo json_encode($message);
+		}
 	}
 }

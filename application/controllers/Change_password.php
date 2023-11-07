@@ -9,16 +9,15 @@ class Change_password extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        access_level('ADMIN');
+        // access_level('ADMIN');
     }
 
     public function index()
     {
         $page_data['page_title'] = 'Change Password';
         $page_data['page_name'] = 'change_password';
-        $page_data['user_type'] = $this->session->userdata('user_type');
-        $user_type = $this->session->userdata('user_type');
-        return $this->load->view('admin/common', $page_data);
+        $user = $this->session->userdata('login')['user_type'];
+        return $this->load->view($user . '/common', $page_data);
     }
 
     public function password()
@@ -35,7 +34,9 @@ class Change_password extends CI_Controller
         } else {
 
             $user_id = $this->session->userdata('login')['user_id'];
-            $user_type = $this->session->userdata('user_type');
+            $user = $this->session->userdata('login')['user_type'];
+            $user_type = strtolower($user);
+
             $data = $this->input->post();
 
             $old_password = $this->db->get_where('user', array('id' => $user_id))->row('password');
@@ -45,18 +46,18 @@ class Change_password extends CI_Controller
                 $update = $this->db->where('id', $user_id)->update('user', array('password' => sha1($data['new_password'])));
                 if ($update) {
                     $message['success'] = 1;
-                    $message['message'] = "User password change  SuccessFully.";
+                    $message['message'] =    $user_type . "  " . "User password change  SuccessFully";
                     $this->session->set_flashdata('flash', $message);
                     redirect(base_url('change_password'));
                 } else {
                     $message['success'] = 0;
-                    $message['message'] = "Failed to changed password.";
+                    $message['message'] =    $user_type . "  " . "Failed to changed password.";
                     $this->session->set_flashdata('flash', $message);
                     redirect(base_url('change_password'));
                 }
             } else {
                 $message['success'] = 0;
-                $message['message'] = "Incorrect Current password.";
+                $message['message'] =   $user_type . "  " . "Incorrect Current password.";
                 $this->session->set_flashdata('flash', $message);
                 redirect(base_url('change_password'));
             }

@@ -23,7 +23,7 @@
 					</svg>
 				</span>
 			</span>
-			<span class="app-brand-text demo menu-text fw-bold ms-2">Materialize</span>
+			<span class="app-brand-text demo menu-text fw-bold ms-2">Tunkey</span>
 		</a>
 		<a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
 			<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +89,14 @@
 				</li>
 			</ul>
 		</li>
+		<li class="menu-item <?= is_active('admin/payment') ?>">
+			<a href="<?= base_url('admin/payment'); ?>" class="menu-link">
+				<i class="menu-icon tf-icons mdi mdi-city"></i>
+				<div data-i18n="Manage Payment">Manage Payment</div>
+			</a>
+		</li>
 	</ul>
+
 </aside>
 <div class="layout-page">
 	<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
@@ -99,14 +106,6 @@
 			</a>
 		</div>
 		<div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-			<div class="navbar-nav align-items-center">
-				<div class="nav-item navbar-search-wrapper mb-0">
-					<a class="nav-item nav-link search-toggler fw-normal px-0" href="javascript:void(0);">
-						<i class="mdi mdi-magnify mdi-24px scaleX-n1-rtl"></i>
-						<span class="d-none d-md-inline-block text-muted">Search (Ctrl+/)</span>
-					</a>
-				</div>
-			</div>
 			<ul class="navbar-nav flex-row align-items-center ms-auto">
 				<!-- User -->
 				<li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -137,12 +136,6 @@
 						</li>
 						<li>
 							<div class="dropdown-divider"></div>
-						</li>
-						<li>
-							<a class="dropdown-item" href="pages-profile-user.html">
-								<i class="mdi mdi-account-outline me-2"></i>
-								<span class="align-middle">My Profile</span>
-							</a>
 						</li>
 						<li>
 							<div class="dropdown-divider"></div>
