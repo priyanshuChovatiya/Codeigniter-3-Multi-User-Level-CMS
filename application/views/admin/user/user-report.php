@@ -111,7 +111,7 @@
 </div>
 <div class="javascript">
 	<script>
-		// $(document).ready(function () {
+		$(document).ready(function () {
 			var table = $('#usersTable').DataTable({
 				fixedHeader: false,
 				responsive: true,
@@ -214,6 +214,6 @@
 				}
 				change_status(obj, current_status);
 			});
-		// });
+		});
 	</script>
 </div>

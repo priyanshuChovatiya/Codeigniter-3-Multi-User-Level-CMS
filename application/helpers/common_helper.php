@@ -64,14 +64,21 @@ function compareDates($date1, $date2)
 }
 function access_level($type)
 {
-
 	$CI = &get_instance();
 	if ($CI->session->userdata('login')['user_type'] == '' || $CI->session->userdata('login')['user_type'] != $type){
 		return redirect(base_url('/login'));
 	}
 }
 
-function imageUpload($field_name, $upload_path, $file_name = NULL)
+function is_login()
+{
+	$CI = &get_instance();
+	if ($CI->session->userdata('login')['user_type'] == ''){
+		return redirect(base_url('/login'));
+	}
+}
+
+function imageUpload($field_name, $upload_path=null, $file_name = NULL)
 {
 	$CI = &get_instance();
 	$CI->load->library('upload');
@@ -89,7 +96,7 @@ function imageUpload($field_name, $upload_path, $file_name = NULL)
 		$config['encrypt_name'] = TRUE;
 	}
 	$CI->upload->initialize($config);
-
+	
 	if (!$CI->upload->do_upload($field_name)) {
 		return false;
 	} else {
@@ -132,3 +139,26 @@ function decrypt_id($encrypted_id)
 		throw new Exception('Invalid  ID');
 	}
 }
+
+function resize_image($filename,$path){
+	$CI = &get_instance();
+
+		$config['image_library'] = 'gd2';
+        $config['source_image'] = $path.'/'.$filename;
+        $config['maintain_ratio'] = TRUE;
+        $config['width'] = 800;
+        $config['height'] = 600;
+        $config['quality'] = '20%';
+        $config['new_image'] = $path.'/'.$filename;
+		
+		$CI->load->library('image_lib', $config);
+
+		if (!$CI->image_lib->resize()) {
+			echo $CI->image_lib->display_errors();
+			exit;
+		} else {
+			$CI->image_lib->clear();
+			echo "Image resized successfully!";
+			exit;
+		}
+	}

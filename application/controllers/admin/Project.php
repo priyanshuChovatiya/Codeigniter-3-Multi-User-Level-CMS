@@ -36,11 +36,8 @@ class Project extends CI_Controller
 		//Project data
 		$this->form_validation->set_rules('name', 'Project Name ', 'trim|required');
 		$this->form_validation->set_rules('title', 'Title', 'trim|required');
-		// $this->form_validation->set_rules('worker', 'Worker', 'numeric');
-		// $this->form_validation->set_rules('vendor', 'Vendor', 'numeric');
 		$this->form_validation->set_rules('city', 'City', 'trim|required|numeric');
 		$this->form_validation->set_rules('customer', 'Customer', 'trim|required|numeric');
-		// $this->form_validation->set_rules('price', 'Price', '|numeric|greater_than_equal_to[0]');
 		$this->form_validation->set_rules('start_date', 'Start Date', 'trim|required');
 		$this->form_validation->set_rules('end_date', 'End Date', 'trim|required');
 		$this->form_validation->set_rules('project_image', 'Project Image', 'trim|mime_in[project_image,image/jpg,image/jpeg,image/png,]');
@@ -146,10 +143,7 @@ class Project extends CI_Controller
 		$this->form_validation->set_rules('name', 'Project Name ', 'trim|required');
 		$this->form_validation->set_rules('title', 'Title', 'trim|required');
 		$this->form_validation->set_rules('city', 'City', 'trim|required|numeric');
-		// $this->form_validation->set_rules('worker', 'Worker', 'trim|numeric');
-		// $this->form_validation->set_rules('vendor', 'Vendor', 'trim|numeric');
 		$this->form_validation->set_rules('customer', 'Customer', 'trim|required|numeric');
-		// $this->form_validation->set_rules('price', 'Price', 'trim|required|numeric|greater_than_equal_to[0]');
 		$this->form_validation->set_rules('start_date', 'Start Date', 'trim|required');
 		$this->form_validation->set_rules('end_date', 'End Date', 'trim|required');
 		$this->form_validation->set_rules('project_image', 'Project Image', 'trim|mime_in[project_image,image/jpg,image/jpeg,image/png,]');
@@ -172,32 +166,56 @@ class Project extends CI_Controller
 			$store_data['start_date'] = $data['start_date'];
 			$store_data['end_date'] = $data['end_date'];
 
-			$pd_id = $data['pd_id'];
+			$pd_id = isset($data['pd_id']) ? $data['pd_id'] : [];
 
+			if (count($data['pd_id']) > count($data['job_type'])) {
+				$count = count($data['pd_id']);
+			} else {
+				$count = count($data['job_type']);
+			}
+			$update_data = [];
+			$insert_data = [];
+			$deleted_id = [];
 			$project_detail_id = $this->db->select('id')->get_where('project_detail', array('project_id' => $id))->result_array();
-			foreach ($project_detail_id as $value) {
-				if (in_array($value['id'], $pd_id)) {
-					$project_details = [];
-					for ($i = 0; $i < count($data['job_type']); $i++) {
-						$project_details[] = [
-							'job_type_id' => $data['job_type'][$i],
-							'worker_id'   => $data['worker'][$i],
-							'vendor_id'   => $data['vendor'][$i],
-							'price'    => $data['price'][$i],
-						];
-					}
-				} else {
-					echo "delete";
+			for ($i = 0; $i < count($project_detail_id); $i++) {
+				if (!in_array($project_detail_id[$i]['id'], $pd_id)) {
+					$deleted_id[] = $project_detail_id[$i]['id'];
 				}
 			}
-			exit;
-			
-			
-			$this->db->update_batch('project_detail', $project_details, $value['id']);
+
+			for ($i = 0; $i < $count; $i++) {
+				if (!empty($data['pd_id'][$i]) && !empty($data['job_type'][$i])) {
+					$update_data[] = [
+						'job_type_id' => $data['job_type'][$i],
+						'worker_id'   => $data['worker'][$i],
+						'vendor_id'   => $data['vendor'][$i],
+						'price'    => $data['price'][$i],
+						'id'    => $data['pd_id'][$i],
+					];
+				} else {
+					$insert_data[] = [
+						'job_type_id' => $data['job_type'][$i],
+						'worker_id'   => $data['worker'][$i],
+						'vendor_id'   => $data['vendor'][$i],
+						'price'    => $data['price'][$i],
+						'project_id' => $id
+					];
+				}
+			}
+
+			if (!empty($update_data)) {
+				$update = $this->db->update_batch('project_detail', $update_data, 'id');
+			}
+			if (!empty($insert_data)) {
+				$update = $this->db->insert_batch('project_detail', $insert_data);
+			}
+			if (!empty($deleted_id)) {
+				$update = $this->db->where_in('id', $deleted_id)->delete('project_detail');
+			}
+
 			$fetch_data = $this->db->select('project_image')->get_where('project', array('id' => $id, 'user_id' => $user_id))->row_array();
 
-			// upload image    first fileName and second pathName
-			if ($this->input->post() && !empty($_FILES['profile']['name'])) {
+			if ($this->input->post() && !empty($_FILES['project_image']['name'])) {
 				if (!empty($fetch_data['project_image'])) {
 					if (file_exists('assets/uploads/project' . $fetch_data['project_image'])) {
 						@unlink('assets/uploads/project' . $fetch_data['project_image']);
@@ -237,20 +255,11 @@ class Project extends CI_Controller
 				$user_id = $this->session->userdata('login')['user_id'];
 				$id = $data['id'];
 
-				if ($data['type'] == 'status') {
-					$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('project', ['status' => $data['status']]);
-					if (isset($response)) {
-						echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);
-					} else {
-						echo json_encode(['success' => false, 'error' => json_encode(validation_errors())]);
-					}
-				} elseif ($data['type'] == 'project_status') {
-					$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('project', ['project_status' => $data['status']]);
-					if (isset($response)) {
-						echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);
-					} else {
-						echo json_encode(['success' => false, 'error' => json_encode(validation_errors())]);
-					}
+				$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('project', [$data['type'] => $data['status']]);
+				if (isset($response)) {
+					echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);
+				} else {
+					echo json_encode(['success' => false, 'error' => json_encode(validation_errors())]);
 				}
 			}
 		} catch (\Throwable | \ErrorException | \Error | \Exception $e) {

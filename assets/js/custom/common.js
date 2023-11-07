@@ -3,16 +3,18 @@ const BaseUrl = $("meta[name=baseurl]").attr("content");
 var services = null;
 /* common ajax loader for all ajax call */
 $(document).ready(function() {
-	// $('.select2-dynamic').select2();
 	$(document).on('change', '.file', function() {
 		var input = this;
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				$(input).parent().next('.show_image').html('<img src="' + e.target.result +
-					'" class="ms-4 mt-3 rounded" width="200" alt="Image preview">');
+		if (input.files) {
+			var filesAmount = input.files.length;
+			for (i = 0; i < filesAmount; i++) {
+				var reader = new FileReader();
+				reader.onload = function(event) {
+					var imageHtml = '<div class="col-md-4"><img src="' + event.target.result + '" class="ms-4 mt-3 rounded" width="200" alt="Image preview"></div>';
+					$('.show_image').append(imageHtml);
+				}
+				reader.readAsDataURL(input.files[i]);
 			}
-			reader.readAsDataURL(input.files[0]);
 		}
 	});
 });
@@ -185,11 +187,12 @@ $(document).on("click", ".resetBtn", function (e) {
     if (result.value) {
       $("form")[0].reset();
       $(".select2").val(null).trigger("change");
-      
       $("form").find(".required").each(function () {
         $(this).removeClass("input-error");
-        $(this).parent().next(".error-message").html("");
       });
+			$('.error-message').each(function(){
+				$(this).remove(); 
+			})
       SweetAlert("success", "Your Form Reset Successfully!!");
     }
   });
@@ -439,9 +442,7 @@ $("form").on("submit", function (e) {
       if ($(this).val().trim() === "") {
         $(this).addClass("input-error");
         if ($(this).parent().next(".error-message").length == 0) {
-          $(this)
-            .parent()
-            .after("<div class='error-message text-danger'></div>");
+          $(this).parent().after("<div class='error-message text-danger'></div>");
           if ($(this).hasClass("select2")) {
             var dataLabelValue = $(this).data("lable");
             $(this)
