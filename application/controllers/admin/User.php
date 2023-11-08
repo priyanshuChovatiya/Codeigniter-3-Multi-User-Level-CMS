@@ -35,7 +35,7 @@ class User extends CI_Controller
 		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[user.email]');
 		$this->form_validation->set_rules('mobile', 'Mobile', 'trim|required|numeric|exact_length[10]|is_unique[user.mobile]');
 		$this->form_validation->set_rules('job_type', 'Job Type', 'trim|required');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required');
+		// $this->form_validation->set_rules('password', 'Password', 'trim|required');
 		$this->form_validation->set_rules('city', 'City', 'trim|required');
 		$this->form_validation->set_rules('user_type', 'User Type', 'trim|required|in_list[CUSTOMER,VENDOR,WORKER]');
 		$this->form_validation->set_rules('profile', 'Profile', 'trim|mime_in[profile,image/jpg,image/jpeg,image/png,]');
@@ -53,7 +53,7 @@ class User extends CI_Controller
 			$user['mobile'] = $data['mobile'];
 			$user['job_type_id'] = $data['job_type'];
 			$user['city_id'] = $data['city'];
-			$user['password'] = sha1($data['password']);
+			$user['password'] = sha1(isset($data['password']) ? $data['password'] : '123456');
 			$user['type'] = $data['user_type'];
 
 			// upload image    first fileName and second pathName

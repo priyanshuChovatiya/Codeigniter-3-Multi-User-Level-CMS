@@ -11,6 +11,17 @@
 							<div class="row g-4">
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
+										<select id="user_type" name="user_type" class="select2 form-select required" data-lable='User Type' required data-allow-clear="true">
+											<option value="">Select User Type</option>
+											<option value="CUSTOMER" <?= isset($data['type']) && $data['type'] == "CUSTOMER" ? "selected" : '' ?>>CUSTOMER</option>
+											<option value="VENDOR" <?= isset($data['type']) && $data['type'] == "VENDOR" ? "selected" : '' ?>>VENDOR</option>
+											<option value="WORKER" <?= isset($data['type']) && $data['type'] == "WORKER" ? "selected" : '' ?>>WORKER</option>
+										</select>
+										<label for="User Type">User Type</label>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-floating form-floating-outline">
 										<input type="text" id="name" name="name" value="<?= isset($data['name']) ? $data['name'] : '' ?>" required class="form-control required" placeholder="Enter Name" />
 										<label for="name">Name</label>
 									</div>
@@ -31,22 +42,11 @@
 								<?php if (empty($data)) { ?>
 									<div class="col-md-4">
 										<div class="form-floating form-floating-outline">
-											<input type="password" id="password" name="password" <?= isset($data) ? 'disabled' : '' ?> required class="form-control required" placeholder="*****" />
+											<input type="password" id="password" name="password" <?= isset($data) ? 'disabled' : '' ?> class="form-control" placeholder="*****" />
 											<label for="password">Password</label>
 										</div>
 									</div>
 								<?php } ?>
-								<div class="col-md-4">
-									<div class="form-floating form-floating-outline">
-										<select id="user_type" name="user_type" class="select2 form-select required" data-lable='User Type' required data-allow-clear="true">
-											<option value="">Select User Type</option>
-											<option value="CUSTOMER" <?= isset($data['type']) && $data['type'] == "CUSTOMER" ? "selected" : '' ?>>CUSTOMER</option>
-											<option value="VENDOR" <?= isset($data['type']) && $data['type'] == "VENDOR" ? "selected" : '' ?>>VENDOR</option>
-											<option value="WORKER" <?= isset($data['type']) && $data['type'] == "WORKER" ? "selected" : '' ?>>WORKER</option>
-										</select>
-										<label for="User Type">User Type</label>
-									</div>
-								</div>
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<select id="city" name="city" class="select2 form-select required" data-lable='City' required data-allow-clear="true">
@@ -103,4 +103,17 @@
 			</div>
 		</div>
 	</form>
+</div>
+
+<div class="javascript">
+	<script>
+		$(document).ready(function() {
+			$(document).on('change', '#user_type', function() {
+				$(this).val();
+				if($(this).val() == "CUSTOMER"){
+
+				}
+			});
+		});
+	</script>
 </div>
