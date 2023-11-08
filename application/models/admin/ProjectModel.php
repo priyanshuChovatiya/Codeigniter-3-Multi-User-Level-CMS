@@ -100,7 +100,7 @@ class ProjectModel extends CI_Model
 				->join('job_type', 'project_detail.job_type_id = job_type.id', 'left')
 				->where('project_detail.project_id', $record->id)->where($worker_id)->where($vendor_id);
 			$project_details = $this->db->get()->result_array();
-			
+
 			$worker_html = "";
 			$vendor_html = "";
 			$job_type_html = "";

@@ -76,7 +76,7 @@ class Project extends CI_Controller
 
 				if (!empty($this->upload->do_upload('work_image'))) {
 					$upload_data = $this->upload->data();
-					resize_image($upload_data['file_name'],'assets/uploads/work_image');
+					resize_image($upload_data['file_name'], 'assets/uploads/work_image');
 
 					// // Configure image manipulation settings
 					// $config['image_library'] = 'gd2'; // Choose the image library (gd, gd2, imagemagick, netpbm, etc)
@@ -92,10 +92,10 @@ class Project extends CI_Controller
 					// $this->image_lib->initialize($resize);
 
 					// if (!empty($this->image_lib->resize())) {
-						$insert_data['name'] =  $upload_data['file_name'];
-						$insert_data['project_detail_id'] = $id;
-						$insert_data['type'] = $data['status'];
-						// $this->db->insert('project_detail_image', $insert_data);
+					$insert_data['name'] =  $upload_data['file_name'];
+					$insert_data['project_detail_id'] = $id;
+					$insert_data['type'] = $data['status'];
+					// $this->db->insert('project_detail_image', $insert_data);
 					// }
 				}
 			}
@@ -124,5 +124,29 @@ class Project extends CI_Controller
 		$page_data['COMPLATED'] = $this->db->select('id,name')->get_where('project_detail_image', array('project_detail_id' => $project_detail_id, 'type' => 'COMPLATED'))->result_array();
 		$res = $this->load->view('worker/view_image.php', $page_data);
 		echo json_encode($res);
+	}
+
+	public function view_detail($id)
+	{
+		$user_id = $this->session->userdata('login')['user_id'];
+
+		$this->db->select('project.*,customer.name as customer_name,city.name as city_name')
+			->from('project')
+			->join('user as customer', 'project.customer_id = customer.id', 'left')
+			->join('project_detail', 'project.id = project_detail.project_id', 'left')
+			->join('city', 'project.city_id = city.id', 'left')
+			->where(array('project.id' => $id));
+		$page_data['data'] = $this->db->get()->row_array();
+		$this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name,job_type.name as job_name,worker.mobile as worker_mobile, worker.email as worker_email,vendor.mobile as vendor_mobile,vendor.email as vendor_email')
+			->from('project_detail')
+			->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
+			->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
+			->join('job_type', 'project_detail.job_type_id = job_type.id', 'left')
+			->where('project_detail.project_id', $id);
+		$page_data['worker'] = $this->db->get()->result_array();
+		// pre($page_data);exit;
+		$page_data['page_title'] = 'Project Details';
+		$page_data['page_name'] = 'worker/view_detail';
+		return $this->load->view('worker/common', $page_data);
 	}
 }
