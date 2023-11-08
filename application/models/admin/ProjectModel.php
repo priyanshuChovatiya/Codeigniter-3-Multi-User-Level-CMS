@@ -51,7 +51,6 @@ class ProjectModel extends CI_Model
 			->from('project')
 			->join('user as customer', 'project.customer_id = customer.id', 'left')
 			->join('project_detail', 'project.id = project_detail.project_id', 'left')
-			// ->join('user as vendor', 'project.id = vendor.id', 'left')
 			->join('city', 'project.city_id = city.id', 'left')
 			->where('project.user_id', $user_id)->where($customer_id)->where($status)->where($city)->where($worker_id)->where($vendor_id);
 		if (!empty($postData['search'])) {

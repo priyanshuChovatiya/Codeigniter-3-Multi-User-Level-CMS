@@ -64,7 +64,7 @@
 </div>
 <div class="javascript">
 	<script>
-		// $(document).ready(function () {
+		$(document).ready(function () {
 		var table = $('#WorkTable').DataTable({
 			fixedHeader: false,
 			responsive: true,
@@ -143,6 +143,6 @@
 			}
 			change_status(obj, current_status);
 		});
-		// });
+		});
 	</script>
 </div>

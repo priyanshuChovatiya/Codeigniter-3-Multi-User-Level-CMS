@@ -9,15 +9,24 @@ class Change_password extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+<<<<<<< HEAD
         // access_level('ADMIN');
+=======
+		is_login();
+>>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
     }
 
     public function index()
     {
         $page_data['page_title'] = 'Change Password';
         $page_data['page_name'] = 'change_password';
+<<<<<<< HEAD
         $user = $this->session->userdata('login')['user_type'];
         return $this->load->view($user . '/common', $page_data);
+=======
+        $user_type = $this->session->userdata('login')['user_type'];
+        return $this->load->view("$user_type/common", $page_data);
+>>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
     }
 
     public function password()
@@ -34,9 +43,12 @@ class Change_password extends CI_Controller
         } else {
 
             $user_id = $this->session->userdata('login')['user_id'];
+<<<<<<< HEAD
             $user = $this->session->userdata('login')['user_type'];
             $user_type = strtolower($user);
 
+=======
+>>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
             $data = $this->input->post();
 
             $old_password = $this->db->get_where('user', array('id' => $user_id))->row('password');

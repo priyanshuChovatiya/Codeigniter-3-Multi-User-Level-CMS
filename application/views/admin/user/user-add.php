@@ -1,7 +1,7 @@
 <div class="container-xxl flex-grow-1 container-p-y pt-0">
-	<h4 class="py-2 mb-2"><span class="text-muted fw-light">User / </span> <?=isset($data) ? 'Edit' : 'Add' ?> </h4>
+	<h4 class="py-2 mb-2"><span class="text-muted fw-light">User / </span> <?= isset($data) ? 'Edit' : 'Add' ?> </h4>
 	<!-- Sticky Actions -->
-	<form action="<?=!isset($data) ? base_url('admin/user/add') : base_url('admin/user/update') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="post" enctype="multipart/form-data">
+	<form action="<?= !isset($data) ? base_url('admin/user/add') : base_url('admin/user/update') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="post" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-lg-12 mb-2">
 				<div class="card">
@@ -14,7 +14,7 @@
 										<input type="text" id="name" name="name" value="<?= isset($data['name']) ? $data['name'] : '' ?>" required class="form-control required" placeholder="Enter Name" />
 										<label for="name">Name</label>
 									</div>
-									<input type="hidden" id="id" name="id" value="<?= isset($id) ? $id : '' ?>" class="form-control"/>
+									<input type="hidden" id="id" name="id" value="<?= isset($id) ? $id : '' ?>" class="form-control" />
 								</div>
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
@@ -28,10 +28,10 @@
 										<label for="mobile">Mobile</label>
 									</div>
 								</div>
-								<?php if(empty($data)) { ?>
+								<?php if (empty($data)) { ?>
 									<div class="col-md-4">
 										<div class="form-floating form-floating-outline">
-											<input type="password" id="password" name="password" <?=isset($data) ? 'disabled' : '' ?> required class="form-control required" placeholder="*****" />
+											<input type="password" id="password" name="password" <?= isset($data) ? 'disabled' : '' ?> required class="form-control required" placeholder="*****" />
 											<label for="password">Password</label>
 										</div>
 									</div>
@@ -51,11 +51,11 @@
 									<div class="form-floating form-floating-outline">
 										<select id="city" name="city" class="select2 form-select required" data-lable='City' required data-allow-clear="true">
 											<option value="">Select City</option>
-											<?php if(!empty($city)){ ?>
-												<?php foreach ($city as $key => $value) {?>
-                                                    <option value="<?= $value['id']?>" <?= isset($data['city_id']) && $data['city_id'] == $value['id']? "selected" : ''?>><?= $value['name']?></option>
-                                                <?php }?>
-                                            <?php }?>
+											<?php if (!empty($city)) { ?>
+												<?php foreach ($city as $key => $value) { ?>
+													<option value="<?= $value['id'] ?>" <?= isset($data['city_id']) && $data['city_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+												<?php } ?>
+											<?php } ?>
 										</select>
 										<label for="City">City</label>
 									</div>
@@ -64,23 +64,24 @@
 									<div class="form-floating form-floating-outline">
 										<select id="job_type" name="job_type" class="select2 form-select required" data-lable='Job Type' required data-allow-clear="true">
 											<option value="">Select Job Type</option>
-											<?php if(!empty($job_type)){ ?>
-												<?php foreach ($job_type as $key => $value) {?>
-                                                    <option value="<?= $value['id']?>" <?= isset($data['job_type_id']) && $data['city_id'] == $value['id']? "selected" : ''?>><?= $value['name']?></option>
-                                                <?php }?>
-                                            <?php }?>
+											<?php if (!empty($job_type)) { ?>
+												<?php foreach ($job_type as $key => $value) { ?>
+													<option value="<?= $value['id'] ?>" <?= isset($data['job_type_id']) && $data['city_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+												<?php } ?>
+											<?php } ?>
 										</select>
 										<label for="Job Type">Job Type</label>
 									</div>
 								</div>
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
-										<input type="file" id="profile" name="profile" <?=!isset($data) ? 'required' : '' ?> class="form-control file <?=!isset($data) ? 'required' : '' ?>" />
+										<input type="file" id="profile" name="profile" <?= !isset($data) ? 'required' : '' ?> class="form-control file <?= !isset($data) ? 'required' : '' ?>" />
 										<label for="profile">Profile Image</label>
 									</div>
 									<div class="show_image">
-										<?php $url = isset($data['profile']) ? 'assets/uploads/profile/' . $data['profile'] : 'assets/uploads/no_image.jpg' ?>
-										<img src="<?= base_url() . $url; ?>" class="ms-4 mt-3 rounded" width="200" alt="Image preview">
+										<?php if (!empty($data['profile'])) { ?>
+											<img src="<?= isset($data['profile']) ? base_url() . 'assets/uploads/profile/' . $data['profile'] : '' ?>" class="ms-4 mt-3 rounded" width="200" alt="Image preview">
+										<?php } ?>
 									</div>
 								</div>
 							</div>

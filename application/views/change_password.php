@@ -1,51 +1,57 @@
 <div class="container-xxl flex-grow-1 container-p-y pt-0">
+<<<<<<< HEAD
     <h4 class="py-2 mb-2"><span class="text-muted fw-light"><?= $this->session->userdata('login')['user_type']; ?> / </span> Change Password </h4>
+=======
+    <h4 class="py-2 mb-2"><span class="text-muted fw-light"><?=ucfirst(strtolower($this->session->userdata('login')['user_type'])); ?> / </span> Change Password </h4>
+>>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
     <!-- Change Password -->
-    <div class="card mb-4">
-        <h5 class="card-header">Change Password</h5>
-        <div class="card-body">
-            <form class="browser-default-validation mb-3 needs-validation" id="formAccountSettings" method="POST" novalidate id="userForm" action="<?= base_url('change_password/password'); ?>">
-                <div class="row">
-                    <div class="mb-3 col-md-6 form-password-toggle">
-                        <div class="form-floating form-floating-outline">
-                            <input class="form-control required" type="password" name="old_password" id="old_password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
-                            <label for="currentPassword">Current Password</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6 form-password-toggle">
-                        <div class="form-floating form-floating-outline">
-                            <input class="form-control required" type="password" id="new_password" name="new_password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
-                            <label for="newPassword">New Password</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6 form-password-toggle">
-                        <div class="form-floating form-floating-outline">
-                            <input class="form-control required" type="password" name="confirm_password" id="confirm_password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
-                            <label for="confirmPassword">Confirm New Password</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row my-4">
-                    <div class="col-md-3">
-                        <label class="form-check">
-                            <input class="form-check-input pass-show" type="checkbox">
-                            <span class="form-check-label">Show password</span>
-                        </label>
-                    </div>
-                </div>
-                </ul>
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary me-2  send-msg-btn waves-effect waves-light submit">Save changes</button>
-                    <button type="reset" class="btn btn-outline-secondary  send-msg-btn waves-effect waves-light resetBtn">Cancel</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
+	<div class="row d-flex justify-content-center">
+		<div class="card mb-4 col-md-12">
+			<h5 class="card-header">Change Password</h5>
+			<div class="card-body">
+				<form class="browser-default-validation mb-3 needs-validation" id="formAccountSettings" method="POST" novalidate id="userForm" action="<?= base_url('change_password/password'); ?>">
+					<div class="row">
+						<div class="mb-3 col-md-6 form-password-toggle">
+							<div class="form-floating form-floating-outline">
+								<input class="form-control required" type="password" name="old_password" id="old_password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
+								<label for="currentPassword">Current Password</label>
+							</div>
+						</div>
+					</div>
+					<div class="row g-3 mb-4">
+						<div class="col-md-6 form-password-toggle">
+							<div class="form-floating form-floating-outline">
+								<input class="form-control required" type="password" id="new_password" name="new_password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
+								<label for="newPassword">New Password</label>
+							</div>
+						</div>
+					</div>
+					<div class="row g-3 mb-4">
+						<div class="col-md-6 form-password-toggle">
+							<div class="form-floating form-floating-outline">
+								<input class="form-control required" type="password" name="confirm_password" id="confirm_password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required />
+								<label for="confirmPassword">Confirm New Password</label>
+							</div>
+						</div>
+					</div>
+					<div class="row my-4">
+						<div class="col-md-2">
+							<label class="form-check">
+								<input class="form-check-input pass-show" type="checkbox">
+								<span class="form-check-label">Show password</span>
+							</label>
+						</div>
+					</div>
+					</ul>
+					<div class="mt-4">
+						<button type="submit" class="btn btn-primary me-2  send-msg-btn waves-effect waves-light submit">Save changes</button>
+						<button type="reset" class="btn btn-outline-secondary  send-msg-btn waves-effect waves-light resetBtn">Cancel</button>
+					</div>
+				</form>
+	
+			</div>
+		</div>
+	</div>
     <!--/ Change Password -->
 
     <script>
