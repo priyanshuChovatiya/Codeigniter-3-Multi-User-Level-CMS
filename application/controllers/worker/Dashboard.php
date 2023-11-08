@@ -21,9 +21,9 @@ class Dashboard extends CI_Controller
 			->join('project_detail', 'project.id = project_detail.project_id', 'left')
 			->join('city', 'project.city_id = city.id', 'left')
 			->where(array('project_detail.worker_id' => $user_id, 'project.project_status !=' => 'COMPLATED'));
-			$this->db->order_by('proect.id', 'asc');
-		$Allrecords = $this->db->get()->result();
-		pre($Allrecords);exit;
+			$this->db->order_by('project.id', 'desc');
+		$Allrecords = $this->db->get()->result_array();
+		// pre($Allrecords);exit;
 		$page_data['project_data'] = $Allrecords;
 		$page_data['page_title'] = 'Worker Dashboard';
 		$page_data['page_name'] = 'worker/dashboard';
