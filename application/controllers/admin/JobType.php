@@ -38,6 +38,7 @@ class JobType extends CI_Controller
 			$job_type['user_id'] = $this->session->userdata('login')['user_id'];
 
 			$insert = $this->db->insert('job_type', $job_type);
+
 			if (isset($insert)) {
 				$r['success'] = 1;
 				$r['message'] = "Job Type Add SuccessFully.";

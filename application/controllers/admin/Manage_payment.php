@@ -22,8 +22,8 @@ class Manage_payment extends CI_Controller
     {
         $page_data['page_title'] = 'Manage Payment';
         $page_data['page_name'] = 'admin/payment';
-        $user_id = $this->session->userdata('login')['user_id'];
-        $page_data['user'] = $this->db->select('id,name')->get_where('user', array('user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
+        $admin_id = $this->session->userdata('login')['user_id'];
+        $page_data['user'] = $this->db->select('id,name')->get_where('user', array('user_id' => $admin_id, 'status' => 'ACTIVE'))->result_array();
         return $this->load->view('admin/common', $page_data);
     }
 
@@ -33,7 +33,7 @@ class Manage_payment extends CI_Controller
         $this->form_validation->set_rules('user_id', 'user_id', 'trim|required');
         $this->form_validation->set_rules('amount', 'amount', 'trim|required');
         $this->form_validation->set_rules('date', 'date', 'trim|required');
-        $this->form_validation->set_rules('type', 'type ', 'trim|required');
+        $this->form_validation->set_rules('type', 'type', 'trim|required');
 
         if ($this->form_validation->run() == false) {
             $r['success'] = 0;
@@ -42,18 +42,19 @@ class Manage_payment extends CI_Controller
             redirect(base_url('admin/manage_payment'), 'refresh');
         } else {
             $data = $this->input->post();
-            $payment = [];
+            // $payment = [];
 
-            $payment['user_id'] = $data['user_id'];
-            $payment['amount'] = $data['amount'];
-            $payment['date'] = $data['date'];
-            $payment['type'] = $data['type'];
-
-
-            $insert = $this->db->insert('payment', $payment);
-            // print_r($payment);
+            // $payment['user_id'] = $data['user_id'];
+            // $payment['amount'] = $data['amount'];
+            // $payment['date'] = $data['date'];
+            // $payment['type'] = $data['type'];
+            unset($data['id']);
+            print_r($data);
             // exit;
-            if (isset($insert)) {
+            $insert = $this->db->insert('payment', $data);
+            // pre($this->db->error());
+            // exit;
+            if (($insert)) {
                 $r['success'] = 1;
                 $r['message'] = "payment details Add SuccessFully.";
             } else {
@@ -75,9 +76,9 @@ class Manage_payment extends CI_Controller
     public function edit($id)
     {
         try {
-            $user_id = $this->session->userdata('login')['user_id'];
+            $admin_id = $this->session->userdata('login')['user_id'];
             $page_data['id'] = $id;
-            $page_data['user'] = $this->db->select('id,name')->get_where('user', array('user_id' => $user_id, 'status' => 'ACTIVE'))->result_array();
+            $page_data['user'] = $this->db->select('id,name')->get_where('user', array('user_id' => $admin_id, 'status' => 'ACTIVE'))->result_array();
             $page_data['data'] = $this->db->select('*')->get_where('payment', array('id' => $id))->row_array();
             $page_data['page_title'] = 'Manage Payment';
             $page_data['page_name'] = 'admin/payment';
@@ -104,8 +105,7 @@ class Manage_payment extends CI_Controller
             $r['success'] = 0;
             $r['message'] = validation_errors();
         } else {
-            
-            // $user_id = $this->session->userdata('login')['user_id'];
+
             $update = $this->db->where('id', $id)->update('payment', ['user_id' => $data['user_id'], 'amount' => $data['amount'], 'date' => $data['date'], 'type' => $data['type']]);
             if (isset($update)) {
                 $r['success'] = 1;

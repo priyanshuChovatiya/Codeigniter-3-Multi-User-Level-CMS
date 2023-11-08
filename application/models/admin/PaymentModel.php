@@ -17,13 +17,13 @@ class PaymentModel extends CI_Model
         $columnName = $postData['columns'][$columnIndex]['data']; // Column name
         $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
         // $searchValue = $postData['search']['value']; // Search value
-        $user_id = $this->session->userdata('login')['user_id'];
+        // $user_id = $this->session->userdata('login')['user_id'];
 
 
         ## Total number of records without filtering
         $totalRecords = $this->db->select('payment.*,user.name as user_id')
             ->from('payment')
-            ->join('user', 'user.id =payment.user_id', 'left')
+            ->join('user', 'user.id = payment.user_id', 'left')
             ->get()->num_rows();
 
 
