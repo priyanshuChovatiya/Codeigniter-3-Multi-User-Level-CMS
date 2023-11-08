@@ -1,9 +1,5 @@
 <div class="container-xxl flex-grow-1 container-p-y pt-0">
-<<<<<<< HEAD
-    <h4 class="py-2 mb-2"><span class="text-muted fw-light"><?= $this->session->userdata('login')['user_type']; ?> / </span> Change Password </h4>
-=======
     <h4 class="py-2 mb-2"><span class="text-muted fw-light"><?=ucfirst(strtolower($this->session->userdata('login')['user_type'])); ?> / </span> Change Password </h4>
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
     <!-- Change Password -->
 	<div class="row d-flex justify-content-center">
 		<div class="card mb-4 col-md-12">
