@@ -77,8 +77,7 @@ class UserModel extends CI_Model
 			$link = base_url('admin/user/edit/') . $id;
 			$checked = $record->status == 'ACTIVE' ? "checked" : "";
 
-			$action = "<div class='d-flex gap-1'><button type='button' class='btn btn-sm btn-primary rounded-pill btn-icon permission' data-bs-toggle='modal' data-id='" . $id . "'> <i class='mdi mdi-tune'></i> </button>
-                <a href='{$link}'><button type='button' class='btn btn-sm btn-dark rounded-pill btn-icon' data-bs-toggle='modal' > <i class='mdi mdi-pencil-outline'></i> </button><a/></div>";
+			$action = "<div class='d-flex gap-1'><a href='{$link}'><button type='button' class='btn btn-sm btn-dark rounded-pill btn-icon' data-bs-toggle='modal' > <i class='mdi mdi-pencil-outline'></i> </button><a/></div>";
 
 			$status = " <label class='switch switch-success'>
                                 <input type='checkbox' data-id='$id' data-status='{$record->status}' data-on='ACTIVE' data-value='1' data-off='INACTIVE'

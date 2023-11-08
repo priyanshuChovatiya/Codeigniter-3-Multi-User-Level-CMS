@@ -8,29 +8,10 @@
 						<img src="<?= base_url('assets/uploads/project/' . $data['project_image']); ?>" alt="Avatar Image" class="rounded" width="200">
 					</div>
 					<h4 class="mb-1 card-title"><?= $data['name']; ?></h4>
-					<span><?= $data['title']; ?></span>
+					<span><?= isset($data['title']) ? $data['title'] : ""; ?></span>
 					<div class="d-flex align-items-center justify-content-center my-4 gap-2">
 						<a href="javascript:;" class="me-1"><span class="badge bg-label-secondary rounded-pill"><?= $data['start_date']; ?></span></a>
 						<a href="javascript:;"><span class="badge bg-label-warning rounded-pill"><?= $data['end_date']; ?></span></a>
-					</div>
-
-					<div class="d-flex align-items-center justify-content-around mb-4">
-						<div>
-							<h4 class="mb-1">18</h4>
-							<span>Projects</span>
-						</div>
-						<div>
-							<h4 class="mb-1">834</h4>
-							<span>Tasks</span>
-						</div>
-						<div>
-							<h4 class="mb-1">129</h4>
-							<span>Connections</span>
-						</div>
-					</div>
-					<div class="d-flex align-items-center justify-content-center">
-						<a href="javascript:;" class="btn btn-primary d-flex align-items-center me-3 waves-effect waves-light"><i class="mdi mdi-account-check-outline me-1"></i>Connected</a>
-						<a href="javascript:;" class="btn btn-outline-secondary btn-icon waves-effect"><i class="mdi mdi-email-outline lh-sm"></i></a>
 					</div>
 				</div>
 			</div>
@@ -42,33 +23,21 @@
 					<ul class="nav nav-tabs nav-tabs-widget pb-3 gap-4 mx-1 d-flex flex-nowrap" role="tablist">
 						<li class="nav-item" role="presentation">
 							<div class="nav-link btn d-flex flex-column align-items-center justify-content-center active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-orders-id" aria-controls="navs-orders-id" aria-selected="false" tabindex="-1">
-								<!-- <button type="button" class="btn btn-icon rounded-pill btn-label-google-plus waves-effect"> -->
 								Daily <br> Activity
-								<!-- <i class="mdi mdi-google mdi-20px"></i> -->
-								<!-- </button> -->
-							</div>
-						</li>
-						<li class="nav-item" role="presentation">
-							<div class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab" data-bs-toggle="tab" data-bs-target="#navs-sales-id" aria-controls="navs-sales-id" aria-selected="false" tabindex="-1">
-								<!-- <button type="button" class="btn btn-icon rounded-pill btn-label-facebook waves-effect">
-                              <i class="mdi mdi-facebook mdi-20px"></i>
-                            </button> -->
-								Material
 							</div>
 						</li>
 						<li class="nav-item" role="presentation">
 							<div class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab" data-bs-toggle="tab" data-bs-target="#navs-profit-id" aria-controls="navs-profit-id" aria-selected="true">
-								<!-- <button type="button" class="btn btn-icon rounded-pill btn-label-instagram waves-effect">
-                              <i class="mdi mdi-instagram mdi-20px"></i>
-                            </button> -->
 								Worker
 							</div>
 						</li>
 						<li class="nav-item" role="presentation">
+							<div class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab" data-bs-toggle="tab" data-bs-target="#navs-sales-id" aria-controls="navs-sales-id" aria-selected="false" tabindex="-1">
+								Material
+							</div>
+						</li>
+						<li class="nav-item" role="presentation">
 							<div class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab" data-bs-toggle="tab" data-bs-target="#navs-income-id" aria-controls="navs-income-id" aria-selected="false" tabindex="-1">
-								<!-- <button type="button" class="btn btn-icon rounded-pill btn-label-twitter waves-effect">
-                              <i class="mdi mdi-twitter mdi-20px"></i>
-                            </button> -->
 								Vendor
 							</div>
 						</li>
@@ -76,45 +45,56 @@
 					</ul>
 					<div class="tab-content p-0 ms-0 ms-sm-2">
 						<div class="tab-pane fade active show" id="navs-orders-id" role="tabpanel">
-							<div class="table-responsive text-nowrap">
-								<table class="table table-borderless">
-									<thead class="border-bottom">
-										<tr>
-											<th class="fw-medium ps-0 text-heading">Parameter</th>
-											<th class="pe-0 fw-medium text-heading">Status</th>
-											<th class="pe-0 fw-medium text-heading">Conversion</th>
-											<th class="pe-0 text-end text-heading">total revenue</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td class="h6 ps-0">Email Marketing Campaign</td>
-											<td class="pe-0"><span class="badge rounded-pill bg-label-primary">Active</span></td>
-											<td class="pe-0 text-success">+24%</td>
-											<td class="pe-0 text-end h6">$42,857</td>
-										</tr>
-										<tr>
-											<td class="h6 ps-0">Google Workspace</td>
-											<td class="pe-0">
-												<span class="badge rounded-pill bg-label-warning">Completed</span>
-											</td>
-											<td class="text-danger pe-0">-12%</td>
-											<td class="pe-0 text-end h6">$850</td>
-										</tr>
-										<tr>
-											<td class="h6 ps-0">Affiliation Program</td>
-											<td class="pe-0"><span class="badge rounded-pill bg-label-primary">Active</span></td>
-											<td class="text-success pe-0">+24%</td>
-											<td class="pe-0 text-end h6">$5,576</td>
-										</tr>
-										<tr>
-											<td class="h6 ps-0">Google Adsense</td>
-											<td class="pe-0"><span class="badge rounded-pill bg-label-info">In Draft</span></td>
-											<td class="text-success pe-0">0%</td>
-											<td class="pe-0 text-end h6">$0</td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="text-nowrap">
+								<form action="<?= base_url('worker/project/daily_work/' . $project_id); ?>" id="permissionForm" class="browser-default-validation needs-validation mt-3" novalidate method="post" enctype="multipart/form-data">
+									<div class="modal-body pb-0" id="Modelbody">
+										<div class="row">
+											<div class="col-md-4 mt-2 mb-3">
+												<div class="form-floating form-floating-outline">
+													<input type="file" id="work_image" multiple name="work_image[]" class="form-control file required" />
+													<label for="work_image">Project Image</label>
+												</div>
+												<p class="pb-1 mb-1"> Select Please Multiple Image</p>
+											</div>
+											<div class="col-md-3 mt-2 mb-3">
+												<div class="form-floating form-floating-outline">
+													<select id="work_complate" name="work_complate" class="select2 form-select required" required data-lable='Work Complated' data-allow-clear="true">
+														<option value="">Select Work Complated</option>
+														<option value="10">10 %</option>
+														<option value="20">20 %</option>
+														<option value="30">30 %</option>
+														<option value="40">40 %</option>
+														<option value="50">50 %</option>
+														<option value="60">60 %</option>
+														<option value="70">70 %</option>
+														<option value="80">80 %</option>
+														<option value="90">90 %</option>
+														<option value="100">100 %</option>
+													</select>
+													<label for="work_complate">Work Complated</label>
+												</div>
+											</div>
+											<div class="col-md-3 mt-2 mb-3">
+												<div class="form-floating form-floating-outline">
+													<input type="text" id="remark" name="remark" class="form-control" />
+													<label for="remark">Remark</label>
+												</div>
+											</div>
+											<input type="hidden" id="id" name="id" class="form-control" />
+											<input type="hidden" id="status" name="status" class="form-control" />
+											<div class="col-md-2 mt-2">
+												<button type="submit" class="btn btn-primary">Submit</button>
+											</div>
+											<div class="col-md-12 mb-2">
+												<div class="show_image row">
+												</div>
+											</div>
+											<div class="col-md-3 mb-2 text-center">
+												<span class="badge rounded-pill bg-label-primary viewImage" data-id="<?= $project_id; ?>">View Activity</span>
+											</div>
+										</div>
+									</div>
+								</form>
 							</div>
 						</div>
 						<div class="tab-pane fade" id="navs-sales-id" role="tabpanel">
@@ -164,9 +144,9 @@
 								<table class="table table-borderless">
 									<thead class="border-bottom">
 										<tr>
+											<th class="fw-medium ps-0 text-heading">Profile</th>
 											<th class="fw-medium ps-0 text-heading">Name</th>
 											<th class="pe-0 fw-medium text-heading">Status</th>
-											<th class="pe-0 fw-medium text-heading">Mobile</th>
 											<th class="pe-0 text-heading">Email</th>
 										</tr>
 									</thead>
@@ -174,7 +154,11 @@
 										<?php if (!empty($worker)) {
 											for ($i = 0; $i < count($worker); $i++) { ?>
 												<tr>
-													<td class="h6 ps-0"><?= $worker[$i]['worker_name'] ?></td>
+													<td><?php if (!empty($worker[$i]['profile'])) { ?>
+															<a href="<?= base_url().'assets/uploads/profile/'.$worker[$i]["profile"]; ?>" target="_blank" rel="noopener noreferrer"><img src="<?= isset($worker[$i]['profile']) ? base_url() . 'assets/uploads/profile/'  . $worker[$i]["profile"] : ''; ?>" class="rounded" width="100" alt="Image preview"></a>
+														<?php } ?>
+													</td>
+													<td class="h6 ps-0"><?= $worker[$i]['worker_name'] ?> ( <?= $worker[$i]['job_name'] ?> ) ( <?= $worker[$i]['worker_mobile'] ?> )</td>
 													<td>
 														<?php
 														if ($worker[$i]['worker_status'] == "PENDING") { ?>
@@ -185,7 +169,6 @@
 															<span class="badge rounded-pill bg-label-success">Complated</span>
 														<?php } ?>
 													</td>
-													<td class="pe-0 text-primary"><?= $worker[$i]['worker_mobile'] ?></td>
 													<td class="pe-0 h6"><?= $worker[$i]['worker_email'] ?></td>
 												</tr>
 										<?php }
@@ -233,24 +216,44 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- <div class="col-lg-12 mb-3">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<h5 class="mb-1 ">Name : <?= $data['name']; ?></h5>
-						<div class="row g-4 mt-3">
-							<div class="row">
-							</div>
-						</div>
-					</div>
+	</div>
+	<div class="modal fade" id="viewImageModel" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="exampleModalLabel1">Daily Activity</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body pb-0" id="viewImageModelBody">
+				</div>
+				<div class="modal-footer mt-3">
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+						Close
+					</button>
 				</div>
 			</div>
-		</div> -->
+		</div>
 	</div>
 	<!-- / Content -->
 	<div class="javascript">
 		<script>
-			$(document).ready(function() {});
+			$(document).ready(function() {
+				$(document).on('click', '.viewImage', function() {
+					var activity_id = $(this).data('id');
+					$('#viewImageModelBody').html("");
+					$.ajax({
+						url: "<?= site_url() . 'worker/project/viewActivity'; ?>",
+						type: 'post',
+						showLoader: true,
+						data: {
+							activity_id: activity_id,
+						},
+						success: function(res) {
+							$('#viewImageModelBody').html(res);
+							$("#viewImageModel").modal('show');
+						}
+					});
+				});
+			});
 		</script>
 	</div>

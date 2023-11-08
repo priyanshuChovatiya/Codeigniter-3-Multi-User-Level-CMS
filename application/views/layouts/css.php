@@ -10,8 +10,7 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/libs/node-waves/node-waves.css" />
 <!-- Core CSS -->
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
-<link rel="stylesheet" href="<?= base_url() ?>assets/vendor/css/rtl/theme-default.css"
-    class="template-customizer-theme-css" />
+<link rel="stylesheet" href="<?= base_url() ?>assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
 <link rel="stylesheet" href="<?= base_url() ?>assets/css/demo.css" />
 <!-- Vendors CSS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -31,14 +30,11 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
-<link rel="stylesheet"
-    href="<?= base_url() ?>assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
+<link rel="stylesheet" href="<?= base_url() ?>assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
 <link rel="stylesheet" href="<?= base_url() ?>assets/vendor/fonts/materialdesignicons.css" />
 
 <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- Helpers -->
 <script src="<?= base_url() ?>assets/vendor/js/helpers.js"></script>
 <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
@@ -46,19 +42,19 @@
 <!-- <script src="assets/vendor/js/template-customizer.js"></script> -->
 <script src="<?= base_url() ?>assets/js/config.js"></script>
 <style>
-.input-error {
-    border: 1px solid red;
-    box-shadow: 0 0 2px red;
-}
+	.input-error {
+		border: 1px solid red;
+		box-shadow: 0 0 2px red;
+	}
 
-.font_size {
-    font-size: 13px;
-}
+	.font_size {
+		font-size: 13px;
+	}
 
-.table> :not(caption)>*>* {
-    padding: 7px 1.25rem;
-    background-color: var(--bs-table-bg);
-    border-bottom-width: 1px;
-    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
-}
+	.table> :not(caption)>*>* {
+		padding: 7px 1.25rem;
+		background-color: var(--bs-table-bg);
+		border-bottom-width: 1px;
+		box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+	}
 </style>

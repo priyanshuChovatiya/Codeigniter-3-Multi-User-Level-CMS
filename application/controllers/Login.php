@@ -66,6 +66,7 @@ class Login extends CI_Controller
 						'mobie' => $user['mobile'],
 						'username' => $user['name'],
 						'user_type' => $user['type'],
+						'job_type' => $user['job_type_id'],
 						'login' => true
 					);
 

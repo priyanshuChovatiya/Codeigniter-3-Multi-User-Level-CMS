@@ -35,8 +35,8 @@ class Project extends CI_Controller
 	{
 		//Project data
 		$this->form_validation->set_rules('name', 'Project Name ', 'trim|required');
-		$this->form_validation->set_rules('title', 'Title', 'trim|required');
-		$this->form_validation->set_rules('city', 'City', 'trim|required|numeric');
+		// $this->form_validation->set_rules('title', 'Title', 'trim|required');
+		// $this->form_validation->set_rules('city', 'City', 'trim|required|numeric');
 		$this->form_validation->set_rules('customer', 'Customer', 'trim|required|numeric');
 		$this->form_validation->set_rules('start_date', 'Start Date', 'trim|required');
 		$this->form_validation->set_rules('end_date', 'End Date', 'trim|required');
@@ -52,8 +52,8 @@ class Project extends CI_Controller
 
 			$user['name'] = $data['name'];
 			$user['user_id'] = $this->session->userdata('login')['user_id'];
-			$user['title'] = $data['title'];
-			$user['city_id'] = $data['city'];
+			$user['title'] = isset($data['title']) ? $data['title'] : '';
+			// $user['city_id'] = $data['city'];
 			$user['customer_id'] = $data['customer'];
 			$user['start_date'] = $data['start_date'];
 			$user['end_date'] = $data['end_date'];
@@ -73,7 +73,7 @@ class Project extends CI_Controller
 					'job_type_id' => $data['job_type'][$i],
 					'worker_id'   => $data['worker'][$i],
 					'vendor_id'   => $data['vendor'][$i],
-					'price'    => $data['price'][$i],
+					'price'    => isset($data['price'][$i]) ? $data['price'][$i] : '',
 					'priority'    => $data['priority'][$i],
 					'project_id' => $project_id
 				];
@@ -142,8 +142,8 @@ class Project extends CI_Controller
 
 		//Project data
 		$this->form_validation->set_rules('name', 'Project Name ', 'trim|required');
-		$this->form_validation->set_rules('title', 'Title', 'trim|required');
-		$this->form_validation->set_rules('city', 'City', 'trim|required|numeric');
+		// $this->form_validation->set_rules('title', 'Title', 'trim|required');
+		// $this->form_validation->set_rules('city', 'City', 'trim|required|numeric');
 		$this->form_validation->set_rules('customer', 'Customer', 'trim|required|numeric');
 		$this->form_validation->set_rules('start_date', 'Start Date', 'trim|required');
 		$this->form_validation->set_rules('end_date', 'End Date', 'trim|required');
@@ -161,8 +161,8 @@ class Project extends CI_Controller
 
 			$store_data['name'] = $data['name'];
 			$store_data['user_id'] = $this->session->userdata('login')['user_id'];
-			$store_data['title'] = $data['title'];
-			$store_data['city_id'] = $data['city'];
+			$store_data['title'] = isset($data['title']) ? $data['title'] : '';
+			// $store_data['city_id'] = $data['city'];
 			$store_data['customer_id'] = $data['customer'];
 			$store_data['start_date'] = $data['start_date'];
 			$store_data['end_date'] = $data['end_date'];
@@ -190,7 +190,7 @@ class Project extends CI_Controller
 						'job_type_id' => $data['job_type'][$i],
 						'worker_id'   => $data['worker'][$i],
 						'vendor_id'   => $data['vendor'][$i],
-						'price'    => $data['price'][$i],
+						'price'    => isset($data['price'][$i]) ? $data['price'][$i] : '',
 						'priority'    => $data['priority'][$i],
 						'id'    => $data['pd_id'][$i],
 					];
@@ -199,7 +199,7 @@ class Project extends CI_Controller
 						'job_type_id' => $data['job_type'][$i],
 						'worker_id'   => $data['worker'][$i],
 						'vendor_id'   => $data['vendor'][$i],
-						'price'    => $data['price'][$i],
+						'price'    => isset($data['price'][$i]) ? $data['price'][$i] : '',
 						'priority'    => $data['priority'][$i],
 						'project_id' => $id
 					];

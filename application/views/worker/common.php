@@ -35,6 +35,7 @@
 	</div>
 	<script>
 		$(document).ready(function () {
+			$('.javascript').html('')
 			var js = $('.javascript').html();
 			$('.append-javascript').append(js);
 			$('.javascript').html('')
