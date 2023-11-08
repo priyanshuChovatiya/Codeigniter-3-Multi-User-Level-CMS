@@ -74,6 +74,7 @@ class Project extends CI_Controller
 					'worker_id'   => $data['worker'][$i],
 					'vendor_id'   => $data['vendor'][$i],
 					'price'    => $data['price'][$i],
+					'priority'    => $data['priority'][$i],
 					'project_id' => $project_id
 				];
 			}
@@ -190,6 +191,7 @@ class Project extends CI_Controller
 						'worker_id'   => $data['worker'][$i],
 						'vendor_id'   => $data['vendor'][$i],
 						'price'    => $data['price'][$i],
+						'priority'    => $data['priority'][$i],
 						'id'    => $data['pd_id'][$i],
 					];
 				} else {
@@ -198,6 +200,7 @@ class Project extends CI_Controller
 						'worker_id'   => $data['worker'][$i],
 						'vendor_id'   => $data['vendor'][$i],
 						'price'    => $data['price'][$i],
+						'priority'    => $data['priority'][$i],
 						'project_id' => $id
 					];
 				}
@@ -269,6 +272,20 @@ class Project extends CI_Controller
 				'data' => []
 			];
 			echo json_encode($message);
+		}
+	}
+
+	public function check_priority()
+	{
+		$project_id = $this->input->post('project_id');
+		$priority = $this->input->post('priority');
+
+		$exists = $this->db->where(array('priority'=>$priority,'project_id'=>$project_id))->get('project_detail')->num_rows();
+
+		if($exists > 0){
+			echo json_encode(['success' => true, 'message' => 'Priority already exists for this project.']);
+		}else{
+			echo json_encode(['success' => false, 'message' => '']);
 		}
 	}
 }

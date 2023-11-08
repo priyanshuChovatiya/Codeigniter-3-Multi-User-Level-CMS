@@ -89,7 +89,7 @@
 										<label for="project_image">Project Image</label>
 									</div>
 									<div class="show_image">
-										<?php if(!empty($data['project_image'])){?>
+										<?php if (!empty($data['project_image'])) { ?>
 											<img src="<?= isset($data['project_image']) ? base_url() . 'assets/uploads/project/'  . $data["project_image"] : ''; ?>" class="ms-4 mt-3 rounded" width="200" alt="Image preview">
 										<?php } ?>
 
@@ -108,6 +108,7 @@
 												<th>Worker</th>
 												<th>Vendor</th>
 												<th>Price</th>
+												<th>Priority</th>
 												<th>Actions</th>
 											</tr>
 										</thead>
@@ -162,6 +163,12 @@
 															<div class="form-floating form-floating-outline">
 																<input type="number" name="price[]" class="form-control required" value="<?= isset($project_detail['price']) ? $project_detail['price'] : '' ?>" required placeholder="0.00" aria-label="0.00" />
 																<label for="price">Price</label>
+															</div>
+														</td>
+														<td class="p-1">
+															<div class="form-floating form-floating-outline">
+																<input type="number" name="priority[]" class="form-control required priority" value="<?= isset($project_detail['priority']) ? $project_detail['priority'] : '' ?>" required placeholder="1" aria-label="0.00" />
+																<label for="priority">Priority</label>
 															</div>
 														</td>
 														<td>
@@ -223,6 +230,12 @@
 														<div class="form-floating form-floating-outline">
 															<input type="number" name="price[]" class="form-control amount required" required min="0" oninput="validateAmount(this)" placeholder="0.00" aria-label="0.00" />
 															<label for="price">Price</label>
+														</div>
+													</td>
+													<td class="p-1">
+														<div class="form-floating form-floating-outline">
+															<input type="number" name="priority[]" class="form-control required priority" value="<?= isset($project_detail['priority']) ? $project_detail['priority'] : '' ?>" required placeholder="1" aria-label="0.00" />
+															<label for="priority">Priority</label>
 														</div>
 													</td>
 													<td>
@@ -316,6 +329,12 @@
 				<label for="price">Price</label>
 			</div>
 		</td>
+		<td class="p-1">
+			<div class="form-floating form-floating-outline">
+				<input type="number" name="priority[]" class="form-control required priority" value="<?= isset($project_detail['priority']) ? $project_detail['priority'] : '' ?>" required placeholder="1" aria-label="0.00" />
+				<label for="priority">Priority</label>
+			</div>
+		</td>
 		<td>
 			<div class="mb-3 col-lg-12 col-xl-2 col-12 d-flex align-items-center mb-0">
 				<button type="button" class="btn btn-danger waves-effect mt-3 remove-row-btn">
@@ -335,47 +354,70 @@
 <div class="javascript">
 	<script>
 		$(document).ready(function() {
-		$('.amount').on('input', function() {
-			var value = $(this).val();
-			if (value < 0 || value.includes('-')) {
-				$(this).val(value.replace('-', ''));
-			}
-		});
-
-		$(document).on("click", ".more-btn", function() {
-			var row = $("#copyHTML").html();
-			AppendBox = $('.appendHTML');
-			AppendBox.append(row);
-			AppendBox.children().last().find('.select2').each(function() {
-
-				$(this).val(null).trigger('change.select2').select2();
+			$('.amount').on('input', function() {
+				var value = $(this).val();
+				if (value < 0 || value.includes('-')) {
+					$(this).val(value.replace('-', ''));
+				}
 			});
-			setSrNo(AppendBox);
-		});
-		$(document).on("click", ".remove-row-btn", function(e) {
-			let mainRowLength = $(".copy_row").length;
-			var RemoveBtn = $(this);
-			if (mainRowLength > 1) {
-				Swal.fire({
-					title: "Are you sure to delete?",
-					text: "You won't be able to revert this!",
-					icon: "warning",
-					showCancelButton: true,
-					confirmButtonText: "Yes, delete!",
-					customClass: {
-						confirmButton: "btn btn-primary me-3 waves-effect waves-light",
-						cancelButton: "btn btn-outline-secondary waves-effect",
-					},
-					buttonsStyling: false,
-				}).then(function(result) {
-					if (result.value) {
-						RemoveBtn.parents(".copy_row").fadeOut(() => {
-							RemoveBtn.parents(".copy_row").remove();
-						});
-					}
+
+			$(document).on("click", ".more-btn", function() {
+				var row = $("#copyHTML").html();
+				AppendBox = $('.appendHTML');
+				AppendBox.append(row);
+				AppendBox.children().last().find('.select2').each(function() {
+					$(this).val(null).trigger('change.select2').select2();
 				});
-			}
-		});
+				setSrNo(AppendBox);
+			});
+			$(document).on("click", ".remove-row-btn", function(e) {
+				let mainRowLength = $(".copy_row").length;
+				var RemoveBtn = $(this);
+				if (mainRowLength > 1) {
+					Swal.fire({
+						title: "Are you sure to delete?",
+						text: "You won't be able to revert this!",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonText: "Yes, delete!",
+						customClass: {
+							confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+							cancelButton: "btn btn-outline-secondary waves-effect",
+						},
+						buttonsStyling: false,
+					}).then(function(result) {
+						if (result.value) {
+							RemoveBtn.parents(".copy_row").fadeOut(() => {
+								RemoveBtn.parents(".copy_row").remove();
+							});
+						}
+					});
+				}
+			});
+
+			$('.priority').on('change', function() {
+				if($('#id').val() != ""){
+					var project_id = $('#id').val(); // Assuming you have a project ID field
+					var priority = $(this).val();
+					$.ajax({
+						url: '<?php echo site_url('admin/project/check_priority'); ?>',
+						type: 'POST',
+						dataType: 'json',
+						data: {
+							project_id: project_id,
+							priority: priority
+						},
+						success: function(response) {
+							if (response.success) {
+								SweetAlert('error', response.message);
+							}
+						},
+						error: function() {
+							SweetAlert('error', 'Error checking priority.');
+						}
+					});
+				}
+			});
 		});
 	</script>
 </div>
