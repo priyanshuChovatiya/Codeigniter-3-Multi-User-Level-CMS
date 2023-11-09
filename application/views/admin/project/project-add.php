@@ -35,22 +35,6 @@
 										<label for="City">City</label>
 									</div>
 								</div> -->
-								<!-- <div class="col-md-4">
-									<div class="form-floating form-floating-outline">
-										<select id="worker" name="worker[]" class="select2 form-select getWorker required" multiple data-lable='Worker' required data-allow-clear="true">
-											<option value="">Select Worker</option>
-										</select>
-										<label for="worker">Workers</label>
-									</div>
-								</div> -->
-								<!-- <div class="col-md-4">
-									<div class="form-floating form-floating-outline">
-										<select id="vendor" name="vendor[]" class="select2 form-select getVendor required" multiple data-lable='Vendor' required data-allow-clear="true">
-											<option value="">Select Vendor</option>
-										</select>
-										<label for="vendor">Vendor</label>
-									</div>
-								</div> -->
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<select id="customer" name="customer" class="select2 form-select required" data-lable='Customer' required data-allow-clear="true">
@@ -65,12 +49,6 @@
 										<label for="customer">Customer</label>
 									</div>
 								</div>
-								<!-- <div class="col-md-4">
-									<div class="form-floating form-floating-outline">
-										<input type="number" name="price" id="price" value="<?= isset($data['price']) ? $data['price'] : '' ?>" required class="form-control phone-mask required  positiveNumber" placeholder="0.00" aria-label="0.00" />
-										<label for="price">Price</label>
-									</div>
-								</div> -->
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<input type="date" name="start_date" id="start_date" value="<?= isset($data['start_date']) ? $data['start_date'] : '' ?>" required class="form-control phone-mask required" />
@@ -135,11 +113,13 @@
 														</td>
 														<td class="p-1">
 															<div class="form-floating form-floating-outline">
-																<select name="worker[]" class="select2 form-select required" data-lable="Worker" required data-allow-clear="true">
+																<select name="worker[]" class="select2 form-select required worker" multiple data-lable="Worker" required data-allow-clear="true">
 																	<option value="">Select Worker</option>
 																	<?php if (!empty($worker)) {
-																		foreach ($worker as $key => $value) { ?>
-																			<option value="<?= $value['id'] ?>" <?= isset($project_detail['worker_id']) && $project_detail['worker_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+																		foreach ($worker as $key => $value) { 
+																			$worker_id = explode(',',$project_detail['worker_id']);
+																			?>
+																			<option value="<?= $value['id'] ?>" <?= isset($worker_id) && in_array($value['id'],$worker_id) ? "selected" : '' ?>><?= $value['name'] ?></option>
 																		<?php } ?>
 																	<?php } ?>
 																</select>
@@ -148,11 +128,13 @@
 														</td>
 														<td class="p-1">
 															<div class="form-floating form-floating-outline">
-																<select name="vendor[]" class="select2 form-select required" data-lable="Vendor" required data-allow-clear="true">
+																<select name="vendor[]" class="select2 form-select required vendor" multiple data-lable="Vendor" required data-allow-clear="true">
 																	<option value="">Select Vendor</option>
 																	<?php if (!empty($vendor)) {
-																		foreach ($vendor as $key => $value) { ?>
-																			<option value="<?= $value['id'] ?>" <?= isset($project_detail['vendor_id']) && $project_detail['vendor_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+																		foreach ($vendor as $key => $value) { 
+																			$vendor_id = explode(',',$project_detail['vendor_id']);
+																			?>
+																			<option value="<?= $value['id'] ?>" <?= isset($vendor_id) && in_array($value['id'],$vendor_id) ? "selected" : '' ?>><?= $value['name'] ?></option>
 																		<?php } ?>
 																	<?php } ?>
 																</select>
@@ -202,7 +184,7 @@
 													</td>
 													<td class="p-1">
 														<div class="form-floating form-floating-outline">
-															<select name="worker[]" class="select2 form-select required" data-lable="Worker" required data-allow-clear="true">
+															<select name="worker[0][]" class="select2 form-select required worker" multiple data-lable="Worker" required data-allow-clear="true">
 																<option value="">Select Worker</option>
 																<?php if (!empty($worker)) {
 																	foreach ($worker as $key => $value) { ?>
@@ -215,7 +197,7 @@
 													</td>
 													<td class="p-1">
 														<div class="form-floating form-floating-outline">
-															<select name="vendor[]" class="select2 form-select required" data-lable="Vendor" required data-allow-clear="true">
+															<select name="vendor[0][]" class="select2 form-select required vendor" multiple data-lable="Vendor" required data-allow-clear="true">
 																<option value="">Select Vendor</option>
 																<?php if (!empty($vendor)) {
 																	foreach ($vendor as $key => $value) { ?>
@@ -299,8 +281,7 @@
 		</td>
 		<td class="p-1">
 			<div class="form-floating form-floating-outline">
-				<select name="worker[]" class="select2 form-select required" required data-lable="Worker" data-allow-clear="true">
-					<option value="">Select Worker</option>
+				<select name="worker[0][]" class="select2 form-select required worker" multiple required data-lable="Worker" data-allow-clear="true">
 					<?php if (!empty($worker)) {
 						foreach ($worker as $key => $value) { ?>
 							<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
@@ -312,8 +293,7 @@
 		</td>
 		<td class="p-1">
 			<div class="form-floating form-floating-outline">
-				<select name="vendor[]" class="select2 form-select required" required data-lable="Vendor" data-allow-clear="true">
-					<option value="">Select Vendor</option>
+				<select name="vendor[0][]" class="select2 form-select required vendor" multiple required data-lable="Vendor" data-allow-clear="true">
 					<?php if (!empty($vendor)) {
 						foreach ($vendor as $key => $value) { ?>
 							<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
@@ -352,8 +332,15 @@
 	var customer = <?= json_encode(($customer) ?? '') ?>;
 </script>
 <div class="javascript">
+	<script src="<?= base_url() ?>assets/js/form-validation.js"></script>
 	<script>
 		$(document).ready(function() {
+			$('.vendor').each(function(index, element) {
+				$(element).attr('name', `vendor[${index}][]`);
+			});
+			$('.worker').each(function(index, element) {
+				$(element).attr('name', `worker[${index}][]`);
+			});
 			$('.amount').on('input', function() {
 				var value = $(this).val();
 				if (value < 0 || value.includes('-')) {
@@ -367,6 +354,17 @@
 				AppendBox.append(row);
 				AppendBox.children().last().find('.select2').each(function() {
 					$(this).val(null).trigger('change.select2').select2();
+				});
+
+				$('.vendor').each(function() {
+
+				});
+
+				$('.vendor').each(function(index, element) {
+					$(element).attr('name', `vendor[${index}][]`);
+				});
+				$('.worker').each(function(index, element) {
+					$(element).attr('name', `worker[${index}][]`);
 				});
 				setSrNo(AppendBox);
 			});
@@ -389,6 +387,12 @@
 						if (result.value) {
 							RemoveBtn.parents(".copy_row").fadeOut(() => {
 								RemoveBtn.parents(".copy_row").remove();
+							});
+							$('.vendor').each(function(index, element) {
+								$(element).attr('name', `vendor[${index}][]`);
+							});
+							$('.worker').each(function(index, element) {
+								$(element).attr('name', `worker[${index}][]`);
 							});
 						}
 					});
@@ -417,31 +421,6 @@
 					SweetAlert('error', 'Priority already exists for this project');
 				}
 			});
-
-			// $('.priority').on('keyup', function() {
-			// 	if ($('#id').val() != "") {
-			// 		var project_id = $('#id').val(); // Assuming you have a project ID field
-			// 		var priority = $(this).val();
-			// 		console.log(priority);
-			// 		$.ajax({
-			// 			url: '<?php echo site_url('admin/project/check_priority'); ?>',
-			// 			type: 'POST',
-			// 			dataType: 'json',
-			// 			data: {
-			// 				project_id: project_id,
-			// 				priority: priority
-			// 			},
-			// 			success: function(response) {
-			// 				if (response.success == true) {
-			// 					SweetAlert('error', response.message);
-			// 				}
-			// 			},
-			// 			error: function() {
-			// 				SweetAlert('error', 'Error checking priority.');
-			// 			}
-			// 		});
-			// 	}
-			// });
 		});
 	</script>
 </div>

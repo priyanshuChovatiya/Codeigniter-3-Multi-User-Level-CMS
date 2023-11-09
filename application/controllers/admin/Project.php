@@ -47,7 +47,6 @@ class Project extends CI_Controller
 			$r['message'] = validation_errors();
 		} else {
 			$data = $this->input->post();
-
 			$user = [];
 
 			$user['name'] = $data['name'];
@@ -71,8 +70,8 @@ class Project extends CI_Controller
 			for ($i = 0; $i < count($data['job_type']); $i++) {
 				$project_details[] = [
 					'job_type_id' => $data['job_type'][$i],
-					'worker_id'   => $data['worker'][$i],
-					'vendor_id'   => $data['vendor'][$i],
+					'worker_id'   => implode(',',$data['worker'][$i]),
+					'vendor_id'   => implode(',',$data['vendor'][$i]),
 					'price'    => isset($data['price'][$i]) ? $data['price'][$i] : '',
 					'priority'    => $data['priority'][$i],
 					'project_id' => $project_id
@@ -188,8 +187,8 @@ class Project extends CI_Controller
 				if (!empty($data['pd_id'][$i]) && !empty($data['job_type'][$i])) {
 					$update_data[] = [
 						'job_type_id' => $data['job_type'][$i],
-						'worker_id'   => $data['worker'][$i],
-						'vendor_id'   => $data['vendor'][$i],
+						'worker_id'   => implode(',',$data['worker'][$i]),
+						'vendor_id'   => implode(',',$data['vendor'][$i]),
 						'price'    => isset($data['price'][$i]) ? $data['price'][$i] : '',
 						'priority'    => $data['priority'][$i],
 						'id'    => $data['pd_id'][$i],
@@ -197,8 +196,8 @@ class Project extends CI_Controller
 				} else {
 					$insert_data[] = [
 						'job_type_id' => $data['job_type'][$i],
-						'worker_id'   => $data['worker'][$i],
-						'vendor_id'   => $data['vendor'][$i],
+						'worker_id'   => implode(',',$data['worker'][$i]),
+						'vendor_id'   => implode(',',$data['vendor'][$i]),
 						'price'    => isset($data['price'][$i]) ? $data['price'][$i] : '',
 						'priority'    => $data['priority'][$i],
 						'project_id' => $id

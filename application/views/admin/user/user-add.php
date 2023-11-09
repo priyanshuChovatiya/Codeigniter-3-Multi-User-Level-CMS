@@ -39,6 +39,19 @@
 										<label for="mobile">Mobile</label>
 									</div>
 								</div>
+								<div class="col-md-4 CUSTOMER">
+									<div class="form-floating form-floating-outline">
+										<select id="job_type" name="job_type" class="select2 form-select" data-lable='Job Type' data-allow-clear="true">
+											<option value="">Select Job Type</option>
+											<?php if (!empty($job_type)) { ?>
+												<?php foreach ($job_type as $key => $value) { ?>
+													<option value="<?= $value['id'] ?>" <?= isset($data['job_type_id']) && $data['city_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+												<?php } ?>
+											<?php } ?>
+										</select>
+										<label for="Job Type">Job Type</label>
+									</div>
+								</div>
 								<?php if (empty($data)) { ?>
 									<div class="col-md-4">
 										<div class="form-floating form-floating-outline">
@@ -58,19 +71,6 @@
 											<?php } ?>
 										</select>
 										<label for="City">City</label>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="form-floating form-floating-outline">
-										<select id="job_type" name="job_type" class="select2 form-select required" data-lable='Job Type' required data-allow-clear="true">
-											<option value="">Select Job Type</option>
-											<?php if (!empty($job_type)) { ?>
-												<?php foreach ($job_type as $key => $value) { ?>
-													<option value="<?= $value['id'] ?>" <?= isset($data['job_type_id']) && $data['city_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
-												<?php } ?>
-											<?php } ?>
-										</select>
-										<label for="Job Type">Job Type</label>
 									</div>
 								</div>
 								<div class="col-md-4">
@@ -104,15 +104,34 @@
 		</div>
 	</form>
 </div>
-
 <div class="javascript">
 	<script>
 		$(document).ready(function() {
-			$(document).on('change', '#user_type', function() {
-				$(this).val();
-				if($(this).val() == "CUSTOMER"){
+			$('.CUSTOMER').hide();
+			$('.CUSTOMER').children().find('#job_type').removeClass('required');
+			$('.CUSTOMER').children().find('#job_type').prop('required', false);
 
+			if ($('#name').val() != "") {
+				user_type($('#user_type').val());
+			}
+
+			function user_type(user_type) {
+				if (user_type == "CUSTOMER") {
+					$(`.${user_type}`).hide();
+					$('.CUSTOMER').children().find('#job_type').removeClass('required');
+					$('.CUSTOMER').children().find('#job_type').prop('required', false);
+				} else {
+					$('.CUSTOMER').show();
+					$('.CUSTOMER').children().find('#job_type').addClass('required');
+					$('.CUSTOMER').children().find('#job_type').prop('required', true);
+					// $('.CUSTOMER').addClass('required');
+					// $('.CUSTOMER').prop('required', true);
 				}
+
+			}
+			$(document).on('change', '#user_type', function() {
+				//   var user_type = $(this).val();
+				user_type($(this).val());
 			});
 		});
 	</script>

@@ -144,7 +144,7 @@
 								<table class="table table-borderless">
 									<thead class="border-bottom">
 										<tr>
-											<th class="fw-medium ps-0 text-heading">Profile</th>
+											<!-- <th class="fw-medium ps-0 text-heading">Profile</th> -->
 											<th class="fw-medium ps-0 text-heading">Name</th>
 											<th class="pe-0 fw-medium text-heading">Status</th>
 											<th class="pe-0 text-heading">Email</th>
@@ -154,11 +154,26 @@
 										<?php if (!empty($worker)) {
 											for ($i = 0; $i < count($worker); $i++) { ?>
 												<tr>
-													<td><?php if (!empty($worker[$i]['profile'])) { ?>
-															<a href="<?= base_url().'assets/uploads/profile/'.$worker[$i]["profile"]; ?>" target="_blank" rel="noopener noreferrer"><img src="<?= isset($worker[$i]['profile']) ? base_url() . 'assets/uploads/profile/'  . $worker[$i]["profile"] : ''; ?>" class="rounded" width="100" alt="Image preview"></a>
-														<?php } ?>
+													<!-- <td> -->
+														<!-- <?php if (!empty($worker[$i]['worker_profile'])) {
+															$profile = explode(',', $worker[$i]['worker_profile']);
+															for ($a = 0; $a < count($profile); $a++) { ?>
+																<a href="<?= base_url('assets/uploads/profile/') . trim($profile[$a]); ?>" target="_blank" rel="noopener noreferrer"><img src="<?= base_url('assets/uploads/profile/') . trim($profile[$a]); ?>" class="rounded m-1" width="100" alt="Image preview"></a><br>
+														<?php }
+														} ?> -->
+													<!-- </td> -->
+													<td class="h6 ps-0">
+														<?php if (!empty($worker[$i]['worker_name'])) {
+															$worker_name = explode(',', $worker[$i]['worker_name']);
+															$worker_mobile = explode(',', $worker[$i]['worker_mobile']);
+															$worker_id = explode(',', $worker[$i]['worker_id']);
+															for ($j = 0; $j < count($worker_name); $j++) { ?>
+																<?= isset($worker_name[$j]) ? $worker_name[$j] : '' ?> ( <?= $worker[$i]['job_name'] ?> ) ( <?= !empty($worker_mobile[$j]) ? $worker_mobile[$j] : ' ' ?> ) 
+																<button type="button" class="btn btn-sm btn-primary ms-3 rounded-pill btn-icon viewImage ms-1" data-user_id="<?=$worker_id[$j];?>" data-project_id="<?= $project_id; ?>"><i class="mdi mdi-eye"></i></button><br>
+														<?php }
+														} ?>
 													</td>
-													<td class="h6 ps-0"><?= $worker[$i]['worker_name'] ?> ( <?= $worker[$i]['job_name'] ?> ) ( <?= $worker[$i]['worker_mobile'] ?> )</td>
+
 													<td>
 														<?php
 														if ($worker[$i]['worker_status'] == "PENDING") { ?>
@@ -169,7 +184,14 @@
 															<span class="badge rounded-pill bg-label-success">Complated</span>
 														<?php } ?>
 													</td>
-													<td class="pe-0 h6"><?= $worker[$i]['worker_email'] ?></td>
+													<td class="pe-0 h6">
+														<?php if (!empty($worker[$i]['worker_email'])) {
+															$worker_email = explode(',', $worker[$i]['worker_email']);
+															for ($k = 0; $k < count($worker_email); $k++) { ?>
+																<?= $worker_email[$k] ?> <br>
+														<?php }
+														} ?>
+													</td>
 												</tr>
 										<?php }
 										} ?>
@@ -192,7 +214,14 @@
 										<?php if (!empty($worker)) {
 											for ($i = 0; $i < count($worker); $i++) { ?>
 												<tr>
-													<td class="h6 ps-0"><?= $worker[$i]['vendor_name'] ?></td>
+													<td class="h6 ps-0">
+														<?php if (!empty($worker[$i]['vendor_name'])) {
+															$vendor_name = explode(',', $worker[$i]['vendor_name']);
+															for ($k = 0; $k < count($vendor_name); $k++) { ?>
+																<?= $vendor_name[$k] ?> <br>
+														<?php }
+														} ?>
+													</td>
 													<td>
 														<?php
 														if ($worker[$i]['vendor_status'] == "PENDING") { ?>
@@ -203,8 +232,22 @@
 															<span class="badge rounded-pill bg-label-success">Complated</span>
 														<?php } ?>
 													</td>
-													<td class="pe-0 text-primary"><?= $worker[$i]['vendor_mobile'] ?></td>
-													<td class="pe-0 h6"><?= $worker[$i]['vendor_email'] ?></td>
+													<td class="pe-0 text-primary">
+														<?php if (!empty($worker[$i]['vendor_mobile'])) {
+															$vendor_mobile = explode(',', $worker[$i]['vendor_mobile']);
+															for ($k = 0; $k < count($vendor_mobile); $k++) { ?>
+																<?= $vendor_mobile[$k] ?> <br>
+														<?php }
+														} ?>
+													</td>
+													<td class="pe-0 h6">
+														<?php if (!empty($worker[$i]['vendor_email'])) {
+															$vendor_email = explode(',', $worker[$i]['vendor_email']);
+															for ($k = 0; $k < count($vendor_email); $k++) { ?>
+																<?= $vendor_email[$k] ?> <br>
+														<?php }
+														} ?>
+													</td>
 												</tr>
 										<?php }
 										} ?>
@@ -238,15 +281,33 @@
 	<div class="javascript">
 		<script>
 			$(document).ready(function() {
+				// $(document).on('click', '.viewImage', function() {
+				// 	var activity_id = $(this).data('id');
+				// 	$('#viewImageModelBody').html("");
+				// 	$.ajax({
+				// 		url: "<?= site_url() . 'worker/project/viewActivity'; ?>",
+				// 		type: 'post',
+				// 		showLoader: true,
+				// 		data: {
+				// 			activity_id: activity_id,
+				// 		},
+				// 		success: function(res) {
+				// 			$('#viewImageModelBody').html(res);
+				// 			$("#viewImageModel").modal('show');
+				// 		}
+				// 	});
+				// });
 				$(document).on('click', '.viewImage', function() {
-					var activity_id = $(this).data('id');
+					var user_id = $(this).data('user_id');
+					var project_id = $(this).data('project_id');
 					$('#viewImageModelBody').html("");
 					$.ajax({
-						url: "<?= site_url() . 'worker/project/viewActivity'; ?>",
+						url: "<?= site_url() . 'worker/project/presonalImage'; ?>",
 						type: 'post',
 						showLoader: true,
 						data: {
-							activity_id: activity_id,
+							user_id: user_id,
+							project_id: project_id,
 						},
 						success: function(res) {
 							$('#viewImageModelBody').html(res);
