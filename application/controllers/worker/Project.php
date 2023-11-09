@@ -17,10 +17,6 @@ class Project extends CI_Controller
 		$this->load->model('worker/ProjectModel');
 	}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 	public function report()
 	{
 		$page_data['page_title'] = 'Project Report';
@@ -40,47 +36,6 @@ class Project extends CI_Controller
 		echo json_encode($data);
 	}
 
-<<<<<<< HEAD
-	public function status()
-	{
-		try {
-			$this->form_validation->set_rules('status', 'Status', 'trim|required');
-			$this->form_validation->set_rules('id', 'Update Id', 'trim|required');
-			$this->form_validation->set_rules('type', 'Status type', 'trim|required');
-
-			if ($this->form_validation->run() == false) {
-				$r['success'] = 0;
-				$r['message'] = validation_errors();
-			} else {
-				$data = $this->input->post();
-				$user_id = $this->session->userdata('login')['user_id'];
-				$id = $data['id'];
-
-				if ($data['type'] == 'status') {
-					$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('project', ['status' => $data['status']]);
-					if (isset($response)) {
-						echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);
-					} else {
-						echo json_encode(['success' => false, 'error' => json_encode(validation_errors())]);
-					}
-				} elseif ($data['type'] == 'project_status') {
-					$response = $this->db->where(array('id' => $id, 'user_id' => $user_id))->update('project', ['project_status' => $data['status']]);
-					if (isset($response)) {
-						echo json_encode(['success' => true, 'message' => 'Status Updated successfully.']);
-					} else {
-						echo json_encode(['success' => false, 'error' => json_encode(validation_errors())]);
-					}
-				}
-			}
-		} catch (\Throwable | \ErrorException | \Error | \Exception $e) {
-			$message = [
-				'success' => false,
-				'error' => $e->getMessage(),
-				'data' => []
-			];
-			echo json_encode($message);
-		}
-=======
 	public function update_status()
 	{
 		$this->form_validation->set_rules('id', 'Update Id', 'trim|required');
@@ -168,7 +123,6 @@ class Project extends CI_Controller
 		$page_data['COMPLATED'] = $this->db->select('id,name')->get_where('project_detail_image', array('project_detail_id' => $project_detail_id, 'type' => 'COMPLATED'))->result_array();
 		$res = $this->load->view('worker/view_image.php', $page_data);
 		echo json_encode($res);
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 	}
 
 	public function view_detail($id)

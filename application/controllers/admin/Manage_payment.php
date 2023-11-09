@@ -42,19 +42,18 @@ class Manage_payment extends CI_Controller
             redirect(base_url('admin/manage_payment'), 'refresh');
         } else {
             $data = $this->input->post();
-            // $payment = [];
+            $payment = [];
 
-            // $payment['user_id'] = $data['user_id'];
-            // $payment['amount'] = $data['amount'];
-            // $payment['date'] = $data['date'];
-            // $payment['type'] = $data['type'];
-            unset($data['id']);
-            print_r($data);
-            // exit;
-            $insert = $this->db->insert('payment', $data);
+            $payment['user_id'] = $data['user_id'];
+            $payment['amount'] = $data['amount'];
+            $payment['date'] = $data['date'];
+            $payment['type'] = $data['type'];
+
+            $insert = $this->db->insert('payment', $payment);
+
             // pre($this->db->error());
             // exit;
-            if (($insert)) {
+            if (isset($insert)) {
                 $r['success'] = 1;
                 $r['message'] = "payment details Add SuccessFully.";
             } else {
@@ -99,7 +98,7 @@ class Manage_payment extends CI_Controller
         $this->form_validation->set_rules('user_id', 'user_id', 'trim|required');
         $this->form_validation->set_rules('amount', 'amount', 'trim|required');
         $this->form_validation->set_rules('date', 'date', 'trim|required');
-        $this->form_validation->set_rules('type', 'type ', 'trim|required');
+        $this->form_validation->set_rules('type', 'type ', 'required');
 
         if ($this->form_validation->run() == false) {
             $r['success'] = 0;

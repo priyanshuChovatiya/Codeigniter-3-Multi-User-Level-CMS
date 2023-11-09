@@ -1,7 +1,7 @@
 <div class="container-xxl flex-grow-1 container-p-y pt-0">
     <h4 class="py-2 mb-2"><span class="text-muted fw-light">Payment / </span> <?= isset($data) ? 'Edit' : 'Add' ?> </h4>
     <!-- Sticky Actions -->
-    <form action="<?= !isset($data) ? base_url('admin/manage_payment/add') : base_url('admin/manage_payment/update') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="POST" enctype="multipart/form-data">
+    <form action="<?= !isset($data) ? base_url('admin/manage_payment/add') : base_url('admin/manage_payment/aaaaa') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="POST" enctype="multipart/form-data">
         <div class="row">
             <div class="col-lg-12 mb-2">
                 <div class="card">
@@ -42,18 +42,18 @@
                                     <div class="form-floating form-floating-outline">
                                         <small class="text-light fw-medium d-block">type</small>
                                         <div class="form-check form-check-inline mt-3 ">
-                                            <input class="form-check-input" type="radio" name="type" id="inlineRadio1" value="1" <?php
-                                                                                                                                    if (isset($data)) {
-                                                                                                                                        echo ($data['type'] == 'CREDIT ') ? 'checked' : '' ?><?php
-                                                                                                                                                                                                } else {
-                                                                                                                                                                                                    ?> checked <?php
-                                                                                                                                                                                                            } ?> />
+                                            <input class="form-check-input" type="radio" name="type" id="inlineRadio1" value="Credit" <?php
+                                                                                                                                        if (isset($data)) {
+                                                                                                                                            echo ($data['type'] == "Credit") ? 'checked' : '' ?><?php
+                                                                                                                                                                                            } else {
+                                                                                                                                                                                                ?> checked <?php
+                                                                                                                                                                                                        } ?> />
                                             <label class="form-check-label" for="inlineRadio1">Credit</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="type" id="inlineRadio2" value="2" <?php
-                                                                                                                                    if (isset($data)) {
-                                                                                                                                        echo ($data['type'] == 'DEBIT ') ? 'checked' : '' ?><?php
+                                            <input class="form-check-input" type="radio" name="type" id="inlineRadio2" value="Debit" <?php
+                                                                                                                                        if (isset($data)) {
+                                                                                                                                            echo ($data['type'] == "Debit") ? 'checked' : '' ?><?php
                                                                                                                                                                                             }  ?> />
                                             <label class="form-check-label" for="inlineRadio2">Debit</label>
                                         </div>
