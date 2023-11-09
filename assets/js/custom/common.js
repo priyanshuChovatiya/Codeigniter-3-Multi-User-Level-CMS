@@ -437,7 +437,9 @@ function price_in_words(price) {
   return str;
 }
 /* Comman form validation */
+
 $("form").on("submit", function (e) {
+	// e.preventDefault();
   let isValid = true;
   $(this)
     .find(".required")
@@ -467,9 +469,9 @@ $("form").on("submit", function (e) {
         $(this).parent().next(".error-message").html("");
       }
     });
-  if (!isValid) {
-    e.preventDefault();
-  }
+		if (!isValid) {
+			e.preventDefault();
+		}
 });
 /* common Jquery validation for all input just add */
 jQuery.validator.setDefaults({
