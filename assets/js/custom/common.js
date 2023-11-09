@@ -6,6 +6,9 @@ $(document).ready(function() {
 	$(document).on('change', '.file', function() {
 		var input = this;
 		if (input.files) {
+			$(".show_image").each(function () {
+				$(this).html('');
+			});
 			var filesAmount = input.files.length;
 			for (i = 0; i < filesAmount; i++) {
 				var reader = new FileReader();

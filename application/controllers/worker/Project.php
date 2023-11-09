@@ -75,7 +75,7 @@ class Project extends CI_Controller
 
 				if (!empty($this->upload->do_upload('work_image'))) {
 					$upload_data = $this->upload->data();
-					resize_image($upload_data['file_name'], 'assets/uploads/work_image');
+					// resize_image($upload_data['file_name'], 'assets/uploads/work_image');
 
 					// // Configure image manipulation settings
 					// $config['image_library'] = 'gd2'; // Choose the image library (gd, gd2, imagemagick, netpbm, etc)
@@ -94,7 +94,7 @@ class Project extends CI_Controller
 					$insert_data['name'] =  $upload_data['file_name'];
 					$insert_data['project_detail_id'] = $id;
 					$insert_data['type'] = $data['status'];
-					// $this->db->insert('project_detail_image', $insert_data);
+					$this->db->insert('project_detail_image', $insert_data);
 					// }
 				}
 			}
@@ -116,12 +116,26 @@ class Project extends CI_Controller
 		redirect(base_url('worker/project/report'), 'refresh');
 	}
 
-	public function viewImage()
+	// public function viewImage()
+	// {
+	// 	$project_detail_id = $this->input->post('project_detail_id');
+	// 	$page_data['INPROCESS'] = $this->db->select('id,name')->get_where('project_detail_image', array('project_detail_id' => $project_detail_id, 'type' => 'INPROCESS'))->result_array();
+	// 	$page_data['COMPLATED'] = $this->db->select('id,name')->get_where('project_detail_image', array('project_detail_id' => $project_detail_id, 'type' => 'COMPLATED'))->result_array();
+	// 	$res = $this->load->view('worker/view_image.php', $page_data);
+	// 	echo json_encode($res);
+	// }
+
+	public function viewActivity()
 	{
-		$project_detail_id = $this->input->post('project_detail_id');
-		$page_data['INPROCESS'] = $this->db->select('id,name')->get_where('project_detail_image', array('project_detail_id' => $project_detail_id, 'type' => 'INPROCESS'))->result_array();
-		$page_data['COMPLATED'] = $this->db->select('id,name')->get_where('project_detail_image', array('project_detail_id' => $project_detail_id, 'type' => 'COMPLATED'))->result_array();
-		$res = $this->load->view('worker/view_image.php', $page_data);
+		$user_id = $this->session->userdata('login')['user_id'];
+		$activity_id = $this->input->post('activity_id');
+		$date = date('Y-m-d');
+		$this->db->select('daily_activity.work_complate,daily_activity.remark,activity_image.name')
+			->from('daily_activity')
+			->join('activity_image', 'daily_activity.id = activity_image.activity_id', 'left')
+			->where(array('user_id' => $user_id, 'date' => $date));
+		$page_data['data'] = $this->db->get()->result_array();
+		$res = $this->load->view('worker/view_activity.php', $page_data);
 		echo json_encode($res);
 	}
 
@@ -136,7 +150,7 @@ class Project extends CI_Controller
 			->join('city', 'project.city_id = city.id', 'left')
 			->where(array('project.id' => $id));
 		$page_data['data'] = $this->db->get()->row_array();
-		$this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name,job_type.name as job_name,worker.mobile as worker_mobile, worker.email as worker_email,vendor.mobile as vendor_mobile,vendor.email as vendor_email')
+		$this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name,job_type.name as job_name,worker.mobile as worker_mobile, worker.email as worker_email,vendor.mobile as vendor_mobile,vendor.email as vendor_email,worker.profile')
 			->from('project_detail')
 			->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
 			->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
@@ -144,8 +158,88 @@ class Project extends CI_Controller
 			->where('project_detail.project_id', $id);
 		$page_data['worker'] = $this->db->get()->result_array();
 		// pre($page_data);exit;
+		$page_data['project_id'] = $id;
 		$page_data['page_title'] = 'Project Details';
 		$page_data['page_name'] = 'worker/view_detail';
 		return $this->load->view('worker/common', $page_data);
+	}
+
+	public function daily_work($id)
+	{
+
+		$this->form_validation->set_rules('work_complate', 'Work Complated', 'trim|required');
+
+		if ($this->form_validation->run() == false) {
+			$r['success'] = 0;
+			$r['message'] = validation_errors();
+		} else {
+			$user_id = $this->session->userdata('login')['user_id'];
+			$job_type = $this->session->userdata('login')['job_type'];
+
+			$data = $this->input->post();
+			$daily_activity = [];
+
+			$daily_activity['user_id'] = $user_id;
+			$daily_activity['project_id'] = $id;
+			$daily_activity['job_type'] = $job_type;
+			$daily_activity['date'] =  date('Y-m-d');
+			$daily_activity['remark'] = isset($data['remark']) ? $data['remark'] : '';
+			$daily_activity['work_complate'] = $data['work_complate'];
+
+			$this->db->insert('daily_activity', $daily_activity);
+			$insert_id = $this->db->insert_id();
+
+
+			$files = $_FILES;
+			$cpt = count($_FILES['work_image']['name']);
+			for ($i = 0; $i < $cpt; $i++) {
+				$_FILES['work_image']['name'] = $files['work_image']['name'][$i];
+				$_FILES['work_image']['type'] = $files['work_image']['type'][$i];
+				$_FILES['work_image']['tmp_name'] = $files['work_image']['tmp_name'][$i];
+				$_FILES['work_image']['error'] = $files['work_image']['error'][$i];
+				$_FILES['work_image']['size'] = $files['work_image']['size'][$i];
+
+				$config = array();
+				$config['upload_path'] = 'assets/uploads/daily_activity/';
+				$config['allowed_types'] = 'gif|jpg|png';
+				$config['encrypt_name'] = TRUE;
+				$config['overwrite']     = FALSE;
+				$this->upload->initialize($config);
+
+				if (!empty($this->upload->do_upload('work_image')) && !empty($insert_id)) {
+					$upload_data = $this->upload->data();
+					$insert_data['activity_id'] = $insert_id;
+					$insert_data['name'] =  $upload_data['file_name'];
+					$this->db->insert('activity_image', $insert_data);
+				}
+			}
+
+			$convertimg = FCPATH . "assets/uploads/daily_activity/" . $upload_data['file_name'];
+			$convertimgsize = filesize($convertimg) / 1024;
+			if ($convertimgsize > 300) {
+
+				$info = getimagesize($convertimg);
+				if ($info['mime'] == 'image/jpeg')
+					$iiimage = imagecreatefromjpeg($convertimg);
+				elseif ($info['mime'] == 'image/png')
+					$iiimage = imagecreatefrompng($convertimg);
+
+				list($width, $height) = getimagesize($_FILES['work_image']['tmp_name']);
+				$tn = imagecreatetruecolor($width, $height);
+
+				imagecopyresampled($tn, $iiimage, 0, 0, 0, 0, $width, $height, $width, $height);
+				imagejpeg($iiimage, $convertimg, 20);
+			}
+
+			if (!empty($insert_id)) {
+				$r['success'] = 1;
+				$r['message'] = "Daily Activity Add successfully.";
+			} else {
+				$r['success'] = 0;
+				$r['message'] = "Daily Activity Add Failed.";
+			}
+		}
+		$this->session->set_flashdata('flash', $r);
+		redirect(base_url('worker/project/view_detail/' . $id), 'refresh');
 	}
 }

@@ -18,11 +18,11 @@
 								</div>
 								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
-										<input type="text" id="title" name="title" value="<?= isset($data['title']) ? $data['title'] : '' ?>" required class="form-control required" placeholder="Enter Title" />
+										<input type="text" id="title" name="title" value="<?= isset($data['title']) ? $data['title'] : '' ?>" class="form-control" placeholder="Enter Title" />
 										<label for="title">Title</label>
 									</div>
 								</div>
-								<div class="col-md-4">
+								<!-- <div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<select id="city" name="city" class="select2 form-select required" data-lable='City' required data-allow-clear="true">
 											<option value="">Select City</option>
@@ -34,7 +34,7 @@
 										</select>
 										<label for="City">City</label>
 									</div>
-								</div>
+								</div> -->
 								<!-- <div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<select id="worker" name="worker[]" class="select2 form-select getWorker required" multiple data-lable='Worker' required data-allow-clear="true">
@@ -161,7 +161,7 @@
 														</td>
 														<td class="p-1">
 															<div class="form-floating form-floating-outline">
-																<input type="number" name="price[]" class="form-control required" value="<?= isset($project_detail['price']) ? $project_detail['price'] : '' ?>" required placeholder="0.00" aria-label="0.00" />
+																<input type="number" name="price[]" class="form-control" value="<?= isset($project_detail['price']) ? $project_detail['price'] : '' ?>" required placeholder="0.00" aria-label="0.00" />
 																<label for="price">Price</label>
 															</div>
 														</td>
@@ -228,7 +228,7 @@
 													</td>
 													<td class="p-1">
 														<div class="form-floating form-floating-outline">
-															<input type="number" name="price[]" class="form-control amount required" required min="0" oninput="validateAmount(this)" placeholder="0.00" aria-label="0.00" />
+															<input type="number" name="price[]" class="form-control amount" required min="0" oninput="validateAmount(this)" placeholder="0.00" aria-label="0.00" />
 															<label for="price">Price</label>
 														</div>
 													</td>
@@ -325,7 +325,7 @@
 		</td>
 		<td class="p-1">
 			<div class="form-floating form-floating-outline">
-				<input type="number" name="price[]" class="form-control amount required" min="0" oninput="validateAmount(this)" required placeholder="0.00" aria-label="0.00" />
+				<input type="number" name="price[]" class="form-control amount" min="0" oninput="validateAmount(this)" required placeholder="0.00" aria-label="0.00" />
 				<label for="price">Price</label>
 			</div>
 		</td>
@@ -395,29 +395,53 @@
 				}
 			});
 
-			$('.priority').on('change', function() {
-				if($('#id').val() != ""){
-					var project_id = $('#id').val(); // Assuming you have a project ID field
-					var priority = $(this).val();
-					$.ajax({
-						url: '<?php echo site_url('admin/project/check_priority'); ?>',
-						type: 'POST',
-						dataType: 'json',
-						data: {
-							project_id: project_id,
-							priority: priority
-						},
-						success: function(response) {
-							if (response.success) {
-								SweetAlert('error', response.message);
-							}
-						},
-						error: function() {
-							SweetAlert('error', 'Error checking priority.');
-						}
-					});
+			$(document).on("keyup", ".priority", function() {
+				var priorities = [];
+				var isDuplicate = false;
+
+				$('.priority').each(function() {
+					var priorityValue = $(this).val();
+
+					if ($.inArray(priorityValue, priorities) !== -1) {
+						isDuplicate = true;
+						return false;
+					}
+
+					if (priorityValue !== '') {
+						priorities.push(priorityValue);
+					}
+				});
+
+				if (isDuplicate) {
+					$(this).val('');
+					SweetAlert('error', 'Priority already exists for this project');
 				}
 			});
+
+			// $('.priority').on('keyup', function() {
+			// 	if ($('#id').val() != "") {
+			// 		var project_id = $('#id').val(); // Assuming you have a project ID field
+			// 		var priority = $(this).val();
+			// 		console.log(priority);
+			// 		$.ajax({
+			// 			url: '<?php echo site_url('admin/project/check_priority'); ?>',
+			// 			type: 'POST',
+			// 			dataType: 'json',
+			// 			data: {
+			// 				project_id: project_id,
+			// 				priority: priority
+			// 			},
+			// 			success: function(response) {
+			// 				if (response.success == true) {
+			// 					SweetAlert('error', response.message);
+			// 				}
+			// 			},
+			// 			error: function() {
+			// 				SweetAlert('error', 'Error checking priority.');
+			// 			}
+			// 		});
+			// 	}
+			// });
 		});
 	</script>
 </div>
