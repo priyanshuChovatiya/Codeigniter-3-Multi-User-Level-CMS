@@ -1,7 +1,7 @@
 <div class="container-xxl flex-grow-1 container-p-y pt-0">
     <h4 class="py-2 mb-2"><span class="text-muted fw-light">Payment / </span> <?= isset($data) ? 'Edit' : 'Add' ?> </h4>
     <!-- Sticky Actions -->
-    <form action="<?= !isset($data) ? base_url('admin/manage_payment/add') : base_url('admin/manage_payment/aaaaa') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="POST" enctype="multipart/form-data">
+    <form action="<?= !isset($data) ? base_url('admin/manage_payment/add') : base_url('admin/manage_payment/update') ?>" class="browser-default-validation mb-3 needs-validation" novalidate id="userForm" method="POST" enctype="multipart/form-data">
         <div class="row">
             <div class="col-lg-12 mb-2">
                 <div class="card">
@@ -27,10 +27,9 @@
                                 <div class="col-md-6">
                                     <div class="form-floating form-floating-outline">
                                         <input type="number" id="amount" name="amount" value="<?= isset($data['amount']) ? $data['amount'] : '' ?>" required class="form-control required" placeholder="Enter amount" />
-                                        <label for="email">Amount</label>
+                                        <label for="amount">Amount</label>
                                     </div>
                                 </div>
-
 
                                 <div class="col-md-6">
                                     <div class="form-floating form-floating-outline">

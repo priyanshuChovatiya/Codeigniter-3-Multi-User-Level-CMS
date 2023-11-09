@@ -10,26 +10,6 @@
 							<div class="row">
 								<div class="col-md-2">
 									<div class="form-floating form-floating-outline">
-<<<<<<< HEAD
-										<select id="status" name="status" class="select2 form-select" data-allow-clear="true">
-											<option value="">Status</option>
-											<option value="PENDING">PENDING</option>
-											<option value="INPROCESS">INPROCESS</option>
-										</select>
-										<label for="status">Status</label>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-floating form-floating-outline">
-										<input type="date" name="start_date" id="start_date" value="<?= isset($data['start_date']) ? $data['start_date'] : '' ?>" required class="form-control phone-mask required" />
-										<label for="start_date">Start Date</label>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-floating form-floating-outline">
-										<input type="date" name="end_date" id="end_date" value="<?= isset($data['end_date']) ? $data['end_date'] : '' ?>" required class="form-control phone-mask required" />
-										<label for="end_date">End Date</label>
-=======
 										<select id="city" name="city" class="select2 form-select required" data-lable='City' required data-allow-clear="true">
 											<option value="">Select City</option>
 											<?php if (!empty($city)) { ?>
@@ -39,7 +19,6 @@
 											<?php } ?>
 										</select>
 										<label for="City">City</label>
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 									</div>
 								</div>
 								<div class="col-md-2">
@@ -94,19 +73,12 @@
 						<thead>
 							<tr>
 								<th>id</th>
-<<<<<<< HEAD
-								<th>Action</th>
-								<th>City</th>
-								<th>Name</th>
-								<th>Title</th>
-=======
 								<th>Project Status</th>
 								<th>Action</th>
 								<th>Name</th>
 								<th>Title</th>
 								<th>City</th>
 								<th>Job Type</th>
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 								<th>Worker</th>
 								<th>Worker Status</th>
 								<th>Mobile</th>
@@ -190,99 +162,6 @@
 <!-- / Content -->
 <div class="javascript">
 	<script>
-<<<<<<< HEAD
-		// $(document).ready(function () {
-		var table = $('#ProjectTable').DataTable({
-			fixedHeader: false,
-			responsive: false,
-			serverSide: true,
-			showLoader: true,
-			destroy: true,
-			autoFill: true,
-			searching: false,
-			paging: true,
-			processing: false,
-			ajax: {
-				url: '<?= base_url('worker/project/getProjectList'); ?>',
-				type: "post",
-				data: function(data) {
-					data.end_date = $('#end_date').val();
-					data.start_date = $('#start_date').val();
-					data.status = $('#status').val();
-					data.search = $('#search').val();
-					ShowBlockUi('#ProjectTable');
-				}
-			},
-			'columns': [{
-					data: 'id'
-				},
-				{
-					data: 'action'
-				},
-				{
-					data: 'city'
-				},
-				{
-					data: 'name'
-				},
-				{
-					data: 'title'
-				},
-
-				{
-					data: 'worker'
-				},
-				{
-					data: 'vendor'
-				},
-				{
-					data: 'customer'
-				},
-				{
-					data: 'price'
-				},
-				{
-					data: 'project_status'
-				},
-				{
-					data: 'start_date'
-				},
-				{
-					data: 'end_date'
-				},
-			]
-		});
-
-		$(document).on('click', '.search-btn', function() {
-			table.ajax.reload();
-			((element) => ShowBlockUi(element))('#usersTable')
-		});
-
-		function change_status({
-			i,
-			...payload
-		}, current_status) {
-			alert_if("Do you want to update the status?", function() {
-				$.ajax({
-					url: "<?= base_url("admin/project/status") ?>",
-					type: 'POST',
-					showLoader: true,
-					data: payload,
-					dataType: 'json',
-					success: function(response) {
-						var {
-							success,
-							message
-						} = response;
-						if (success) {
-							SweetAlert('success', message);
-							ShowBlockUi('#ProjectTable');
-						} else {
-							i.val(current_status)
-							SweetAlert('error', 'Failed to update status.');
-							ShowBlockUi('#ProjectTable');
-						}
-=======
 		$(document).ready(function() {
 			var table = $('#ProjectTable').DataTable({
 				fixedHeader: false,
@@ -307,21 +186,10 @@
 				},
 				'columns': [{
 						data: 'id'
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 					},
 					{
 						data: 'project_status'
 					},
-<<<<<<< HEAD
-				});
-			}, () => {
-				if (payload.type == 'project_status') {
-					i.val(current_status);
-				} else {
-					current_status = !i.prop("checked") ? i.data("on") : i.data("off");
-					i.prop('checked', !i.prop('checked')).siblings('.switch-label').text(current_status)
-				}
-=======
 					{
 						data: 'action'
 					},
@@ -374,7 +242,6 @@
 						data: 'end_date'
 					},
 				]
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 			});
 
 			$(document).on('click', '.search-btn', function() {

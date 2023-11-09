@@ -91,7 +91,7 @@
 		</li>
 		<li class="menu-item <?= is_active('admin/manage_payment') ?>">
 			<a href="<?= base_url('admin/manage_payment'); ?>" class="menu-link">
-				<i class="menu-icon tf-icons mdi mdi-city"></i>
+				<i class="menu-icon tf-icons mdi mdi-credit-card"></i>
 				<div data-i18n="Manage Payment">Manage Payment</div>
 			</a>
 		</li>

@@ -141,8 +141,6 @@ class ProjectModel extends CI_Model
 		// $searchValue = $postData['search']['value']; // Search value
 		$user_id = $this->session->userdata('login')['user_id'];
 
-<<<<<<< HEAD
-=======
 		if (!empty($postData['worker_id'])) {
 			$worker_id = array('project_detail.worker_id' => $postData['worker_id']);
 		} else {
@@ -168,7 +166,6 @@ class ProjectModel extends CI_Model
 		} else {
 			$city = array();
 		}
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 
 		if (!empty($postData['from_date'])) {
 			$from_date = array('project.from_date' => $postData['from_date']);
@@ -187,22 +184,12 @@ class ProjectModel extends CI_Model
 		}
 
 		## Total number of records without filtering
-<<<<<<< HEAD
-		$query = $this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name')
-			->from('project_detail')
-			->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
-			->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
-			->where('project_detail.worker_id', $user_id);
-		// ->where('project.user_id', $user_id)->where($start_date)->where($status)->where($end_date);
-
-=======
 		$query = $this->db->select('project.*,customer.name as customer_name,city.name as city_name')
 			->from('project')
 			->join('user as customer', 'project.customer_id = customer.id', 'left')
 			->join('project_detail', 'project.id = project_detail.project_id', 'left')
 			->join('city', 'project.city_id = city.id', 'left')
 			->where(array('project_detail.worker_id' => $user_id, 'project.project_status !=' => 'COMPLATED'))->where($worker_status)->where($vendor_status)->where($city)->where($worker_id)->where($vendor_id);
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 		if (!empty($postData['search'])) {
 			$query->like('project.name', $postData['search']);
 		}
@@ -211,21 +198,12 @@ class ProjectModel extends CI_Model
 
 
 		## Total number of record with filtering
-<<<<<<< HEAD
-		$recordstotalRecord = $this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name')
-			->from('project_detail')
-			->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
-			->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
-			->where('project_detail.worker_id', $user_id);
-		// ->where('project.user_id', $user_id)->where($start_date)->where($status)->where($end_date);
-=======
 		$recordstotalRecord = $this->db->select('project.*,customer.name as customer_name,city.name as city_name')
 			->from('project')
 			->join('user as customer', 'project.customer_id = customer.id', 'left')
 			->join('project_detail', 'project.id = project_detail.project_id', 'left')
 			->join('city', 'project.city_id = city.id', 'left')
 			->where(array('project_detail.worker_id' => $user_id, 'project.project_status !=' => 'COMPLATED'))->where($worker_status)->where($vendor_status)->where($city)->where($worker_id)->where($vendor_id);
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 		if (!empty($postData['search'])) {
 			$recordstotalRecord->like('project.name', $postData['search']);
 		}
@@ -234,25 +212,12 @@ class ProjectModel extends CI_Model
 
 
 		## Fetch records
-<<<<<<< HEAD
-		$records = 	$this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name,city.name as city_name,customer.name as customer_name,project.customer_id,project.start_date,project.end_date,project.project_image,project.project_status,project.name,project.title')
-			->from('project_detail')
-			->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
-			->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
-			->join('project', 'project_detail.project_id = project.id', 'left')
-			->join('city', 'project_detail.project_id = city.id', 'left')
-			->join('user as customer', 'project_detail.project_id = customer.id', 'left')
-			->where('project_detail.worker_id', $user_id);
-		// ->where('project.user_id', $user_id)->where($start_date)->where($status)->where($end_date);
-
-=======
 		$records = $this->db->select('project.*,customer.name as customer_name,city.name as city_name')
 			->from('project')
 			->join('user as customer', 'project.customer_id = customer.id', 'left')
 			->join('project_detail', 'project.id = project_detail.project_id', 'left')
 			->join('city', 'project.city_id = city.id', 'left')
 			->where(array('project_detail.worker_id' => $user_id, 'project.project_status !=' => 'COMPLATED'))->where($worker_status)->where($vendor_status)->where($city)->where($worker_id)->where($vendor_id);
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 		if (!empty($postData['search'])) {
 			$records->like('project.name', $postData['search']);
 		}
@@ -266,32 +231,6 @@ class ProjectModel extends CI_Model
 
 		foreach ($Allrecords as $record) {
 
-<<<<<<< HEAD
-			// $this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name')
-			// 	->from('project_detail')
-			// 	->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
-			// 	->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
-			// 	->join('project', 'project_detail.project_id=project.id', 'left')
-			// 	->where('project_detail.worker_id', $user_id);
-			// $project_details = $this->db->get()->result_array();
-
-
-			$id = $record->id;
-			$image_link = base_url('assets/uploads/project/') . $record->project_image;
-			$Pending = ($record->project_status == 'PENDING') ? 'selected' : '';
-			$InProcess = ($record->project_status == 'INPROCESS') ? 'selected' : '';
-			$Complated = ($record->project_status == 'COMPLATED') ? 'selected' : '';
-
-			$action = "<a href='{$image_link}' target='_blank'><button type='button' class=' btn btn-sm btn-primary rounded-pill btn-icon' ><i class='mdi mdi-eye'></i></button><a/> </div>";
-
-			$project_status = "<div class='form-floating form-floating-outline' style='width: 130px;'>
-								<select name='project_status' class='select2 form-select project_status' data-id='$id' data-allow-clear='true' data-current-status='" . $record->project_status . "'>
-									<option value='PENDING' $Pending>PENDING</option>
-									<option value='INPROCESS' $InProcess>INPROCESS</option>
-									<option value='COMPLATED' $Complated>COMPLATED</option>
-								</select>
-							</div>";
-=======
 			$this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name,job_type.name as job_name,worker.mobile as worker_mobile, worker.email as worker_email,vendor.mobile as vendor_mobile,vendor.email as vendor_email')
 				->from('project_detail')
 				->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
@@ -321,24 +260,24 @@ class ProjectModel extends CI_Model
 				$vendor_mobile .= "<span>{$value['vendor_mobile']}</span><br>";
 				$vendor_email .= "<span>{$value['vendor_email']}</span><br>";
 
-				if($value['worker_status'] == "PENDING"){
-					$worker_status .= "<span class='badge bg-warning'>PENDING</span> <br>" ;
+				if ($value['worker_status'] == "PENDING") {
+					$worker_status .= "<span class='badge bg-warning'>PENDING</span> <br>";
 					// $worker_status .=  ($user_id == $value['worker_id']) ? '<button type="button" class="btn btn-sm btn-success me-2 rounded-pill btn-icon approved ms-1" data-id="'.$value['id'].'" data-status="PENDING" ><span class="mdi mdi-check"></span> </button>' : '';
-					$action .=  ($user_id == $value['worker_id']) ? '<button type="button" class="btn btn-sm btn-danger me-2 rounded-pill btn-icon inprogress ms-1" data-id="'.$value['id'].'" data-status="INPROGRESS" ><i class="mdi mdi-timer-sand"></i></button>' : '';
-				}elseif($value['worker_status'] == "INPROCESS"){
+					$action .=  ($user_id == $value['worker_id']) ? '<button type="button" class="btn btn-sm btn-danger me-2 rounded-pill btn-icon inprogress ms-1" data-id="' . $value['id'] . '" data-status="INPROGRESS" ><i class="mdi mdi-timer-sand"></i></button>' : '';
+				} elseif ($value['worker_status'] == "INPROCESS") {
 					$worker_status .= "<span class='badge bg-info'>IN PROGRESS</span> <br>";
-					$action .=  ($user_id == $value['worker_id']) ? '<div class="d-flex gap-1"><button type="button" class="btn btn-sm btn-success me-2 rounded-pill btn-icon approved ms-1" data-id="'.$value['id'].'" data-status="PENDING" ><span class="mdi mdi-check"></span> </button>' : '';
-					$action .=  ($user_id == $value['worker_id'] && $value['worker_status'] == "INPROCESS") ? '<button type="button" class="btn btn-sm btn-primary me-2 rounded-pill btn-icon viewImage ms-1" data-id="'.$value['id'].'"><i class="mdi mdi-eye"></i></button> </div>' : '';
-				}elseif($value['worker_status'] == "COMPLATED"){
+					$action .=  ($user_id == $value['worker_id']) ? '<div class="d-flex gap-1"><button type="button" class="btn btn-sm btn-success me-2 rounded-pill btn-icon approved ms-1" data-id="' . $value['id'] . '" data-status="PENDING" ><span class="mdi mdi-check"></span> </button>' : '';
+					$action .=  ($user_id == $value['worker_id'] && $value['worker_status'] == "INPROCESS") ? '<button type="button" class="btn btn-sm btn-primary me-2 rounded-pill btn-icon viewImage ms-1" data-id="' . $value['id'] . '"><i class="mdi mdi-eye"></i></button> </div>' : '';
+				} elseif ($value['worker_status'] == "COMPLATED") {
 					$worker_status .= "<span class='badge bg-success'>COMPLATED</span> <br>";
-					$action .=  ($user_id == $value['worker_id'] && $value['worker_status'] == "COMPLATED") ? '<button type="button" class="btn btn-sm btn-primary me-2 rounded-pill btn-icon viewImage ms-1" data-id="'.$value['id'].'"><i class="mdi mdi-eye"></i></button>' : '';
+					$action .=  ($user_id == $value['worker_id'] && $value['worker_status'] == "COMPLATED") ? '<button type="button" class="btn btn-sm btn-primary me-2 rounded-pill btn-icon viewImage ms-1" data-id="' . $value['id'] . '"><i class="mdi mdi-eye"></i></button>' : '';
 				}
 
-				if($value['vendor_status'] == "PENDING"){
+				if ($value['vendor_status'] == "PENDING") {
 					$vendor_status .= "<span class='badge bg-warning'>PENDING</span>";
-				}elseif($value['vendor_status'] == "INPROCESS"){
+				} elseif ($value['vendor_status'] == "INPROCESS") {
 					$vendor_status .= "<span class='badge bg-info'>IN PROGRESS</span>";
-				}elseif($value['vendor_status'] == "COMPLATED"){
+				} elseif ($value['vendor_status'] == "COMPLATED") {
 					$vendor_status .= "<span class='badge bg-success'>COMPLATED</span>";
 				}
 			}
@@ -350,29 +289,14 @@ class ProjectModel extends CI_Model
 				$project_status .= "<span class='badge bg-info'>IN PROGRESS</span>";
 			}
 
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 
 
 
 			$data[] = array(
 				"id" => $i++,
-<<<<<<< HEAD
-				"action" => $action,
-				"city" => $record->city_name,
-=======
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 				"name" => $record->name,
 				"action" => $action,
 				"title" => $record->title,
-<<<<<<< HEAD
-				"worker" => $record->worker_name,
-				"vendor" => $record->vendor_name,
-				"customer" => $record->customer_name,
-				"price" => $record->price,
-				"project_status" => $project_status,
-				"start_date" => $record->start_date,
-				"end_date" => $record->end_date,
-=======
 				"city" => $record->city_name,
 				"job_type" => $job_type_html,
 				"worker" => $worker_html,
@@ -388,7 +312,6 @@ class ProjectModel extends CI_Model
 				"start_date" => $record->start_date,
 				"end_date" => $record->end_date,
 				"project_status" => $project_status,
->>>>>>> 954640e6a85ba5d8447ec5666f457fb16d4e6b05
 			);
 		}
 		## Response
