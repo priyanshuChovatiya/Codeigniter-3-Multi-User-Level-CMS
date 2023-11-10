@@ -21,22 +21,25 @@ class PaymentModel extends CI_Model
 
 
         ## Total number of records without filtering
-        $totalRecords = $this->db->select('payment.*,user.name as user_id')
+        $totalRecords = $this->db->select('payment.*,user.name as user_name,user.type,job_type.name as job_type')
             ->from('payment')
             ->join('user', 'user.id =payment.user_id', 'left')
+			->join('job_type', 'job_type.id = payment.user_id', 'left')
             ->get()->num_rows();
 
 
         ## Total number of record with filtering
-        $totalRecordwithFilter =  $this->db->select('payment.*,user.name as user_id')
+        $totalRecordwithFilter =  $this->db->select('payment.*,user.name as user_name,user.type,job_type.name as job_type')
             ->from('payment')
             ->join('user', 'user.id =payment.user_id', 'left')
+			->join('job_type', 'job_type.id = payment.user_id', 'left')
             ->get()->num_rows();
 
         ## Fetch records
-        $records =  $this->db->select('payment.*,user.name as user_id')
+        $records =  $this->db->select('payment.*,user.name as user_name,user.type,job_type.name as job_type')
             ->from('payment')
             ->join('user', 'user.id = payment.user_id', 'left')
+			->join('job_type', 'job_type.id = payment.user_id', 'left')
             ->order_by($columnName, $columnSortOrder)
             ->limit($rowperpage, $start)
             ->get()->result();
@@ -48,13 +51,16 @@ class PaymentModel extends CI_Model
             $id = $record->id;
             $link = base_url('admin/manage_payment/edit/') . $id;
 
-            $action = "<div class='d-flex gap-1'><a href='{$link}'><button type='button' class='btn btn-sm btn-dark rounded-pill btn-icon' data-bs-toggle='modal' > <i class='mdi mdi-pencil-outline'></i> </button><a/>";
+			$user_type = isset($record->type) ? "( $record->type ) " : "";
+			$job_type = isset($record->job_type) ? "( $record->job_type ) " : "";
 
+			$user_name = "<span>$record->user_name  $user_type  $job_type</span>";
+            $action = "<div class='d-flex gap-1'><a href='{$link}'><button type='button' class='btn btn-sm btn-dark rounded-pill btn-icon' data-bs-toggle='modal' > <i class='mdi mdi-pencil-outline'></i> </button><a/>";
 
             $data[] = array(
                 "id" => $i++,
                 "action" => $action,
-                "user_id" => $record->user_id,
+                "user_name" => $user_name,
                 "amount" => $record->amount,
                 "date" => $record->date,
                 "type" => $record->type,

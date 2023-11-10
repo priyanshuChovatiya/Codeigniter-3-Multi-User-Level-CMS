@@ -17,7 +17,7 @@
                                             <option value="">Select User Name</option>
                                             <?php if (!empty($user)) { ?>
                                                 <?php foreach ($user as $key => $value) { ?>
-                                                    <option value="<?= $value['id'] ?>" <?= isset($data['user_id']) && $data['user_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?></option>
+                                                    <option value="<?= $value['id'] ?>" <?= isset($data['user_id']) && $data['user_id'] == $value['id'] ? "selected" : '' ?>><?= $value['name'] ?> <?php if(!empty($value['type'])){ echo '(' .$value['type'] .')';} ?> <?php if(!empty($value['job_type'])){ echo '(' .$value['job_type'] .')';} ?></option>
                                                 <?php } ?>
                                             <?php } ?>
                                         </select>
@@ -40,20 +40,13 @@
                                 <div class="col-md-6">
                                     <div class="form-floating form-floating-outline">
                                         <small class="text-light fw-medium d-block">type</small>
-                                        <div class="form-check form-check-inline mt-3 ">
+                                        <div class="form-check form-check-inline mt-2">
                                             <input class="form-check-input" type="radio" name="type" id="inlineRadio1" value="Credit" <?php
-                                                                                                                                        if (isset($data)) {
-                                                                                                                                            echo ($data['type'] == "Credit") ? 'checked' : '' ?><?php
-                                                                                                                                                                                            } else {
-                                                                                                                                                                                                ?> checked <?php
-                                                                                                                                                                                                        } ?> />
+                                                                                                                                        if (isset($data)){ echo ($data['type'] == "Credit") ? 'checked' : '' ?><?php } else { ?> checked <?php } ?> />
                                             <label class="form-check-label" for="inlineRadio1">Credit</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="type" id="inlineRadio2" value="Debit" <?php
-                                                                                                                                        if (isset($data)) {
-                                                                                                                                            echo ($data['type'] == "Debit") ? 'checked' : '' ?><?php
-                                                                                                                                                                                            }  ?> />
+                                            <input class="form-check-input" type="radio" name="type" id="inlineRadio2" value="Debit" <?php if (isset($data)) { echo ($data['type'] == "Debit") ? 'checked' : '' ?><?php }  ?> />
                                             <label class="form-check-label" for="inlineRadio2">Debit</label>
                                         </div>
                                     </div>
@@ -136,7 +129,7 @@
                         data: 'action'
                     },
                     {
-                        data: 'user_id'
+                        data: 'user_name'
                     },
                     {
                         data: 'amount'
