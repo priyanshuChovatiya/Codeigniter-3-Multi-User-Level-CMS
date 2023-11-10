@@ -24,7 +24,7 @@ class Change_password_model extends CI_Model
     {
         // Determine the table name based on the user type
         $table_name = ($user_type == 'user') ? 'user' : (($user_type == 'vendor') ? 'vendor' : 'admin');
-        $old_password = $this->db->get_where('users', array('id' => $id))->row('password');
+        $old_password = $this->db->get_where('users', array('id' => $user_id))->row('password');
 
         // Hash the new password before updating the database
         $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);

@@ -167,6 +167,21 @@ class ProjectModel extends CI_Model
 			$city = array();
 		}
 
+		if (!empty($postData['from_date'])) {
+			$from_date = array('project.from_date' => $postData['from_date']);
+		} else {
+			$from_date = array();
+		}
+		if (!empty($postData['to_date'])) {
+			$to_date = array('project.to_date' => $postData['to_date']);
+		} else {
+			$to_date = array();
+		}
+		if (!empty($postData['project_status'])) {
+			$project_status = array('project.project_status' => $postData['project_status']);
+		} else {
+			$project_status = array();
+		}
 
 		## Total number of records without filtering
 		$query = $this->db->select('project.*,customer.name as customer_name,city.name as city_name')
@@ -194,6 +209,7 @@ class ProjectModel extends CI_Model
 		}
 		$this->db->group_by('project_detail.project_id');
 		$totalRecordwithFilter = $this->db->get()->num_rows();
+
 
 		## Fetch records
 		$records = $this->db->select('project.*,customer.name as customer_name,city.name as city_name')
@@ -244,24 +260,24 @@ class ProjectModel extends CI_Model
 				$vendor_mobile .= "<span>{$value['vendor_mobile']}</span><br>";
 				$vendor_email .= "<span>{$value['vendor_email']}</span><br>";
 
-				if($value['worker_status'] == "PENDING"){
-					$worker_status .= "<span class='badge bg-warning'>PENDING</span> <br>" ;
+				if ($value['worker_status'] == "PENDING") {
+					$worker_status .= "<span class='badge bg-warning'>PENDING</span> <br>";
 					// $worker_status .=  ($user_id == $value['worker_id']) ? '<button type="button" class="btn btn-sm btn-success me-2 rounded-pill btn-icon approved ms-1" data-id="'.$value['id'].'" data-status="PENDING" ><span class="mdi mdi-check"></span> </button>' : '';
-					$action .=  ($user_id == $value['worker_id']) ? '<button type="button" class="btn btn-sm btn-danger me-2 rounded-pill btn-icon inprogress ms-1" data-id="'.$value['id'].'" data-status="INPROGRESS" ><i class="mdi mdi-timer-sand"></i></button>' : '';
-				}elseif($value['worker_status'] == "INPROCESS"){
+					$action .=  ($user_id == $value['worker_id']) ? '<button type="button" class="btn btn-sm btn-danger me-2 rounded-pill btn-icon inprogress ms-1" data-id="' . $value['id'] . '" data-status="INPROGRESS" ><i class="mdi mdi-timer-sand"></i></button>' : '';
+				} elseif ($value['worker_status'] == "INPROCESS") {
 					$worker_status .= "<span class='badge bg-info'>IN PROGRESS</span> <br>";
-					$action .=  ($user_id == $value['worker_id']) ? '<div class="d-flex gap-1"><button type="button" class="btn btn-sm btn-success me-2 rounded-pill btn-icon approved ms-1" data-id="'.$value['id'].'" data-status="PENDING" ><span class="mdi mdi-check"></span> </button>' : '';
-					$action .=  ($user_id == $value['worker_id'] && $value['worker_status'] == "INPROCESS") ? '<button type="button" class="btn btn-sm btn-primary me-2 rounded-pill btn-icon viewImage ms-1" data-id="'.$value['id'].'"><i class="mdi mdi-eye"></i></button> </div>' : '';
-				}elseif($value['worker_status'] == "COMPLATED"){
+					$action .=  ($user_id == $value['worker_id']) ? '<div class="d-flex gap-1"><button type="button" class="btn btn-sm btn-success me-2 rounded-pill btn-icon approved ms-1" data-id="' . $value['id'] . '" data-status="PENDING" ><span class="mdi mdi-check"></span> </button>' : '';
+					$action .=  ($user_id == $value['worker_id'] && $value['worker_status'] == "INPROCESS") ? '<button type="button" class="btn btn-sm btn-primary me-2 rounded-pill btn-icon viewImage ms-1" data-id="' . $value['id'] . '"><i class="mdi mdi-eye"></i></button> </div>' : '';
+				} elseif ($value['worker_status'] == "COMPLATED") {
 					$worker_status .= "<span class='badge bg-success'>COMPLATED</span> <br>";
-					$action .=  ($user_id == $value['worker_id'] && $value['worker_status'] == "COMPLATED") ? '<button type="button" class="btn btn-sm btn-primary me-2 rounded-pill btn-icon viewImage ms-1" data-id="'.$value['id'].'"><i class="mdi mdi-eye"></i></button>' : '';
+					$action .=  ($user_id == $value['worker_id'] && $value['worker_status'] == "COMPLATED") ? '<button type="button" class="btn btn-sm btn-primary me-2 rounded-pill btn-icon viewImage ms-1" data-id="' . $value['id'] . '"><i class="mdi mdi-eye"></i></button>' : '';
 				}
 
-				if($value['vendor_status'] == "PENDING"){
+				if ($value['vendor_status'] == "PENDING") {
 					$vendor_status .= "<span class='badge bg-warning'>PENDING</span>";
-				}elseif($value['vendor_status'] == "INPROCESS"){
+				} elseif ($value['vendor_status'] == "INPROCESS") {
 					$vendor_status .= "<span class='badge bg-info'>IN PROGRESS</span>";
-				}elseif($value['vendor_status'] == "COMPLATED"){
+				} elseif ($value['vendor_status'] == "COMPLATED") {
 					$vendor_status .= "<span class='badge bg-success'>COMPLATED</span>";
 				}
 			}
@@ -272,6 +288,8 @@ class ProjectModel extends CI_Model
 			} elseif ($record->project_status == 'INPROCESS') {
 				$project_status .= "<span class='badge bg-info'>IN PROGRESS</span>";
 			}
+
+
 
 
 			$data[] = array(

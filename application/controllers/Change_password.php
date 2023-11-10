@@ -9,7 +9,7 @@ class Change_password extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-		is_login();
+        is_login();
     }
 
     public function index()
@@ -43,18 +43,18 @@ class Change_password extends CI_Controller
                 $update = $this->db->where('id', $user_id)->update('user', array('password' => sha1($data['new_password'])));
                 if ($update) {
                     $message['success'] = 1;
-                    $message['message'] = "User password change  SuccessFully.";
+                    $message['message'] =    $user_type . "  " . "User password change  SuccessFully";
                     $this->session->set_flashdata('flash', $message);
                     redirect(base_url('change_password'));
                 } else {
                     $message['success'] = 0;
-                    $message['message'] = "Failed to changed password.";
+                    $message['message'] =    $user_type . "  " . "Failed to changed password.";
                     $this->session->set_flashdata('flash', $message);
                     redirect(base_url('change_password'));
                 }
             } else {
                 $message['success'] = 0;
-                $message['message'] = "Incorrect Current password.";
+                $message['message'] =   $user_type . "  " . "Incorrect Current password.";
                 $this->session->set_flashdata('flash', $message);
                 redirect(base_url('change_password'));
             }

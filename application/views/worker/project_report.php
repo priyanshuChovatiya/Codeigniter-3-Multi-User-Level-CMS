@@ -89,6 +89,7 @@
 								<th>Email</th>
 								<th>Customer</th>
 								<th>Price</th>
+								<th>Project Status</th>
 								<th>Start Date</th>
 								<th>End Date</th>
 							</tr>
