@@ -16,7 +16,6 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
-<!-- <script src="<?= base_url() ?>assets/js/form-validation.js"></script> -->
 <script src="<?= base_url() ?>assets/js/forms-selects.js"></script>
 <script src="<?= base_url() ?>assets/vendor/libs/select2/select2.js"></script>
 
@@ -24,6 +23,7 @@
 <script src="<?= base_url() ?>assets/vendor/libs/block-ui/block-ui.js"></script>
 <!-- <script src="<?= base_url() ?>assets/js/custom/AjaxHandler.js"></script> -->
 <script src="<?= base_url() ?>assets/js/custom/common.js"></script>
+<!-- <script src="<?= base_url() ?>assets/js/form-validation.js"></script> -->
 
 <?php if ($flash = $this->session->Flashdata('flash')): ?>
 <script>

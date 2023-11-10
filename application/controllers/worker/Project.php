@@ -68,34 +68,34 @@ class Project extends CI_Controller
 				$config = array();
 				$config['upload_path'] = 'assets/uploads/work_image';
 				$config['allowed_types'] = 'gif|jpg|png';
-				// $config['max_size']      = '50000';
 				$config['encrypt_name'] = TRUE;
 				$config['overwrite']     = FALSE;
 				$this->upload->initialize($config);
 
 				if (!empty($this->upload->do_upload('work_image'))) {
 					$upload_data = $this->upload->data();
-					// resize_image($upload_data['file_name'], 'assets/uploads/work_image');
 
-					// // Configure image manipulation settings
-					// $config['image_library'] = 'gd2'; // Choose the image library (gd, gd2, imagemagick, netpbm, etc)
-					// $config['source_image'] = $upload_data['full_path']; // Path to the uploaded image
-					// $config['maintain_ratio'] = TRUE; // Maintain the original aspect ratio
-					// $config['width'] = 800; // New image width
-					// $config['height'] = 600; // New image height
-					// $config['quality'] = '20%'; // New image quality
-
-					// // $this->load->library('image_lib', $config);
-
-					// $this->image_lib->clear();
-					// $this->image_lib->initialize($resize);
-
-					// if (!empty($this->image_lib->resize())) {
 					$insert_data['name'] =  $upload_data['file_name'];
 					$insert_data['project_detail_id'] = $id;
 					$insert_data['type'] = $data['status'];
 					$this->db->insert('project_detail_image', $insert_data);
-					// }
+				}
+
+				$convertimg = FCPATH . "assets/uploads/work_image/" . $upload_data['file_name'];
+				$convertimgsize = filesize($convertimg) / 1024;
+				if ($convertimgsize > 300) {
+
+					$info = getimagesize($convertimg);
+					if ($info['mime'] == 'image/jpeg')
+						$iiimage = imagecreatefromjpeg($convertimg);
+					elseif ($info['mime'] == 'image/png')
+						$iiimage = imagecreatefrompng($convertimg);
+
+					list($width, $height) = getimagesize($_FILES['work_image']['tmp_name']);
+					$tn = imagecreatetruecolor($width, $height);
+
+					imagecopyresampled($tn, $iiimage, 0, 0, 0, 0, $width, $height, $width, $height);
+					imagejpeg($iiimage, $convertimg, 20);
 				}
 			}
 			$update_data = [];
@@ -116,15 +116,6 @@ class Project extends CI_Controller
 		redirect(base_url('worker/project/report'), 'refresh');
 	}
 
-	// public function viewImage()
-	// {
-	// 	$project_detail_id = $this->input->post('project_detail_id');
-	// 	$page_data['INPROCESS'] = $this->db->select('id,name')->get_where('project_detail_image', array('project_detail_id' => $project_detail_id, 'type' => 'INPROCESS'))->result_array();
-	// 	$page_data['COMPLATED'] = $this->db->select('id,name')->get_where('project_detail_image', array('project_detail_id' => $project_detail_id, 'type' => 'COMPLATED'))->result_array();
-	// 	$res = $this->load->view('worker/view_image.php', $page_data);
-	// 	echo json_encode($res);
-	// }
-
 	public function viewActivity()
 	{
 		$user_id = $this->session->userdata('login')['user_id'];
@@ -134,6 +125,21 @@ class Project extends CI_Controller
 			->from('daily_activity')
 			->join('activity_image', 'daily_activity.id = activity_image.activity_id', 'left')
 			->where(array('user_id' => $user_id, 'date' => $date));
+		$page_data['data'] = $this->db->get()->result_array();
+		$res = $this->load->view('worker/view_activity.php', $page_data);
+		echo json_encode($res);
+	}
+
+	public function presonalImage()
+	{
+		// $user_id = $this->session->userdata('login')['user_id'];
+		$user_id = $this->input->post('user_id');
+		$project_id = $this->input->post('project_id');
+		$date = date('Y-m-d');
+		$this->db->select('daily_activity.work_complate,daily_activity.remark,activity_image.name')
+			->from('daily_activity')
+			->join('activity_image', 'daily_activity.id = activity_image.activity_id', 'left')
+			->where(array('user_id' => $user_id, 'date' => $date, 'project_id' => $project_id));
 		$page_data['data'] = $this->db->get()->result_array();
 		$res = $this->load->view('worker/view_activity.php', $page_data);
 		echo json_encode($res);
@@ -149,14 +155,34 @@ class Project extends CI_Controller
 			->join('project_detail', 'project.id = project_detail.project_id', 'left')
 			->join('city', 'project.city_id = city.id', 'left')
 			->where(array('project.id' => $id));
-		$page_data['data'] = $this->db->get()->row_array();
-		$this->db->select('project_detail.*, worker.name as worker_name, vendor.name as vendor_name,job_type.name as job_name,worker.mobile as worker_mobile, worker.email as worker_email,vendor.mobile as vendor_mobile,vendor.email as vendor_email,worker.profile')
+			$page_data['data'] = $this->db->get()->row_array();
+			
+			$this->db->select('project_detail.*,
+			GROUP_CONCAT(DISTINCT worker.name ORDER BY worker.id ASC SEPARATOR ",") as worker_name, 
+			GROUP_CONCAT(DISTINCT vendor.name ORDER BY vendor.id ASC SEPARATOR ",") as vendor_name,
+			GROUP_CONCAT(DISTINCT job_type.name SEPARATOR ",") as job_name,
+			GROUP_CONCAT(DISTINCT worker.mobile ORDER BY worker.id ASC SEPARATOR ",") as worker_mobile,
+			GROUP_CONCAT(DISTINCT worker.email ORDER BY worker.id ASC SEPARATOR ",") as worker_email,
+			GROUP_CONCAT(DISTINCT vendor.mobile ORDER BY vendor.id ASC SEPARATOR ",") as vendor_mobile,
+			GROUP_CONCAT(DISTINCT vendor.email ORDER BY vendor.id ASC SEPARATOR ",") as vendor_email,
+			GROUP_CONCAT(DISTINCT worker.profile ORDER BY worker.id ASC SEPARATOR ",") as worker_profile,
+			GROUP_CONCAT(DISTINCT project_detail.worker_status SEPARATOR ",") as worker_status')
 			->from('project_detail')
-			->join('user as worker', 'project_detail.worker_id = worker.id', 'left')
-			->join('user as vendor', 'project_detail.vendor_id = vendor.id', 'left')
+			->join('user as worker', "FIND_IN_SET(worker.id, project_detail.worker_id)", 'left')
+			->join('user as vendor', "FIND_IN_SET(vendor.id, project_detail.vendor_id)", 'left')
 			->join('job_type', 'project_detail.job_type_id = job_type.id', 'left')
-			->where('project_detail.project_id', $id);
-		$page_data['worker'] = $this->db->get()->result_array();
+			->where('project_detail.project_id', $id)
+			->group_by('project_detail.id');
+			$page_data['worker'] = $this->db->get()->result_array();
+			
+			
+		// 	$this->db->select('daily_activity.work_complate,worker.name as worker_name')
+		// 		->from('daily_activity')
+		// 		->join('project_detail', 'project_detail.project_id = daily_activity.project_id', 'left')
+		// 		->join('user as worker', "FIND_IN_SET(worker.id, project_detail.worker_id)", 'left')
+		// 		->where(array('daily_activity.project_id' => $id, 'daily_activity.date'=> date('Y-m-d')))
+		// 		->group_by('daily_activity.id');
+		// $page_data['complated_work'] = $this->db->get()->result_array();
 		// pre($page_data);exit;
 		$page_data['project_id'] = $id;
 		$page_data['page_title'] = 'Project Details';
