@@ -176,11 +176,12 @@ class Project extends CI_Controller
 			$page_data['worker'] = $this->db->get()->result_array();
 			
 			
-		// 	$this->db->select('daily_activity.work_complate,worker.name as worker_name')
+		// 	$this->db->select('daily_activity.work_complate,worker.name as worker_name,job_type.name as job_type')
 		// 		->from('daily_activity')
 		// 		->join('project_detail', 'project_detail.project_id = daily_activity.project_id', 'left')
 		// 		->join('user as worker', "FIND_IN_SET(worker.id, project_detail.worker_id)", 'left')
-		// 		->where(array('daily_activity.project_id' => $id, 'daily_activity.date'=> date('Y-m-d')))
+		// 		->join('job_type', 'daily_activity.job_type = job_type.id', 'left')
+		// 		->where(array('daily_activity.project_id' => $id,))
 		// 		->group_by('daily_activity.id');
 		// $page_data['complated_work'] = $this->db->get()->result_array();
 		// pre($page_data);exit;
